@@ -3,10 +3,33 @@
 [ext_resource type="Texture2D" uid="uid://se7v0qo6tdg7" path="res://icon.svg" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
 
-[node name="Main" type="Node" unique_id=403780105]
+[sub_resource type="Curve2D" id="Curve2D_0xm2m"]
 
-[node name="Icon" type="Sprite2D" parent="." unique_id=945557211]
-position = Vector2(545, 342.99997)
-scale = Vector2(0.5546875, 0.5546875)
-texture = ExtResource("1_ig7tw")
+[node name="Main" type="Node" unique_id=403780105]
 script = ExtResource("2_0xm2m")
+xy_scale = Vector2(100, 20)
+time_scale = 0.01
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1397439364]
+offset_right = 1154.0
+offset_bottom = 648.0
+color = Color(0.21, 0.21, 0.21, 1)
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1536082122]
+points = PackedVector2Array(1086, 97, 920, 419, 787, 299, 608, 541)
+default_color = Color(0.65, 0, 0, 1)
+joint_mode = 2
+begin_cap_mode = 2
+antialiased = true
+
+[node name="Path2D" type="Path2D" parent="." unique_id=523228222]
+curve = SubResource("Curve2D_0xm2m")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1380822122]
+rotates = false
+
+[node name="Icon" type="Sprite2D" parent="Path2D/PathFollow2D" unique_id=945557211]
+texture = ExtResource("1_ig7tw")
+
+[node name="Camera2D" type="Camera2D" parent="Path2D/PathFollow2D" unique_id=1097233294]
+zoom = Vector2(0.5, 0.5)
