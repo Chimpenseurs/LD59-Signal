@@ -3,8 +3,19 @@ extends Node
 
 var current_time = 0.0
 var total_time = 10.0
-@export var xy_scale = Vector2(2,2)
+@export var xy_scale = Vector2(1,1)
 @export var time_scale = 0.1
+#@export var initial_derivation_vec_coef = 1.0
+#@export var initial_derivation_timeleft = 0.5
+@export var dist_offset_threshold = 100
+
+var slow_coef = 0.1
+var slow_time_scale = time_scale * slow_coef
+
+var previous_position : Vector2
+var derivation_vec : Vector2
+var derivation_vec_coef = 0.0
+var derivation_timeleft = 0.0
 
 # Let suppose an interval between 2 points is 20
 # If t = 33, the point before t is time_serie[1] and
@@ -24,7 +35,6 @@ var time_serie = [
 	Vector2(100, 30),
 ]
 
-var dist_offset_threshold = 100
 var next_point_id = 1
 
 #func _lerp(pt1: Vector2, pt2: Vector2, lerp: float) -> Vector2:
@@ -86,15 +96,19 @@ func get_serie() -> Array[Vector2]:
 	#points.push_front(first_point)
 	#points.push_back(last_point)
 	#return points
-
+	
 func _ready() -> void:
 	time_serie = $Line2D.points
 	var curve = Curve2D.new()
 	for i in time_serie.size():
 		time_serie[i] *= xy_scale
 		curve.add_point(time_serie[i])
-	$Line2D.points = time_serie
+		#var circle = $Circle.duplicate()
+		#circle.position = time_serie[i]
+		#$Line2D.add_child(circle)
 	$Path2D.curve = curve
+	
+	previous_position = $Path2D/PathFollow2D/Circle.global_position
 
 #func _get_segment_points(path2D : Path2D) -> Array[Vector2]:
 	#for pt_i in time_serie.size():
@@ -105,15 +119,29 @@ func _ready() -> void:
 			#continue
 	#return []
 	
+func _get_path_current_position():
+	return $Path2D.curve.sample_baked($Path2D/PathFollow2D.progress)
+	
+func _get_path_next_position():
+	return $Path2D.curve.sample_baked($Path2D/PathFollow2D.progress + 10)
+	
 func _process(delta: float) -> void:
 	
-	current_time += delta
-	var player_pos = $Path2D/PathFollow2D/Icon.global_position
+	current_time += delta * time_scale
+	var player_pos = $Path2D/PathFollow2D/Circle.global_position
 	
-	$Path2D/PathFollow2D.set_progress_ratio(current_time * time_scale)
+	$Camera2D.position.x = _get_path_current_position().x
+	$Path2D/PathFollow2D.set_progress_ratio(current_time)
 	
 	var distance_to_next_point = player_pos.distance_to($Path2D.curve.get_point_position(next_point_id))
 	
+	if distance_to_next_point < dist_offset_threshold:
+		$Path2D/PathFollow2D/Circle.material = load("res://materials/blooming_player.tres")
+		$Path2D/PathFollow2D/Circle.scale = Vector2(1.5,1.5)
+	else:
+		$Path2D/PathFollow2D/Circle.material = null
+		$Path2D/PathFollow2D/Circle.scale = Vector2(0.5,0.5)
+		
 	var has_pressed = false
 	if Input.is_action_just_pressed("ui_up"):
 		has_pressed = true
@@ -123,10 +151,27 @@ func _process(delta: float) -> void:
 			self.next_point_id+=1
 		else :
 			print("BAD")
+			$AnimationPlayer.play("slower")
 			
 	if player_pos.x > $Path2D.curve.get_point_position(next_point_id).x:
 		if not has_pressed:
 			print("MISSED")
+			$AnimationPlayer.play("slower")
+			#$Ld59SignalProto.pitch_scale /= slow_coef
+			#time_scale = slow_time_scale
+			#derivation_vec = (player_pos - previous_position).normalized()
+			#derivation_vec_coef = initial_derivation_vec_coef
+			#derivation_timeleft = initial_derivation_timeleft
 		self.next_point_id+=1
-	
-	pass
+		
+	previous_position = player_pos
+
+	#if derivation_vec_coef > 0:
+		#var delta_next_pos = - player_pos.normalized()
+		#$Path2D/PathFollow2D/Circle.position += lerp(derivation_vec * delta, delta_next_pos * delta, 1-derivation_vec_coef)
+		##derivation_vec_coef = max(0, derivation_vec_coef -  0.1)
+		#derivation_timeleft = max(0, derivation_timeleft - delta)
+		#print(1.0-Tween.interpolate_value(0, 1.0, 0.5 - derivation_timeleft, 0.5, Tween.TRANS_EXPO, Tween.EASE_IN))
+		#var t = 1.0-Tween.interpolate_value(0, 1.0, 0.5 - derivation_timeleft, 0.5, Tween.TRANS_EXPO, Tween.EASE_IN)
+		#print(t)
+		#derivation_vec_coef = t

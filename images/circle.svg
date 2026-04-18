@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16.551085mm"
+   height="16.55109mm"
+   viewBox="0 0 16.551085 16.55109"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   sodipodi:docname="circle.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.86323653"
+     inkscape:cx="397.34185"
+     inkscape:cy="561.25984"
+     inkscape:window-width="2502"
+     inkscape:window-height="1371"
+     inkscape:window-x="58"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="16.551085"
+       height="16.55109"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-66.51083,-232.94118)">
+    <circle
+       style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       id="path4"
+       cx="74.786377"
+       cy="241.21672"
+       r="8.2755413"
+       inkscape:export-filename="circle.svg"
+       inkscape:export-xdpi="109.04041"
+       inkscape:export-ydpi="109.04041" />
+  </g>
+</svg>

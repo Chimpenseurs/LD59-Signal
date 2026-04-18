@@ -1,41 +1,322 @@
 [gd_scene format=3 uid="uid://cx6w8noqg5f3v"]
 
-[ext_resource type="Texture2D" uid="uid://se7v0qo6tdg7" path="res://icon.svg" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
 [ext_resource type="AudioStream" uid="uid://c2pl12conh555" path="res://musics/LD59-Signal-proto.ogg" id="3_h2yge"]
+[ext_resource type="Texture2D" uid="uid://bn63imeod2dmu" path="res://images/circle.svg" id="4_1bvp3"]
+
+[sub_resource type="Shader" id="Shader_1bvp3"]
+code = "/*
+Shader from Godot Shaders - the free shader library.
+godotshaders.com/shader/energy-beams
+
+This shader is under CC0 license. Feel free to use, improve and 
+change this shader according to your needs and consider sharing 
+the modified result to godotshaders.com.
+*/
+
+shader_type canvas_item;
+render_mode blend_add; // Remove this if you want to use HDR glow instead (use \"Glow\" and \"Outline Glow\" sliders)
+
+uniform int beams = 2; // How many beams the energy field should have
+
+uniform float energy = 3.0; // How much the beams will travel up and down
+uniform int roughness : hint_range(1, 10) = 3; // How compact the noise texture will be
+uniform int frequency = 10; // Amount of \"ripples\" in the beams
+
+uniform float speed = 1.0; // Animation speed
+uniform float thickness : hint_range(0.0, 0.1) = 0.006; // Thickness of the main beam
+uniform float outline_thickness : hint_range(0.0, 0.1) = 0.03; //Thickness of the outline color
+uniform float beam_difference : hint_range(0.0, 1.0) = 0.0; // The thickness difference between the main beam and the other, if there are more than one beam. The closer to 1 the smaller the thickness difference.
+
+uniform float glow : hint_range(0.0, 3.0) = 0.0; // Use together with WorldEnvironment's Glow feature
+uniform float outline_glow : hint_range(0.0, 3.0) = 0.0;
+
+uniform vec4 color : source_color = vec4(0.91, 1.0, 1.0, 1.0);
+uniform vec4 outline_color : source_color = vec4(0.5, 1.0, 0.96, 1.0);
+
+uniform float progress : hint_range(0.0, 1.0) = 1.0;
+
+uniform float y_offset : hint_range (-0.5, 0.5) = 0.0; // Position of the beam
+uniform float fixed_edge_size : hint_range(0.0, 0.5) = 0.05; // How close to the edge should the beam be still before the animatino starts
+uniform vec2 noise_scale = vec2(1.0); // If the object (for example the ColorRect or Sprite node) is compressed use this to compensate for the noise texture being compressed.
+
+float random(vec2 uv) {
+    return fract(sin(dot(uv.xy,
+        vec2(12.9898,78.233))) *
+            43758.5453123);
+}
+
+float noise(vec2 uv) {
+    vec2 uv_index = floor(uv);
+    vec2 uv_fract = fract(uv);
+
+    // Four corners in 2D of a tile
+    float a = random(uv_index);
+    float b = random(uv_index + vec2(1.0, 0.0));
+    float c = random(uv_index + vec2(0.0, 1.0));
+    float d = random(uv_index + vec2(1.0, 1.0));
+
+    vec2 blur = smoothstep(0.0, 1.0, uv_fract);
+
+    return mix(a, b, blur.x) +
+            (c - a) * blur.y * (1.0 - blur.x) +
+            (d - b) * blur.x * blur.y;
+}
+
+float fbm(vec2 uv, float time) {
+    int octaves = roughness;
+    float amp = 0.01 * energy * progress;
+    float freq = float(frequency);
+	float value = 0.0;
+	
+    for(int i = 0; i < octaves; i++) {
+        value += amp * noise(freq * vec2(uv.x, uv.y + time));
+        amp *= 0.5;
+        freq *= 2.0;
+    }
+    return value;
+}
+
+vec4 difference(vec4 base, vec4 blend){
+	return abs(base - blend);
+}
+
+vec4 bolt(vec2 uv, float time, float i)
+{
+	// Setup the beam locking to the edges.
+	float falloff = smoothstep(0.0, fixed_edge_size, uv.x) * smoothstep(0.0, fixed_edge_size, 1.0 - uv.x);
+	
+	// Use Fractal Brownian Motion to create a \"cloud texture\" and use Difference blend mode to make the beam
+	vec4 clouds = vec4(fbm((uv + vec2(i) ) * noise_scale, time * speed)) * falloff;
+	vec4 diff_clouds = difference(clouds, vec4(uv.y - 0.5 + y_offset + (uv.y * falloff * 0.02 * energy * progress)));
+	
+	// Create a new noise to mask the beams on low \"progress\" values. To make a \"turn-off\" effect more visually interesting.
+	vec4 clouds2 = vec4(fbm((uv * 2.0) * noise_scale, time * 1.)) * 5.0;
+	diff_clouds += smoothstep(0.0, 0.8, clouds2) * 0.1 * (1.-progress);
+	
+	// Set thickness of the beams. First beam is the Thickness size and all following beams are sized with beam_difference
+	float thickness2 =  1. - ( thickness / (min(i + beam_difference, 1.0) + (1.0-beam_difference))) * progress ;
+	vec4 beam = clamp(smoothstep(thickness2, thickness2 + 0.005 * progress, 1.0 - diff_clouds), vec4(0.0), vec4(1.0));
+	
+	//Set the beam outlines
+	vec4 beam_outline;
+	float outline = thickness2 - (outline_thickness * progress);
+	beam_outline = clamp(smoothstep(outline, outline + 0.04, 1.0 - diff_clouds), 0.0, 1.0);
+	beam_outline = clamp(beam_outline - beam, 0.0, 1.0);
+	
+	// Merge the beam and the outline and return to the fragment function
+	return (beam * (color + vec4(glow, glow, glow, 0.))) + (beam_outline * (outline_color + vec4(outline_glow, outline_glow, outline_glow, 0.)));
+}
+
+void fragment()
+{	
+	vec4 beam = vec4(0.0);
+	
+	for (int i = 0; i < beams; i++){
+		beam = max(beam, bolt(UV, TIME, float(i)));
+	}
+	
+	COLOR = beam;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lquwl"]
+shader = SubResource("Shader_1bvp3")
+shader_parameter/beams = 4
+shader_parameter/energy = 10.0
+shader_parameter/roughness = 3
+shader_parameter/frequency = 10
+shader_parameter/speed = 1.0
+shader_parameter/thickness = 0.014000000665
+shader_parameter/outline_thickness = 0.0550000026125
+shader_parameter/beam_difference = 0.0
+shader_parameter/glow = 0.42800002033
+shader_parameter/outline_glow = 0.0
+shader_parameter/color = Color(0.91, 1, 1, 1)
+shader_parameter/outline_color = Color(0.5, 1, 0.96, 1)
+shader_parameter/progress = 1.0
+shader_parameter/y_offset = 0.0
+shader_parameter/fixed_edge_size = 0.05
+shader_parameter/noise_scale = Vector2(1, 1)
 
 [sub_resource type="Curve2D" id="Curve2D_0xm2m"]
 
+[sub_resource type="Animation" id="Animation_h2yge"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Ld59SignalProto:pitch_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:time_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.05]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Line2D:material:shader_parameter/frequency")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [10]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Line2D:material:shader_parameter/noise_scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1bvp3"]
+resource_name = "slower"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Ld59SignalProto:pitch_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 1),
+"transitions": PackedFloat32Array(0.232, 4.756827, 1),
+"update": 0,
+"values": [1.0, 0.1, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:time_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 1),
+"transitions": PackedFloat32Array(0.233, 4.75, 1),
+"update": 0,
+"values": [0.05, 0.005, 0.05]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Line2D:material:shader_parameter/frequency")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 1),
+"transitions": PackedFloat32Array(0.231, 4.75, 1),
+"update": 1,
+"values": [10, 1, 10]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Line2D:material:shader_parameter/noise_scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 1),
+"transitions": PackedFloat32Array(0.231, 4.75, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lquwl"]
+_data = {
+&"RESET": SubResource("Animation_h2yge"),
+&"slower": SubResource("Animation_1bvp3")
+}
+
 [node name="Main" type="Node" unique_id=403780105]
 script = ExtResource("2_0xm2m")
-xy_scale = Vector2(100, 20)
-time_scale = 0.01
-
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1397439364]
-offset_right = 1154.0
-offset_bottom = 648.0
-color = Color(0.21, 0.21, 0.21, 1)
+time_scale = 0.05
+dist_offset_threshold = 203
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1536082122]
-points = PackedVector2Array(143, 242, 185, 351, 213, 244, 246, 361, 267, 238, 293, 357, 328, 242, 351, 357, 382, 236, 410, 359, 425, 234, 454, 349, 472, 232, 499, 351, 530, 230, 563, 345, 593, 238, 624, 347, 659, 234, 690, 343, 762, 86, 984, 336, 1109, 228, 1281, 554, 1372, 184, 1481, 16, 1649, 338, 1754, 188, 2035, 893, 2150, 1078, 2366, 887, 2662, -62)
-default_color = Color(0.65, 0, 0, 1)
+material = SubResource("ShaderMaterial_lquwl")
+points = PackedVector2Array(5, 467, 166, 152, 261, 465, 376, 156, 471, 463, 616, 141, 736, 460, 856, 135, 964, 465, 1116, 126, 1236, 469, 1395, 126, 1517, 467, 1682, 117, 1873, 604, 2218, 51, 2348, 270, 2486, 75, 2531, 205, 2657, 19, 2760, 289, 2886, 169, 3159, 576, 3480, 34, 3549, 246, 4290, 30, 4451, 156, 4670, 53, 5103, 533, 5187, 407, 5262, 480, 5311, 390, 5418, 484, 5523, 244, 5594, 370, 5740, 40, 5956, 458, 6282, 342, 6413, 463, 6496, 21)
+width = 100.0
+default_color = Color(1, 0, 0, 1)
+texture_mode = 2
 joint_mode = 2
 begin_cap_mode = 2
+end_cap_mode = 2
 antialiased = true
+metadata/_edit_lock_ = true
 
 [node name="Path2D" type="Path2D" parent="." unique_id=523228222]
 curve = SubResource("Curve2D_0xm2m")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1380822122]
 rotates = false
+loop = false
 
-[node name="Icon" type="Sprite2D" parent="Path2D/PathFollow2D" unique_id=945557211]
-texture = ExtResource("1_ig7tw")
+[node name="Circle" type="Sprite2D" parent="Path2D/PathFollow2D" unique_id=1360790884]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_1bvp3")
 
-[node name="Camera2D" type="Camera2D" parent="Path2D/PathFollow2D" unique_id=1097233294]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1097233294]
+position = Vector2(575.99994, 319.99997)
 scale = Vector2(0.99999994, 0.99999994)
-zoom = Vector2(0.5, 0.5)
+position_smoothing_enabled = true
+
+[node name="BG" type="Node2D" parent="Camera2D" unique_id=2029432541]
+
+[node name="ColorRect" type="ColorRect" parent="Camera2D/BG" unique_id=512366022]
+z_index = -1
+offset_left = -662.99994
+offset_top = -370.99997
+offset_right = 640.00006
+offset_bottom = 399.00003
+color = Color(0.047239788, 0.06789976, 0.03691347, 1)
+
+[node name="Line2D" type="Line2D" parent="Camera2D/BG" unique_id=2089011069]
+z_index = -1
+scale = Vector2(0.9999999, 0.9999999)
+points = PackedVector2Array(-660, -3.9999695, 641.0001, -3.9999695)
+width = 5.0
+default_color = Color(0, 0.56078434, 0, 1)
+
+[node name="Line2D3" type="Line2D" parent="Camera2D/BG" unique_id=680045097]
+z_index = -1
+position = Vector2(6.1035156e-05, 180.00003)
+scale = Vector2(0.9999999, 0.9999999)
+points = PackedVector2Array(-660, -3.9999695, 641.0001, -3.9999695)
+width = 2.0
+default_color = Color(0, 0.56078434, 0, 1)
+
+[node name="Line2D4" type="Line2D" parent="Camera2D/BG" unique_id=1345953594]
+z_index = -1
+position = Vector2(4.000061, -160.99995)
+scale = Vector2(0.9999999, 0.9999999)
+points = PackedVector2Array(-660, -3.9999695, 641.0001, -3.9999695)
+width = 2.0
+default_color = Color(0, 0.56078434, 0, 1)
 
 [node name="Ld59SignalProto" type="AudioStreamPlayer" parent="." unique_id=1224994769]
 stream = ExtResource("3_h2yge")
 autoplay = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1148269338]
+libraries/ = SubResource("AnimationLibrary_lquwl")
