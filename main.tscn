@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://se7v0qo6tdg7" path="res://icon.svg" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
+[ext_resource type="AudioStream" uid="uid://c2pl12conh555" path="res://musics/LD59-Signal-proto.ogg" id="3_h2yge"]
 
 [sub_resource type="Curve2D" id="Curve2D_0xm2m"]
 
@@ -16,7 +17,7 @@ offset_bottom = 648.0
 color = Color(0.21, 0.21, 0.21, 1)
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1536082122]
-points = PackedVector2Array(1086, 97, 920, 419, 787, 299, 608, 541)
+points = PackedVector2Array(143, 242, 185, 351, 213, 244, 246, 361, 267, 238, 293, 357, 328, 242, 351, 357, 382, 236, 410, 359, 425, 234, 454, 349, 472, 232, 499, 351, 530, 230, 563, 345, 593, 238, 624, 347, 659, 234, 690, 343, 762, 86, 984, 336, 1109, 228, 1281, 554, 1372, 184, 1481, 16, 1649, 338, 1754, 188, 2035, 893, 2150, 1078, 2366, 887, 2662, -62)
 default_color = Color(0.65, 0, 0, 1)
 joint_mode = 2
 begin_cap_mode = 2
@@ -32,4 +33,9 @@ rotates = false
 texture = ExtResource("1_ig7tw")
 
 [node name="Camera2D" type="Camera2D" parent="Path2D/PathFollow2D" unique_id=1097233294]
+scale = Vector2(0.99999994, 0.99999994)
 zoom = Vector2(0.5, 0.5)
+
+[node name="Ld59SignalProto" type="AudioStreamPlayer" parent="." unique_id=1224994769]
+stream = ExtResource("3_h2yge")
+autoplay = true

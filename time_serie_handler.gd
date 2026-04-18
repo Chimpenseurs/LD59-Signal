@@ -3,8 +3,8 @@ extends Node
 
 var current_time = 0.0
 var total_time = 10.0
-@export var xy_scale = Vector2(10,2)
-@export var time_scale = 1.0
+@export var xy_scale = Vector2(2,2)
+@export var time_scale = 0.1
 
 # Let suppose an interval between 2 points is 20
 # If t = 33, the point before t is time_serie[1] and
@@ -23,6 +23,9 @@ var time_serie = [
 	Vector2(82, 10),
 	Vector2(100, 30),
 ]
+
+var dist_offset_threshold = 100
+var next_point_id = 1
 
 #func _lerp(pt1: Vector2, pt2: Vector2, lerp: float) -> Vector2:
 	#return Vector2(
@@ -85,6 +88,7 @@ func get_serie() -> Array[Vector2]:
 	#return points
 
 func _ready() -> void:
+	time_serie = $Line2D.points
 	var curve = Curve2D.new()
 	for i in time_serie.size():
 		time_serie[i] *= xy_scale
@@ -92,8 +96,37 @@ func _ready() -> void:
 	$Line2D.points = time_serie
 	$Path2D.curve = curve
 
-
+#func _get_segment_points(path2D : Path2D) -> Array[Vector2]:
+	#for pt_i in time_serie.size():
+		#var pos = path2D.curve.get_point_position(pt_i)
+		#if pos.x > $Path2D/PathFollow2D/Icon.position.x:
+			#return [path2D.curve.get_point_position(pt_i-1), path2D.curve.get_point_position(pt_i)]
+		#else:
+			#continue
+	#return []
+	
 func _process(delta: float) -> void:
+	
 	current_time += delta
+	var player_pos = $Path2D/PathFollow2D/Icon.global_position
+	
 	$Path2D/PathFollow2D.set_progress_ratio(current_time * time_scale)
+	
+	var distance_to_next_point = player_pos.distance_to($Path2D.curve.get_point_position(next_point_id))
+	
+	var has_pressed = false
+	if Input.is_action_just_pressed("ui_up"):
+		has_pressed = true
+		print(distance_to_next_point)
+		if distance_to_next_point < dist_offset_threshold:
+			print("GOOD")
+			self.next_point_id+=1
+		else :
+			print("BAD")
+			
+	if player_pos.x > $Path2D.curve.get_point_position(next_point_id).x:
+		if not has_pressed:
+			print("MISSED")
+		self.next_point_id+=1
+	
 	pass
