@@ -1,12 +1,12 @@
 class_name Game
-extends Node
+extends Node2D
 
 const DISPLAY_SIZE = 100
 const INTERVAL_SIZE = 20
 
 var y
 
-var t
+var t = 0.0
 
 # Let suppose an interval between 2 points is 20
 # If t = 33, the point before t is time_serie[1] and
@@ -87,4 +87,19 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	t += delta
+	
+	# position actuelle du joueur
+	# position du dernier pic
+	
+	# si le joueur est en dehors du parcours du signal
+	# et que le bon bouton est appuye
+	# alors on va faire revenir le joueur sur la courbe du signal
+	
+	# si le joueur est sur le parcours du signal
+	# et que le mauvais bouton est appuye
+	# alors on va faire deriver le joueur sur la courbe du signal
+		
+	#if Input.is_action_pressed("ui_up"):
+		#up(delta)
+		
 	pass
