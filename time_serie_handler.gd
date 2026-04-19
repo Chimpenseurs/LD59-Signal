@@ -12,13 +12,12 @@ var high_h = 0.1
 
 var current_time = 0.0
 @export var xy_scale = Vector2(1.0,1)
-var time_scale = 0.05
+@export var velocity_x : float = 10.0 # m/s
 
 var path_pixels_ref = 7839.0
 
 var time_serie = []
 var triggers = []
-var velocities_scales = []
 
 var next_trigger_point_id = 1
 var previous_point_id = 0
@@ -28,12 +27,11 @@ var valid_control = false
 func get_serie() -> Array[Vector2]:
 	return time_serie
 
-func inject_pulse(pulse, velocity_scale):
-	triggers.append(time_serie.size())
-	time_serie.append_array(pulse)
-	for i in pulse.size()-1:
-		velocities_scales.append(velocity_scale)
-	velocities_scales.append(1.0)
+func inject_pulse(pulse, i_triggers):
+	scale_pulse(pulse)
+	var path = pulse.slice(1,pulse.size())
+	triggers.append_array(i_triggers)
+	time_serie.append_array(path)
 	
 func scale_pulse(pulse):
 	for i in pulse.size():
@@ -45,32 +43,32 @@ func length_pulse(pulse) -> float :
 		length += pulse[i].distance_to(pulse[i+1])
 	return length
 
+func add_flat_pulse(offset_x, stride_x):
+	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x, baseline_h)]
+	inject_pulse(pulse, [])
+	
 func add_simple_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x * 0.2, medium_h), Vector2(offset_x + stride_x * 0.4, baseline_h), Vector2(offset_x + stride_x * 1.0, baseline_h)]
-	scale_pulse(pulse)
-	var velocity_scale = stride_x / length_pulse(pulse)
-	inject_pulse(pulse, velocity_scale)
+	inject_pulse(pulse, [time_serie.size()-1])
 
 func add_regular_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x * 0.2, high_h), Vector2(offset_x + stride_x * 0.4, 1.0 - high_h), Vector2(offset_x + stride_x * 0.6, medium_h), Vector2(offset_x + stride_x * 1.0, 0.5)]
-	scale_pulse(pulse)
-	var velocity_scale = stride_x / length_pulse(pulse)
-	inject_pulse(pulse, velocity_scale)
+	inject_pulse(pulse, [time_serie.size()-1])
 		
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
 	var stride_x = 200
 	
-	var file = FileAccess.open("res://partition.txt", FileAccess.READ)
-	var content = file.get_as_text()
-	content = content.strip_edges()
-	var content_array = content.split(",")
+	var content = FileAccess.open("res://partition.txt", FileAccess.READ).get_as_text().strip_edges().split(",")
 	var pulses_types = []
-	for pulse_type in content_array:
+	for pulse_type in content:
 		pulses_types.append(int(pulse_type))
 	
 	var index = 0
+	time_serie.append(Vector2(0,baseline_h))
 	for pulse_type in pulses_types:
+		if pulse_type == 0:
+			add_flat_pulse(index * stride_x, stride_x)
 		if pulse_type == 1:
 			add_simple_pulse(index * stride_x, stride_x)
 		elif pulse_type == 2:
@@ -83,46 +81,46 @@ func _ready() -> void:
 		index += 1
 		
 	$Line2D.points = time_serie
-	
-	var curve = Curve2D.new()
-	for i in time_serie.size():
-		curve.add_point(time_serie[i])
-	$Path2D.curve = curve
 
 	for i in triggers.size():
 		var column = $Column.duplicate()
-		column.scale.x *= xy_scale.x
-		column.position.x = time_serie[triggers[i]].x-45
+		var texture : GradientTexture2D = column.texture
+		var texture_width = texture.width
+		column.position.x = time_serie[triggers[i]].x - texture_width * 0.5
 		$Line2D.add_child(column)
-
-	# this allows to get the total number of pixels in the path, we need it for the speed scale
-	$Path2D/PathFollow2D.progress_ratio = 1.0
-	time_scale *= (path_pixels_ref / float($Path2D/PathFollow2D.progress))
-	$Path2D/PathFollow2D.progress_ratio = 0.0
 	
-func _get_path_current_position():
-	return $Path2D.curve.sample_baked($Path2D/PathFollow2D.progress)
-	
-func _get_path_next_position():
-	return $Path2D.curve.sample_baked($Path2D/PathFollow2D.progress + 10)
+func _get_path_current_position(time):
+	var pos_x = time * velocity_x
+	for i in time_serie.size():
+		if time_serie[i].x < pos_x:
+			continue
+		assert(i > 0)
+		var seg : Vector2 = (time_serie[i] - time_serie[i-1]).normalized()
+		var vertical_x = Vector2(pos_x, 0);
+		var pt = Geometry2D.line_intersects_line(vertical_x, Vector2.DOWN, time_serie[i-1], seg)
+		assert(pt != null)
+		return pt
+			
+	assert(false)
 	
 func _process(delta: float) -> void:
 
 	if  Engine.is_editor_hint():
 		return
 
-	var player_pos = $Path2D/PathFollow2D/Circle.global_position
+	var player_pos = $Circle.global_position
 	if time_serie[previous_point_id+1].x < player_pos.x:
 		previous_point_id += 1
 		
-	var velocity_scale = velocities_scales[previous_point_id]
 	var next_trigger_point = time_serie[triggers[next_trigger_point_id]]
 	var distance_to_next_point = player_pos.distance_to(next_trigger_point)
 	
-	current_time += delta * (time_scale / velocity_scale)
+	current_time += delta
+	var current_position = _get_path_current_position(current_time)
 	
-	$Camera2D.position.x = _get_path_current_position().x
-	$Path2D/PathFollow2D.set_progress_ratio(current_time)
+	$Camera2D.position.x = current_position.x
+	$Circle.position = current_position
+	#$Path2D/PathFollow2D.set_progress_ratio(current_time)
 		
 	var has_pressed = false
 	if Input.is_action_just_pressed("pause"):
@@ -153,4 +151,4 @@ func _on_area_2d_area_exited(area: Area2D) -> void:
 	valid_control = false
 	
 func active_wave():
-	$Wave.position = $Path2D/PathFollow2D/Circle.global_position
+	$Wave.position = $Circle.global_position
