@@ -114,7 +114,7 @@ func length_pulse(pulse) -> float :
 	return length
 
 func add_simple_pulse(offset_x, stride_x):
-	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x * 0.5, medium_h), Vector2(offset_x + stride_x * 0.9, baseline_h), Vector2(offset_x + stride_x * 1.0, baseline_h)]
+	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x * 0.2, medium_h), Vector2(offset_x + stride_x * 0.4, baseline_h), Vector2(offset_x + stride_x * 1.0, baseline_h)]
 	scale_pulse(pulse)
 	var velocity_scale = stride_x / length_pulse(pulse)
 	inject_pulse(pulse, velocity_scale)
@@ -124,21 +124,29 @@ func add_regular_pulse(offset_x, stride_x):
 	scale_pulse(pulse)
 	var velocity_scale = stride_x / length_pulse(pulse)
 	inject_pulse(pulse, velocity_scale)
-	
+		
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
 	var stride_x = 200
-	for i in range(60):
-		var is_even = i % 4
-		var bound_y = 0.3 if is_even else 0.7
-		if i == 30:
-			add_regular_pulse(i * stride_x, stride_x)
-		elif not is_even and i != 29 and i != 31:
-			add_simple_pulse(i * stride_x, stride_x)
-		
+	
+	var file = FileAccess.open("res://partition.txt", FileAccess.READ)
+	var content = file.get_as_text()
+	content = content.strip_edges()
+	var content_array = content.split(",")
+	var pulses_types = []
+	for pulse_type in content_array:
+		pulses_types.append(int(pulse_type))
+	
+	var index = 0
+	for pulse_type in pulses_types:
+		if pulse_type == 1:
+			add_simple_pulse(index * stride_x, stride_x)
+		elif pulse_type == 2:
+			add_regular_pulse(index * stride_x, stride_x)
+		index += 1
+			
 	$Line2D.points = time_serie
 	
-	#time_serie = $Line2D.points
 	var curve = Curve2D.new()
 	for i in time_serie.size():
 		time_serie[i]
@@ -157,8 +165,6 @@ func _ready() -> void:
 	$Path2D/PathFollow2D.progress_ratio = 1.0
 	time_scale *= (path_pixels_ref / float($Path2D/PathFollow2D.progress))
 	time_scale_init = time_scale
-	print($Path2D/PathFollow2D.progress)
-	print(time_scale)
 	$Path2D/PathFollow2D.progress_ratio = 0.0
 	
 	var animation = $AnimationPlayer.get_animation("slower")
@@ -167,15 +173,6 @@ func _ready() -> void:
 	animation.track_set_key_value(track_id, 0, time_scale_init)
 	animation.track_set_key_value(track_id, 1, time_scale_init * 0.1)
 	animation.track_set_key_value(track_id, 2, time_scale_init)
-
-#func _get_segment_points(path2D : Path2D) -> Array[Vector2]:
-	#for pt_i in time_serie.size():
-		#var pos = path2D.curve.get_point_position(pt_i)
-		#if pos.x > $Path2D/PathFollow2D/Icon.position.x:
-			#return [path2D.curve.get_point_position(pt_i-1), path2D.curve.get_point_position(pt_i)]
-		#else:
-			#continue
-	#return []
 	
 func _get_path_current_position():
 	return $Path2D.curve.sample_baked($Path2D/PathFollow2D.progress)
@@ -196,13 +193,6 @@ func _process(delta: float) -> void:
 	
 	$Camera2D.position.x = _get_path_current_position().x
 	$Path2D/PathFollow2D.set_progress_ratio(current_time)
-	
-	#if distance_to_next_point < dist_offset_threshold:
-		#$Path2D/PathFollow2D/Circle.material = load("res://materials/blooming_player.tres")
-		#$Path2D/PathFollow2D/Circle.scale = Vector2(1.5,1.5)
-	#else:
-		#$Path2D/PathFollow2D/Circle.material = null
-		#$Path2D/PathFollow2D/Circle.scale = Vector2(0.5,0.5)
 		
 	var has_pressed = false
 	if Input.is_action_just_pressed("ui_up") :

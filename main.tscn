@@ -18,8 +18,8 @@ shader_parameter/outline_thickness = 0.10000000149012
 shader_parameter/beam_difference = 0.0
 shader_parameter/glow = 0.0
 shader_parameter/outline_glow = 0.0
-shader_parameter/color = Color(0.91, 1, 1, 1)
-shader_parameter/outline_color = Color(0.5, 1, 0.96, 1)
+shader_parameter/color = Color(0.69807625, 1, 0.67210174, 1)
+shader_parameter/outline_color = Color(0.32031652, 0.48541278, 0.083442755, 1)
 shader_parameter/progress = 1.0
 shader_parameter/y_offset = 0.0
 shader_parameter/fixed_edge_size = 0.05
@@ -117,7 +117,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.33333334, 1),
 "transitions": PackedFloat32Array(0.231, 4.75, 1),
 "update": 0,
-"values": [0.0049999999999999975, 0.005, 0.0049999999999999975]
+"values": [0.00499999999999999, 0.005, 0.00499999999999999]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -202,6 +202,7 @@ color = Color(0.047239788, 0.06789976, 0.03691347, 1)
 
 [node name="Line2D" type="Line2D" parent="Camera2D/BG" unique_id=2089011069]
 z_index = -1
+position = Vector2(-1.999939, 9.0000305)
 scale = Vector2(0.9999999, 0.9999999)
 points = PackedVector2Array(-660, -3.9999695, 1659.0002, -4.9999695)
 width = 5.0
@@ -228,8 +229,8 @@ stream = ExtResource("4_lquwl")
 autoplay = true
 
 [node name="Column" type="Sprite2D" parent="." unique_id=202545968]
-position = Vector2(-692.9999, 212)
-scale = Vector2(0.3, 4.803)
+position = Vector2(-692.9999, 338.80402)
+scale = Vector2(0.3, 6.7843127)
 texture = SubResource("GradientTexture2D_1bvp3")
 
 [node name="Area2D" type="Area2D" parent="Column" unique_id=601109245]
