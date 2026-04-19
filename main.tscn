@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
 [ext_resource type="Shader" uid="uid://7bfhjbcb41x0" path="res://shaders/signal.gdshader" id="2_1bvp3"]
-[ext_resource type="AudioStream" uid="uid://ds5xmikf7av13" path="res://musics/LD59-Signal-test.ogg" id="3_h2yge"]
 [ext_resource type="Texture2D" uid="uid://bn63imeod2dmu" path="res://images/circle.svg" id="4_1bvp3"]
+[ext_resource type="AudioStream" uid="uid://1ryh6e10t4uw" path="res://musics/LD59_Cosmic-Microwave-Background_final.ogg" id="4_lquwl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lquwl"]
 shader = ExtResource("2_1bvp3")
@@ -26,6 +26,9 @@ shader_parameter/noise_scale = Vector2(1, 1)
 
 [sub_resource type="Curve2D" id="Curve2D_0xm2m"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_1bvp3"]
+radius = 30.673914
+
 [sub_resource type="Gradient" id="Gradient_h2yge"]
 offsets = PackedFloat32Array(0, 0.15060242, 0.5180723, 0.8795181, 1)
 colors = PackedColorArray(0, 0, 0, 0, 0, 0.3499999, 1, 0.4745098, 0, 0.3499999, 1, 0.67058825, 0.23000002, 0.49949992, 1, 0.5372549, 1, 1, 1, 0)
@@ -34,6 +37,9 @@ colors = PackedColorArray(0, 0, 0, 0, 0, 0.3499999, 1, 0.4745098, 0, 0.3499999, 
 gradient = SubResource("Gradient_h2yge")
 width = 128
 height = 128
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lquwl"]
+size = Vector2(106.666626, 126.79575)
 
 [sub_resource type="Animation" id="Animation_h2yge"]
 length = 0.001
@@ -171,6 +177,11 @@ loop = false
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_1bvp3")
 
+[node name="Area2D" type="Area2D" parent="Path2D/PathFollow2D/Circle" unique_id=48873254]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/PathFollow2D/Circle/Area2D" unique_id=563145820]
+shape = SubResource("CircleShape2D_1bvp3")
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1097233294]
 position = Vector2(575.99994, 319.99997)
 scale = Vector2(0.99999994, 0.99999994)
@@ -211,13 +222,21 @@ width = 2.0
 default_color = Color(0, 0.56078434, 0, 1)
 
 [node name="Ld59SignalProto" type="AudioStreamPlayer" parent="." unique_id=1224994769]
-stream = ExtResource("3_h2yge")
+stream = ExtResource("4_lquwl")
 autoplay = true
 
 [node name="Column" type="Sprite2D" parent="." unique_id=202545968]
 position = Vector2(-692.9999, 212)
-scale = Vector2(0.73046863, 11.687499)
+scale = Vector2(0.3, 4.803)
 texture = SubResource("GradientTexture2D_1bvp3")
+
+[node name="Area2D" type="Area2D" parent="Column" unique_id=601109245]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Column/Area2D" unique_id=1258925870]
+position = Vector2(3.3327637, -0.10409927)
+shape = SubResource("RectangleShape2D_lquwl")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1148269338]
 libraries/ = SubResource("AnimationLibrary_lquwl")
+
+[connection signal="area_entered" from="Column/Area2D" to="." method="_on_trigger_area_entered"]

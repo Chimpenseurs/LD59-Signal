@@ -26,6 +26,9 @@ var velocities_scales = []
 
 var next_trigger_point_id = 1
 var previous_point_id = 0
+
+var valid_control = false
+
 #func _lerp(pt1: Vector2, pt2: Vector2, lerp: float) -> Vector2:
 	#return Vector2(
 		#(pt2.x - pt1.x) * lerp,
@@ -125,9 +128,9 @@ func _ready() -> void:
 	for i in range(30):
 		var is_even = i % 2
 		var bound_y = 0.3 if is_even else 0.7
-		if i == 24:
+		if i == 30:
 			add_regular_pulse(i * stride_x, stride_x)
-		elif not is_even and i != 23 and i != 25:
+		elif not is_even and i != 29 and i != 31:
 			add_simple_pulse(i * stride_x, stride_x)
 		
 	$Line2D.points = time_serie
@@ -185,7 +188,7 @@ func _process(delta: float) -> void:
 		#$Path2D/PathFollow2D/Circle.scale = Vector2(0.5,0.5)
 		
 	var has_pressed = false
-	if Input.is_action_just_pressed("ui_up"):
+	if Input.is_action_just_pressed("ui_up") :
 		has_pressed = true
 		print(distance_to_next_point)
 		if distance_to_next_point < dist_offset_threshold:
@@ -217,3 +220,7 @@ func _process(delta: float) -> void:
 		#var t = 1.0-Tween.interpolate_value(0, 1.0, 0.5 - derivation_timeleft, 0.5, Tween.TRANS_EXPO, Tween.EASE_IN)
 		#print(t)
 		#derivation_vec_coef = t
+
+
+func _on_trigger_area_entered(area: Area2D) -> void:
+	valid_control = true
