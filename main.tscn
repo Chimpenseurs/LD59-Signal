@@ -6,7 +6,8 @@
 [ext_resource type="Material" uid="uid://dx1fjlf8t1sik" path="res://materials/blooming_player.tres" id="3_lquwl"]
 [ext_resource type="AudioStream" uid="uid://1ryh6e10t4uw" path="res://musics/LD59_Cosmic-Microwave-Background_final.ogg" id="4_lquwl"]
 [ext_resource type="AudioStream" uid="uid://dnt0ni2nfr3ph" path="res://assets/sfx/Wrong Error.wav" id="6_7mycd"]
-[ext_resource type="Texture2D" uid="uid://cikt0x7c3rrj4" path="res://images/circle_white.png" id="6_272bh"]
+[ext_resource type="Texture2D" uid="uid://ceknw0h4begpy" path="res://images/circle_white.png" id="6_272bh"]
+[ext_resource type="PackedScene" uid="uid://cudoses46ae5g" path="res://pause_menu.tscn" id="8_5vw27"]
 
 [sub_resource type="Curve2D" id="Curve2D_0xm2m"]
 
@@ -304,6 +305,7 @@ streams_count = 1
 stream_0/stream = ExtResource("6_7mycd")
 
 [node name="Main" type="Node" unique_id=403780105]
+process_mode = 1
 script = ExtResource("2_0xm2m")
 time_scale = 0.05
 dist_offset_threshold = 203
@@ -400,6 +402,20 @@ points = PackedVector2Array(-660, -3.9999695, 1663.0002, -5.0000305)
 width = 2.0
 default_color = Color(0, 0.56078434, 0, 1)
 
+[node name="PauseMenu" parent="Camera2D" unique_id=727579683 instance=ExtResource("8_5vw27")]
+visible = false
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -175.99994
+offset_top = -319.99997
+offset_right = -175.99994
+offset_bottom = -319.99997
+grow_horizontal = 1
+grow_vertical = 1
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
 [node name="Ld59SignalProto" type="AudioStreamPlayer" parent="." unique_id=1224994769]
 stream = ExtResource("4_lquwl")
 autoplay = true
@@ -427,5 +443,7 @@ texture = ExtResource("6_272bh")
 stream = SubResource("AudioStreamRandomizer_272bh")
 bus = &"SFX"
 
+[connection signal="back_to_menu" from="Camera2D/PauseMenu" to="." method="_on_pause_menu_back_to_menu"]
+[connection signal="restart" from="Camera2D/PauseMenu" to="." method="_on_pause_menu_restart"]
 [connection signal="area_entered" from="Column/Area2D" to="." method="_on_trigger_area_entered"]
 [connection signal="area_exited" from="Column/Area2D" to="." method="_on_area_2d_area_exited"]

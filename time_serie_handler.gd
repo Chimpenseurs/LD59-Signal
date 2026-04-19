@@ -1,6 +1,8 @@
 class_name Game
 extends Node
 
+signal set_pause
+
 var current_time = 0.0
 var total_time = 10.0
 @export var xy_scale = Vector2(1.0,1)
@@ -121,6 +123,7 @@ func _ready() -> void:
 	animation.track_set_key_value(track_id, 1, time_scale_init * 0.1)
 	animation.track_set_key_value(track_id, 2, time_scale_init)
 	
+	
 func _get_path_current_position():
 	return $Path2D.curve.sample_baked($Path2D/PathFollow2D.progress)
 	
@@ -142,6 +145,10 @@ func _process(delta: float) -> void:
 	$Path2D/PathFollow2D.set_progress_ratio(current_time)
 		
 	var has_pressed = false
+	if Input.is_action_just_pressed("pause"):
+		$Camera2D/PauseMenu.visible = true
+		emit_signal("set_pause")
+		
 	if Input.is_action_just_pressed("ui_up") :
 		has_pressed = true
 		print(distance_to_next_point)

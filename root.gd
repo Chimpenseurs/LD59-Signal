@@ -20,11 +20,15 @@ func _on_play() -> void:
 		main_menu.queue_free()
 	
 	game = game_scene.instantiate()
-	#game.replay.connect(_on_play)
-	#game.gotomainmenu.connect(_on_main_menu)
+	game.get_node("Camera2D/PauseMenu").restart.connect(_on_play)
+	game.get_node("Camera2D/PauseMenu").back_to_menu.connect(_on_back_to_main_menu)
+	game.set_pause.connect(_on_game_pause)
 	
 	add_child(game)
 	get_tree().paused = false
+
+func _on_game_pause() -> void:
+	get_tree().paused = true
 
 func _on_control_menu() -> void:
 	if control_menu != null:
