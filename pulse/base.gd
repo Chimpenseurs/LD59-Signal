@@ -45,9 +45,9 @@ var trigger_end: float
 var combo_idx: int
 var expected_combos: Array[Combo]
 
-func _init(offset_x: float, stride_x: float):
-	self.offset_x = offset_x
-	self.stride_x = stride_x
+func _init(offset_x_: float, stride_x_: float):
+	self.offset_x = offset_x_
+	self.stride_x = stride_x_
 	self.combo_idx = 0
 	self.state = Combo_state.WAITING_NEXT_TRIGGER
 

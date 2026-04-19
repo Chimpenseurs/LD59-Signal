@@ -25,7 +25,7 @@ var derivation_timeleft = 0.0
 # we need to lerp at 13/20 from time_serie[1] to time_serie[2]
 
 var pulses: Array[PulseBase] = []
-var pulse_idx: int = 0
+var pulse_idx = 0
 var serie = []
 var triggers = []
 var velocities_scales = []
@@ -35,36 +35,30 @@ var previous_point_id = 0
 
 var valid_control = false
 
-func get_serie() -> Array[Vector2]:
-	serie = []
-	for p in pulses:
-		serie.append_array(p.get_pulse())
-	return serie
-#
-#func get_serie_interval() -> Array:
-##	Get the point of the left border of the screen.
-	#var first_point = _get_first_point()
-#
-##	Get the point of the right border of the screen.
-	#var last_point = _get_last_point()
-#
-##	Get the points in the time serie included in the screen.
-	#var points = self.time_serie.slice(
-		#((t - fmod(t, INTERVAL_SIZE)) / INTERVAL_SIZE) + 1,
-		#max(
-			#(t + 100 - fmod(t, INTERVAL_SIZE)) / INTERVAL_SIZE,
-			#len(time_serie) - 1
-		#)
+#func _lerp(pt1: Vector2, pt2: Vector2, lerp: float) -> Vector2:
+	#return Vector2(
+		#(pt2.x - pt1.x) * lerp,
+		#(pt2.y - pt1.y) * lerp
 	#)
+#
+#func _get_first_point() -> Vector2:
+	#var point_before = (t - (fmod(t, INTERVAL_SIZE))) / INTERVAL_SIZE
+	#var lerp_val = (fmod(t, INTERVAL_SIZE)) / INTERVAL_SIZE
+#
+	#if point_before + 1 < len(time_serie):
+		#return _lerp(
+			#time_serie[point_before],
+			#time_serie[point_before + 1],
+			#lerp_val)
 	#
-##	Add the points of the border of the screen.
-	#points.push_front(first_point)
-	#points.push_back(last_point)
-	#return points
-	
-var baseline_h = 0.5
-var medium_h = 0.3
-var high_h = 0.1
+##	Return null point at end of game.
+	#return Vector2(0, 0)
+#
+func get_serie() -> Array[Vector2]:
+	var construct: Array[Vector2] = []
+	for p in pulses:
+		construct.append_array(p.get_pulse())
+	return construct
 
 func inject_pulse(pulse: PulseBase, velocity_scale):
 	pulses.append(pulse)
@@ -136,6 +130,16 @@ func _ready() -> void:
 	time_scale_init = time_scale
 	$Path2D/PathFollow2D.progress_ratio = 0.0
 	
+	for p in pulses:
+		var start = p.trigger_start
+		var end = p.trigger_end
+		var column: Sprite2D = $Column.duplicate()
+		#column.scale.x *= xy_scale.x
+		var texture: GradientTexture2D = column.texture
+		texture.width = end - start
+		column.position.x = (end + start) / 2
+		$Line2D.add_child(column)
+	
 	var animation = $AnimationPlayer.get_animation("slower")
 	var track_id = animation.find_track(".:time_scale", Animation.TYPE_VALUE)
 
@@ -155,8 +159,8 @@ func _process(delta: float) -> void:
 		previous_point_id += 1
 		
 	var velocity_scale = velocities_scales[previous_point_id]
-	var next_trigger_point = serie[triggers[next_trigger_point_id]]
-	var distance_to_next_point = player_pos.distance_to(next_trigger_point)
+	#var next_trigger_point = serie[triggers[next_trigger_point_id]]
+	#var distance_to_next_point = player_pos.distance_to(next_trigger_point)
 
 	current_time += delta * (time_scale / velocity_scale)
 

@@ -5,8 +5,8 @@ extends PulseBase
 func _set_time_serie(stride_x: float):
 	self.time_serie = [
 		Vector2(offset_x, BASELINE_H),
-		Vector2(offset_x + stride_x * 0.5, MEDIUM_H),
-		Vector2(offset_x + stride_x * 0.9, BASELINE_H),
+		Vector2(offset_x + stride_x * 0.2, MEDIUM_H),
+		Vector2(offset_x + stride_x * 0.4, BASELINE_H),
 		Vector2(offset_x + stride_x * 1.0, BASELINE_H)
 	]
 
