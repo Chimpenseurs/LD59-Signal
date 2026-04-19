@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
 [ext_resource type="Shader" uid="uid://7bfhjbcb41x0" path="res://shaders/signal.gdshader" id="2_1bvp3"]
-[ext_resource type="AudioStream" uid="uid://5vlilbo61imd" path="res://musics/LD59-Signal-test.ogg" id="3_h2yge"]
 [ext_resource type="Material" uid="uid://dx1fjlf8t1sik" path="res://materials/blooming_player.tres" id="3_lquwl"]
 [ext_resource type="Texture2D" uid="uid://bn63imeod2dmu" path="res://images/circle.svg" id="4_1bvp3"]
 [ext_resource type="AudioStream" uid="uid://1ryh6e10t4uw" path="res://musics/LD59_Cosmic-Microwave-Background_final.ogg" id="4_lquwl"]
@@ -115,10 +114,10 @@ tracks/1/path = NodePath(".:time_scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3, 1),
-"transitions": PackedFloat32Array(0.233, 4.75, 1),
+"times": PackedFloat32Array(0, 0.33333334, 1),
+"transitions": PackedFloat32Array(0.231, 4.75, 1),
 "update": 0,
-"values": [0.05, 0.005, 0.05]
+"values": [0.0049999999999999975, 0.005, 0.0049999999999999975]
 }
 tracks/2/type = "value"
 tracks/2/imported = false

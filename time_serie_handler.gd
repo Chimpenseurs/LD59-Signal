@@ -5,12 +5,15 @@ var current_time = 0.0
 var total_time = 10.0
 @export var xy_scale = Vector2(1.0,1)
 @export var time_scale = 1.0
+var time_scale_init = time_scale
 #@export var initial_derivation_vec_coef = 1.0
 #@export var initial_derivation_timeleft = 0.5
 @export var dist_offset_threshold = 100
 
 var slow_coef = 0.1
 var slow_time_scale = time_scale * slow_coef
+
+var path_pixels_ref = 7839.0
 
 var previous_position : Vector2
 var derivation_vec : Vector2
@@ -125,8 +128,8 @@ func add_regular_pulse(offset_x, stride_x):
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
 	var stride_x = 200
-	for i in range(30):
-		var is_even = i % 2
+	for i in range(60):
+		var is_even = i % 4
 		var bound_y = 0.3 if is_even else 0.7
 		if i == 30:
 			add_regular_pulse(i * stride_x, stride_x)
@@ -141,7 +144,7 @@ func _ready() -> void:
 		time_serie[i]
 		curve.add_point(time_serie[i])
 	$Path2D.curve = curve
-	
+
 	for i in triggers.size():
 		var column = $Column.duplicate()
 		column.scale.x *= xy_scale.x
@@ -149,7 +152,21 @@ func _ready() -> void:
 		$Line2D.add_child(column)
 	
 	previous_position = $Path2D/PathFollow2D/Circle.global_position
-	$Path2D/PathFollow2D/Circle.material = load("res://materials/blooming_player.tres")
+	
+	# this allows to get the total number of pixels in the path, we need it for the speed scale
+	$Path2D/PathFollow2D.progress_ratio = 1.0
+	time_scale *= (path_pixels_ref / float($Path2D/PathFollow2D.progress))
+	time_scale_init = time_scale
+	print($Path2D/PathFollow2D.progress)
+	print(time_scale)
+	$Path2D/PathFollow2D.progress_ratio = 0.0
+	
+	var animation = $AnimationPlayer.get_animation("slower")
+	var track_id = animation.find_track(".:time_scale", Animation.TYPE_VALUE)
+
+	animation.track_set_key_value(track_id, 0, time_scale_init)
+	animation.track_set_key_value(track_id, 1, time_scale_init * 0.1)
+	animation.track_set_key_value(track_id, 2, time_scale_init)
 
 #func _get_segment_points(path2D : Path2D) -> Array[Vector2]:
 	#for pt_i in time_serie.size():
