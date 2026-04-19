@@ -1,154 +1,12 @@
 [gd_scene format=3 uid="uid://cx6w8noqg5f3v"]
 
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
-[ext_resource type="AudioStream" uid="uid://c2pl12conh555" path="res://musics/LD59-Signal-proto.ogg" id="3_h2yge"]
+[ext_resource type="AudioStream" uid="uid://5vlilbo61imd" path="res://musics/LD59-Signal-test.ogg" id="3_h2yge"]
 [ext_resource type="Texture2D" uid="uid://bn63imeod2dmu" path="res://images/circle.svg" id="4_1bvp3"]
 
-[sub_resource type="Shader" id="Shader_1bvp3"]
-code = "/*
-Shader from Godot Shaders - the free shader library.
-godotshaders.com/shader/energy-beams
-
-This shader is under CC0 license. Feel free to use, improve and 
-change this shader according to your needs and consider sharing 
-the modified result to godotshaders.com.
-*/
-
-shader_type canvas_item;
-render_mode blend_add; // Remove this if you want to use HDR glow instead (use \"Glow\" and \"Outline Glow\" sliders)
-
-uniform int beams = 2; // How many beams the energy field should have
-
-uniform float energy = 3.0; // How much the beams will travel up and down
-uniform int roughness : hint_range(1, 10) = 3; // How compact the noise texture will be
-uniform int frequency = 10; // Amount of \"ripples\" in the beams
-
-uniform float speed = 1.0; // Animation speed
-uniform float thickness : hint_range(0.0, 0.1) = 0.006; // Thickness of the main beam
-uniform float outline_thickness : hint_range(0.0, 0.1) = 0.03; //Thickness of the outline color
-uniform float beam_difference : hint_range(0.0, 1.0) = 0.0; // The thickness difference between the main beam and the other, if there are more than one beam. The closer to 1 the smaller the thickness difference.
-
-uniform float glow : hint_range(0.0, 3.0) = 0.0; // Use together with WorldEnvironment's Glow feature
-uniform float outline_glow : hint_range(0.0, 3.0) = 0.0;
-
-uniform vec4 color : source_color = vec4(0.91, 1.0, 1.0, 1.0);
-uniform vec4 outline_color : source_color = vec4(0.5, 1.0, 0.96, 1.0);
-
-uniform float progress : hint_range(0.0, 1.0) = 1.0;
-
-uniform float y_offset : hint_range (-0.5, 0.5) = 0.0; // Position of the beam
-uniform float fixed_edge_size : hint_range(0.0, 0.5) = 0.05; // How close to the edge should the beam be still before the animatino starts
-uniform vec2 noise_scale = vec2(1.0); // If the object (for example the ColorRect or Sprite node) is compressed use this to compensate for the noise texture being compressed.
-
-float random(vec2 uv) {
-    return fract(sin(dot(uv.xy,
-        vec2(12.9898,78.233))) *
-            43758.5453123);
-}
-
-float noise(vec2 uv) {
-    vec2 uv_index = floor(uv);
-    vec2 uv_fract = fract(uv);
-
-    // Four corners in 2D of a tile
-    float a = random(uv_index);
-    float b = random(uv_index + vec2(1.0, 0.0));
-    float c = random(uv_index + vec2(0.0, 1.0));
-    float d = random(uv_index + vec2(1.0, 1.0));
-
-    vec2 blur = smoothstep(0.0, 1.0, uv_fract);
-
-    return mix(a, b, blur.x) +
-            (c - a) * blur.y * (1.0 - blur.x) +
-            (d - b) * blur.x * blur.y;
-}
-
-float fbm(vec2 uv, float time) {
-    int octaves = roughness;
-    float amp = 0.01 * energy * progress;
-    float freq = float(frequency);
-	float value = 0.0;
-	
-    for(int i = 0; i < octaves; i++) {
-        value += amp * noise(freq * vec2(uv.x, uv.y + time));
-        amp *= 0.5;
-        freq *= 2.0;
-    }
-    return value;
-}
-
-vec4 difference(vec4 base, vec4 blend){
-	return abs(base - blend);
-}
-
-vec4 bolt(vec2 uv, float time, float i)
-{
-	// Setup the beam locking to the edges.
-	float falloff = smoothstep(0.0, fixed_edge_size, uv.x) * smoothstep(0.0, fixed_edge_size, 1.0 - uv.x);
-	
-	// Use Fractal Brownian Motion to create a \"cloud texture\" and use Difference blend mode to make the beam
-	vec4 clouds = vec4(fbm((uv + vec2(i) ) * noise_scale, time * speed)) * falloff;
-	vec4 diff_clouds = difference(clouds, vec4(uv.y - 0.5 + y_offset + (uv.y * falloff * 0.02 * energy * progress)));
-	
-	// Create a new noise to mask the beams on low \"progress\" values. To make a \"turn-off\" effect more visually interesting.
-	vec4 clouds2 = vec4(fbm((uv * 2.0) * noise_scale, time * 1.)) * 5.0;
-	diff_clouds += smoothstep(0.0, 0.8, clouds2) * 0.1 * (1.-progress);
-	
-	// Set thickness of the beams. First beam is the Thickness size and all following beams are sized with beam_difference
-	float thickness2 =  1. - ( thickness / (min(i + beam_difference, 1.0) + (1.0-beam_difference))) * progress ;
-	vec4 beam = clamp(smoothstep(thickness2, thickness2 + 0.005 * progress, 1.0 - diff_clouds), vec4(0.0), vec4(1.0));
-	
-	//Set the beam outlines
-	vec4 beam_outline;
-	float outline = thickness2 - (outline_thickness * progress);
-	beam_outline = clamp(smoothstep(outline, outline + 0.04, 1.0 - diff_clouds), 0.0, 1.0);
-	beam_outline = clamp(beam_outline - beam, 0.0, 1.0);
-	
-	// Merge the beam and the outline and return to the fragment function
-	return (beam * (color + vec4(glow, glow, glow, 0.))) + (beam_outline * (outline_color + vec4(outline_glow, outline_glow, outline_glow, 0.)));
-}
-
-void fragment()
-{	
-	vec4 beam = vec4(0.0);
-	
-	for (int i = 0; i < beams; i++){
-		beam = max(beam, bolt(UV, TIME, float(i)));
-	}
-	
-	COLOR = beam;
-}"
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lquwl"]
-shader = SubResource("Shader_1bvp3")
-shader_parameter/beams = 4
-shader_parameter/energy = 10.0
-shader_parameter/roughness = 3
-shader_parameter/frequency = 10
-shader_parameter/speed = 1.0
-shader_parameter/thickness = 0.014000000665
-shader_parameter/outline_thickness = 0.0550000026125
-shader_parameter/beam_difference = 0.0
-shader_parameter/glow = 0.42800002033
-shader_parameter/outline_glow = 0.0
-shader_parameter/color = Color(0.91, 1, 1, 1)
-shader_parameter/outline_color = Color(0.5, 1, 0.96, 1)
-shader_parameter/progress = 1.0
-shader_parameter/y_offset = 0.0
-shader_parameter/fixed_edge_size = 0.05
-shader_parameter/noise_scale = Vector2(1, 1)
 
 [sub_resource type="Curve2D" id="Curve2D_0xm2m"]
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h2yge"]
-lifetime_randomness = 0.21
-particle_flag_disable_z = true
-angle_min = -720.0
-angle_max = 720.0
-gravity = Vector3(0, 98, 0)
-scale_min = 0.0
-scale_max = 31.769999
-turbulence_enabled = true
 
 [sub_resource type="Gradient" id="Gradient_h2yge"]
 offsets = PackedFloat32Array(0, 0.15060242, 0.5180723, 0.8795181, 1)
@@ -219,7 +77,7 @@ tracks/0/path = NodePath("Ld59SignalProto:pitch_scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 1),
+"times": PackedFloat32Array(0, 0.33333334, 1),
 "transitions": PackedFloat32Array(0.232, 4.756827, 1),
 "update": 0,
 "values": [1.0, 0.1, 1.0]
@@ -275,8 +133,7 @@ dist_offset_threshold = 203
 [node name="Line2D" type="Line2D" parent="." unique_id=1536082122]
 material = SubResource("ShaderMaterial_lquwl")
 points = PackedVector2Array(5, 467, 166, 152, 261, 465, 376, 156, 471, 463, 616, 141, 736, 460, 856, 135, 964, 465, 1116, 126, 1236, 469, 1395, 126, 1517, 467, 1682, 117, 1859, 454, 2002, 102, 2151, 452, 2271, 106, 2416, 442, 2605, 91, 2748, 445, 2885, 88, 3174, 607, 3365, 101, 3465, 270, 4124, 35, 4451, 156, 4670, 53, 5103, 533, 5187, 407, 5262, 480, 5311, 390, 5418, 484, 5523, 244, 5594, 370, 5740, 40, 5956, 458, 6282, 342, 6413, 463, 6464, 204, 6562, 525, 6742, 93, 6874, 459, 7051, 78, 7235, 631, 7475, 235, 7612, 544, 7809, 32, 8045, 560, 8090, 415, 8243, 600, 8403, 30, 8604, 394, 8702, 211, 8780, 375, 8859, 217, 8920, 380, 9031, 116, 9173, 617, 9440, 64, 9667, 617)
-width = 100.0
-default_color = Color(1, 0, 0, 1)
+default_color = Color(0.21818587, 0.5092811, 1, 1)
 texture_mode = 2
 joint_mode = 2
 begin_cap_mode = 2
@@ -294,14 +151,6 @@ loop = false
 [node name="Circle" type="Sprite2D" parent="Path2D/PathFollow2D" unique_id=1360790884]
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_1bvp3")
-
-[node name="GPUParticles2D" type="GPUParticles2D" parent="Path2D/PathFollow2D/Circle" unique_id=809476249]
-visible = false
-lifetime = 1.12
-speed_scale = 2.9
-explosiveness = 1.0
-randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_h2yge")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1097233294]
 position = Vector2(575.99994, 319.99997)
