@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
 [ext_resource type="Shader" uid="uid://7bfhjbcb41x0" path="res://shaders/signal.gdshader" id="2_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://xiaa2tnh6t0e" path="res://images/white_circle.png" id="3_272bh"]
 [ext_resource type="Material" uid="uid://dx1fjlf8t1sik" path="res://materials/blooming_player.tres" id="3_lquwl"]
-[ext_resource type="Texture2D" uid="uid://dp7m62gufnsiv" path="res://images/white_circle.svg" id="4_272bh"]
 [ext_resource type="AudioStream" uid="uid://1ryh6e10t4uw" path="res://musics/LD59_Cosmic-Microwave-Background_final.ogg" id="4_lquwl"]
 [ext_resource type="AudioStream" uid="uid://dnt0ni2nfr3ph" path="res://assets/sfx/Wrong Error.wav" id="6_7mycd"]
 [ext_resource type="Texture2D" uid="uid://cikt0x7c3rrj4" path="res://images/circle_white.png" id="6_272bh"]
@@ -334,7 +334,7 @@ loop = false
 modulate = Color(1, 0, 0, 1)
 material = ExtResource("3_lquwl")
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("4_272bh")
+texture = ExtResource("3_272bh")
 
 [node name="Area2D" type="Area2D" parent="Path2D/PathFollow2D/Circle" unique_id=48873254]
 
