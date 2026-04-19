@@ -150,6 +150,15 @@ scale_min = 0.0
 scale_max = 31.769999
 turbulence_enabled = true
 
+[sub_resource type="Gradient" id="Gradient_h2yge"]
+offsets = PackedFloat32Array(0, 0.15060242, 0.5180723, 0.8795181, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0.3499999, 1, 0.4745098, 0, 0.3499999, 1, 0.67058825, 0.23000002, 0.49949992, 1, 0.5372549, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1bvp3"]
+gradient = SubResource("Gradient_h2yge")
+width = 128
+height = 128
+
 [sub_resource type="Animation" id="Animation_h2yge"]
 length = 0.001
 tracks/0/type = "value"
@@ -279,7 +288,7 @@ metadata/_edit_lock_ = true
 curve = SubResource("Curve2D_0xm2m")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1380822122]
-v_offset = -40.0
+v_offset = -10.0
 loop = false
 
 [node name="Circle" type="Sprite2D" parent="Path2D/PathFollow2D" unique_id=1360790884]
@@ -297,6 +306,7 @@ process_material = SubResource("ParticleProcessMaterial_h2yge")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1097233294]
 position = Vector2(575.99994, 319.99997)
 scale = Vector2(0.99999994, 0.99999994)
+offset = Vector2(450, 0)
 position_smoothing_enabled = true
 
 [node name="BG" type="Node2D" parent="Camera2D" unique_id=2029432541]
@@ -305,14 +315,14 @@ position_smoothing_enabled = true
 z_index = -1
 offset_left = -662.99994
 offset_top = -370.99997
-offset_right = 640.00006
+offset_right = 1665.0
 offset_bottom = 399.00003
 color = Color(0.047239788, 0.06789976, 0.03691347, 1)
 
 [node name="Line2D" type="Line2D" parent="Camera2D/BG" unique_id=2089011069]
 z_index = -1
 scale = Vector2(0.9999999, 0.9999999)
-points = PackedVector2Array(-660, -3.9999695, 641.0001, -3.9999695)
+points = PackedVector2Array(-660, -3.9999695, 1659.0002, -4.9999695)
 width = 5.0
 default_color = Color(0, 0.56078434, 0, 1)
 
@@ -320,7 +330,7 @@ default_color = Color(0, 0.56078434, 0, 1)
 z_index = -1
 position = Vector2(6.1035156e-05, 180.00003)
 scale = Vector2(0.9999999, 0.9999999)
-points = PackedVector2Array(-660, -3.9999695, 641.0001, -3.9999695)
+points = PackedVector2Array(-660, -3.9999695, 1670.0002, -4)
 width = 2.0
 default_color = Color(0, 0.56078434, 0, 1)
 
@@ -328,13 +338,18 @@ default_color = Color(0, 0.56078434, 0, 1)
 z_index = -1
 position = Vector2(4.000061, -160.99995)
 scale = Vector2(0.9999999, 0.9999999)
-points = PackedVector2Array(-660, -3.9999695, 641.0001, -3.9999695)
+points = PackedVector2Array(-660, -3.9999695, 1663.0002, -5.0000305)
 width = 2.0
 default_color = Color(0, 0.56078434, 0, 1)
 
 [node name="Ld59SignalProto" type="AudioStreamPlayer" parent="." unique_id=1224994769]
 stream = ExtResource("3_h2yge")
 autoplay = true
+
+[node name="Column" type="Sprite2D" parent="." unique_id=202545968]
+position = Vector2(-692.9999, 212)
+scale = Vector2(0.73046863, 11.687499)
+texture = SubResource("GradientTexture2D_1bvp3")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1148269338]
 libraries/ = SubResource("AnimationLibrary_lquwl")

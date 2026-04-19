@@ -20,20 +20,7 @@ var derivation_timeleft = 0.0
 # Let suppose an interval between 2 points is 20
 # If t = 33, the point before t is time_serie[1] and
 # we need to lerp at 13/20 from time_serie[1] to time_serie[2]
-var time_serie = [
-	Vector2(0, 10),
-	Vector2(10, 90),
-	Vector2(15, 50),
-	Vector2(30, 60),
-	Vector2(40, 20),
-	Vector2(42, 50),
-	Vector2(48, 10),
-	Vector2(55, 90),
-	Vector2(59, 60),
-	Vector2(70, 70),
-	Vector2(82, 10),
-	Vector2(100, 30),
-]
+var time_serie = []
 
 var next_point_id = 1
 
@@ -97,15 +84,31 @@ func get_serie() -> Array[Vector2]:
 	#points.push_back(last_point)
 	#return points
 	
+func add_pulse(offset_x, stride_x) -> Array[Vector2]:
+	return [Vector2(offset_x, 0.1), Vector2(offset_x + stride_x * 0.2, 0.9), Vector2(offset_x + stride_x * 0.5, 0.3), Vector2(offset_x + stride_x, 0.5)]
+	
 func _ready() -> void:
-	time_serie = $Line2D.points
+	xy_scale.y = get_viewport().get_visible_rect().size.y
+	var stride_x = 200
+	for i in range(30):
+		var is_even = i % 2
+		var bound_y = 0.3 if is_even else 0.7
+		if i == 24:
+			time_serie.append_array(add_pulse(i * stride_x, stride_x))
+			i+=1
+		else :
+			time_serie.append(Vector2(i*stride_x, bound_y) * xy_scale)
+		
+	$Line2D.points = time_serie
+	
+	#time_serie = $Line2D.points
 	var curve = Curve2D.new()
 	for i in time_serie.size():
-		time_serie[i] *= xy_scale
+		time_serie[i]
 		curve.add_point(time_serie[i])
-		#var circle = $Circle.duplicate()
-		#circle.position = time_serie[i]
-		#$Line2D.add_child(circle)
+		var column = $Column.duplicate()
+		column.position.x = time_serie[i].x-45
+		$Line2D.add_child(column)
 	$Path2D.curve = curve
 	
 	previous_position = $Path2D/PathFollow2D/Circle.global_position
