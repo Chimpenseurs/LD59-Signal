@@ -147,6 +147,7 @@ func _process(delta: float) -> void:
 		print(distance_to_next_point)
 		if valid_control:
 			print("GOOD")
+			$AnimationPlayer.play("success")
 			self.next_trigger_point_id+=1
 		else :
 			print("BAD")
@@ -165,3 +166,6 @@ func _on_trigger_area_entered(area: Area2D) -> void:
 
 func _on_area_2d_area_exited(area: Area2D) -> void:
 	valid_control = false
+	
+func active_wave():
+	$Wave.position = $Path2D/PathFollow2D/Circle.global_position

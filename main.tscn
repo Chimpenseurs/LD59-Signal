@@ -3,9 +3,10 @@
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
 [ext_resource type="Shader" uid="uid://7bfhjbcb41x0" path="res://shaders/signal.gdshader" id="2_1bvp3"]
 [ext_resource type="Material" uid="uid://dx1fjlf8t1sik" path="res://materials/blooming_player.tres" id="3_lquwl"]
-[ext_resource type="Texture2D" uid="uid://bn63imeod2dmu" path="res://images/circle.svg" id="4_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://dp7m62gufnsiv" path="res://images/white_circle.svg" id="4_272bh"]
 [ext_resource type="AudioStream" uid="uid://1ryh6e10t4uw" path="res://musics/LD59_Cosmic-Microwave-Background_final.ogg" id="4_lquwl"]
 [ext_resource type="AudioStream" uid="uid://dnt0ni2nfr3ph" path="res://assets/sfx/Wrong Error.wav" id="6_7mycd"]
+[ext_resource type="Texture2D" uid="uid://cikt0x7c3rrj4" path="res://images/circle_white.png" id="6_272bh"]
 
 [sub_resource type="Curve2D" id="Curve2D_0xm2m"]
 
@@ -128,6 +129,42 @@ tracks/2/keys = {
 "update": 0,
 "values": [Color(0.69807625, 1, 0.67210174, 1)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Path2D/PathFollow2D/Circle:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 0, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Wave:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.3, 0.3)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Wave:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_1bvp3"]
 resource_name = "slower"
@@ -199,10 +236,65 @@ tracks/4/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_5vw27"]
+resource_name = "success"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Path2D/PathFollow2D/Circle:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(0.10153162, 1.0717752, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 0.8032767, 0.7704654, 1), Color(1, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Wave:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.3, 0.3), Vector2(2, 2)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"active_wave"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Wave:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lquwl"]
 _data = {
 &"RESET": SubResource("Animation_h2yge"),
-&"slower": SubResource("Animation_1bvp3")
+&"slower": SubResource("Animation_1bvp3"),
+&"success": SubResource("Animation_5vw27")
 }
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_272bh"]
@@ -239,9 +331,10 @@ v_offset = -10.0
 loop = false
 
 [node name="Circle" type="Sprite2D" parent="Path2D/PathFollow2D" unique_id=1360790884]
+modulate = Color(1, 0, 0, 1)
 material = ExtResource("3_lquwl")
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("4_1bvp3")
+texture = ExtResource("4_272bh")
 
 [node name="Area2D" type="Area2D" parent="Path2D/PathFollow2D/Circle" unique_id=48873254]
 
@@ -325,6 +418,10 @@ shape = SubResource("RectangleShape2D_lquwl")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1148269338]
 libraries/ = SubResource("AnimationLibrary_lquwl")
+
+[node name="Wave" type="Sprite2D" parent="." unique_id=848662902]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("6_272bh")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1089278649]
 stream = SubResource("AudioStreamRandomizer_272bh")

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   sodipodi:docname="dessin.png"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.89619809"
+     inkscape:cx="397.23361"
+     inkscape:cy="560.70193"
+     inkscape:window-width="2502"
+     inkscape:window-height="1371"
+     inkscape:window-x="58"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2"
+       x="-0.046110871"
+       y="-0.046110868"
+       width="1.0922217"
+       height="1.0922217">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.93024293"
+         id="feGaussianBlur2" />
+    </filter>
+  </defs>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:#ffffff;stroke-width:0.264583"
+       id="path1"
+       cx="54.912521"
+       cy="36.313122"
+       r="12.399602"
+       inkscape:export-filename="white_circle.svg"
+       inkscape:export-xdpi="102.42265"
+       inkscape:export-ydpi="102.42265" />
+    <path
+       id="path2"
+       style="fill:#ffffff;stroke-width:5;stroke:none;stroke-dasharray:none;fill-opacity:1;filter:url(#filter2)"
+       d="M 51.665063 126.94832 A 24.208746 24.208746 0 0 0 27.456205 151.15718 A 24.208746 24.208746 0 0 0 51.665063 175.36604 A 24.208746 24.208746 0 0 0 75.873922 151.15718 A 24.208746 24.208746 0 0 0 51.665063 126.94832 z M 51.665063 134.62434 A 16.532801 16.532801 0 0 1 68.197904 151.15718 A 16.532801 16.532801 0 0 1 51.665063 167.69002 A 16.532801 16.532801 0 0 1 35.132222 151.15718 A 16.532801 16.532801 0 0 1 51.665063 134.62434 z "
+       inkscape:export-filename="circle_white.svg"
+       inkscape:export-xdpi="102.42265"
+       inkscape:export-ydpi="102.42265" />
+  </g>
+</svg>
