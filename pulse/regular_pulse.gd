@@ -1,4 +1,4 @@
-class_name SimplePulse
+class_name RegularPulse
 
 extends PulseBase
 
@@ -15,7 +15,6 @@ func _init(offset_x: float, stride_x: float):
 	self.trigger_start = offset_x - 5
 	self.trigger_end = offset_x + 5
 	self._set_time_serie(stride_x)
-	self.expected_combos = [Combo.UP]
 
 func _handle_combo(combo: Combo, current_x: float) -> Combo_state:
 #	Implement your combo logic here.
