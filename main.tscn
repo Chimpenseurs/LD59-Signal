@@ -312,7 +312,7 @@ stream_0/stream = ExtResource("6_7mycd")
 process_mode = 1
 script = ExtResource("2_0xm2m")
 xy_scale = Vector2(1, 853)
-time_scale = 0.5
+time_scale = 0.05
 dist_offset_threshold = 203
 
 [node name="TextureButton" type="Button" parent="." unique_id=526635855]
