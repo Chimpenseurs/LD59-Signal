@@ -1,17 +1,21 @@
 class_name PulseBase
 
-enum Combo_state { TOO_SOON, GOOD, BAD, MISSED, WAITING_NEXT }
+enum Combo_state { TOO_SOON, TOO_LATE, GOOD, BAD, MISSED, WAITING_NEXT }
+
+const BASELINE_H = 0.5
+const MEDIUM_H = 0.3
+const HIGH_H = 0.1
 
 var total_time: float
 var state: Combo_state
-var offset_t: float
+var offset_x: float
 var time_serie: Array[Vector2]
 var trigger_start: float
 var trigger_end: float
 
-func _init(start: float):
-	offset_t = start
-	state = Combo_state.WAITING_NEXT
+func _init(offset_x: float):
+	self.offset_x = offset_x
+	self.state = Combo_state.WAITING_NEXT
 
 func get_pulse() -> Array[Vector2]:
 	assert(false, "Abstract class method cannot be called")
