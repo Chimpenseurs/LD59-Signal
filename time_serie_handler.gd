@@ -143,13 +143,18 @@ func _ready() -> void:
 			add_simple_pulse(index * stride_x, stride_x)
 		elif pulse_type == 2:
 			add_regular_pulse(index * stride_x, stride_x)
+		var str = str(index)
+		$TextureButton.text = str
+		$TextureButton.position.x = index * stride_x
+		var tb = $TextureButton.duplicate()
+		self.add_child(tb)
 		index += 1
+		
 			
 	$Line2D.points = time_serie
 	
 	var curve = Curve2D.new()
 	for i in time_serie.size():
-		time_serie[i]
 		curve.add_point(time_serie[i])
 	$Path2D.curve = curve
 
@@ -158,7 +163,7 @@ func _ready() -> void:
 		column.scale.x *= xy_scale.x
 		column.position.x = time_serie[triggers[i]].x-45
 		$Line2D.add_child(column)
-	
+
 	previous_position = $Path2D/PathFollow2D/Circle.global_position
 	
 	# this allows to get the total number of pixels in the path, we need it for the speed scale
