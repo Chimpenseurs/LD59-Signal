@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://cjyggs6ml1lfr"]
+
+[ext_resource type="Script" uid="uid://mjo1730vvf66" path="res://control_menu.gd" id="1_k71r4"]
+[ext_resource type="FontFile" uid="uid://mnrswl4tv81w" path="res://assets/fonts/JVNE Wopper'83.ttf" id="1_taqx6"]
+[ext_resource type="Texture2D" uid="uid://dhg28am52s76o" path="res://assets/img/tuto1.png" id="2_1sqh5"]
+[ext_resource type="Texture2D" uid="uid://cg7a2ywcagpsq" path="res://assets/img/Arrow_Up_Key_Light.png" id="3_hnqsp"]
+[ext_resource type="AudioStream" uid="uid://dvw2eq6g7u65x" path="res://assets/sfx/menu_select.wav" id="4_hnqsp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_bkl5u"]
+font = ExtResource("1_taqx6")
+font_size = 30
+font_color = Color(0, 0.7647059, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_k71r4"]
+font = ExtResource("1_taqx6")
+font_size = 20
+font_color = Color(0, 0.7647059, 0, 1)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_k71r4"]
+random_pitch = 1.0650467
+streams_count = 1
+stream_0/stream = ExtResource("4_hnqsp")
+
+[node name="ControlMenu" type="Control" unique_id=2110826156]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k71r4")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1380920847]
+layout_mode = 0
+offset_left = -28.0
+offset_top = -22.0
+offset_right = 1199.0
+offset_bottom = 673.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="." unique_id=814398780]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -192.5
+offset_top = 59.0
+offset_right = 192.5
+offset_bottom = 104.0
+grow_horizontal = 2
+text = "How to play"
+label_settings = SubResource("LabelSettings_bkl5u")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=430041433]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.5
+offset_top = -101.5
+offset_right = 225.5
+offset_bottom = 121.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_1sqh5")
+
+[node name="TextureRect" type="TextureRect" parent="TextureRect" unique_id=724375934]
+layout_mode = 0
+offset_left = 140.0
+offset_top = -89.0
+offset_right = 240.0
+offset_bottom = 11.0
+texture = ExtResource("3_hnqsp")
+
+[node name="Label" type="Label" parent="TextureRect" unique_id=762958115]
+layout_mode = 0
+offset_left = 8.0
+offset_top = -49.0
+offset_right = 142.0
+offset_bottom = -19.0
+text = "PRESS"
+label_settings = SubResource("LabelSettings_k71r4")
+
+[node name="Label2" type="Label" parent="TextureRect" unique_id=1061391796]
+layout_mode = 0
+offset_left = 232.0
+offset_top = -52.0
+offset_right = 413.0
+offset_bottom = -22.0
+text = "in rythm"
+label_settings = SubResource("LabelSettings_k71r4")
+
+[node name="Button" type="Button" parent="." unique_id=87919775]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -31.0
+offset_top = -87.0
+offset_right = 31.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Return"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=809926505]
+stream = SubResource("AudioStreamRandomizer_k71r4")
+
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
