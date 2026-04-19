@@ -191,7 +191,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_up") :
 		has_pressed = true
 		print(distance_to_next_point)
-		if distance_to_next_point < dist_offset_threshold:
+		if valid_control:
 			print("GOOD")
 			self.next_trigger_point_id+=1
 		else :
@@ -210,7 +210,7 @@ func _process(delta: float) -> void:
 		self.next_trigger_point_id+=1
 		
 	previous_position = player_pos
-
+ 
 	#if derivation_vec_coef > 0:
 		#var delta_next_pos = - player_pos.normalized()
 		#$Path2D/PathFollow2D/Circle.position += lerp(derivation_vec * delta, delta_next_pos * delta, 1-derivation_vec_coef)
@@ -221,6 +221,8 @@ func _process(delta: float) -> void:
 		#print(t)
 		#derivation_vec_coef = t
 
-
 func _on_trigger_area_entered(area: Area2D) -> void:
 	valid_control = true
+
+func _on_area_2d_area_exited(area: Area2D) -> void:
+	valid_control = false

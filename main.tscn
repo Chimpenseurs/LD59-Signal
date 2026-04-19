@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
 [ext_resource type="Shader" uid="uid://7bfhjbcb41x0" path="res://shaders/signal.gdshader" id="2_1bvp3"]
+[ext_resource type="Material" uid="uid://dx1fjlf8t1sik" path="res://materials/blooming_player.tres" id="3_lquwl"]
 [ext_resource type="Texture2D" uid="uid://bn63imeod2dmu" path="res://images/circle.svg" id="4_1bvp3"]
 [ext_resource type="AudioStream" uid="uid://1ryh6e10t4uw" path="res://musics/LD59_Cosmic-Microwave-Background_final.ogg" id="4_lquwl"]
 
@@ -27,7 +28,7 @@ shader_parameter/noise_scale = Vector2(1, 1)
 [sub_resource type="Curve2D" id="Curve2D_0xm2m"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1bvp3"]
-radius = 30.673914
+radius = 17.448338
 
 [sub_resource type="Gradient" id="Gradient_h2yge"]
 offsets = PackedFloat32Array(0, 0.15060242, 0.5180723, 0.8795181, 1)
@@ -174,6 +175,7 @@ v_offset = -10.0
 loop = false
 
 [node name="Circle" type="Sprite2D" parent="Path2D/PathFollow2D" unique_id=1360790884]
+material = ExtResource("3_lquwl")
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_1bvp3")
 
@@ -240,3 +242,4 @@ shape = SubResource("RectangleShape2D_lquwl")
 libraries/ = SubResource("AnimationLibrary_lquwl")
 
 [connection signal="area_entered" from="Column/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Column/Area2D" to="." method="_on_area_2d_area_exited"]
