@@ -38,21 +38,27 @@ const HIGH_H = 0.1
 var total_time: float
 var state: Combo_state
 var offset_x: float
+var stride_x: float
 var time_serie: Array[Vector2]
 var trigger_start: float
 var trigger_end: float
 var combo_idx: int
 var expected_combos: Array[Combo]
 
-func _init(offset_x: float):
+func _init(offset_x: float, stride_x: float):
 	self.offset_x = offset_x
+	self.stride_x = stride_x
 	self.combo_idx = 0
 	self.state = Combo_state.WAITING_NEXT_TRIGGER
+
+func size() -> int:
+	return self.time_serie.size()
 
 func get_pulse() -> Array[Vector2]:
 	return self.time_serie
 
 func get_trigger_end() -> float:
+	assert(false, "Not implemented for PulseBase class.")
 	return self.trigger_end
 
 func get_state() -> Combo_state:
