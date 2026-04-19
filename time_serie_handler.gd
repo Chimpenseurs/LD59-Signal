@@ -1,3 +1,5 @@
+@tool
+
 class_name Game
 extends Node
 
@@ -116,12 +118,13 @@ func _ready() -> void:
 	time_scale_init = time_scale
 	$Path2D/PathFollow2D.progress_ratio = 0.0
 	
-	var animation = $AnimationPlayer.get_animation("slower")
-	var track_id = animation.find_track(".:time_scale", Animation.TYPE_VALUE)
+	if not Engine.is_editor_hint():
+		var animation = $AnimationPlayer.get_animation("slower")
+		var track_id = animation.find_track(".:time_scale", Animation.TYPE_VALUE)
 
-	animation.track_set_key_value(track_id, 0, time_scale_init)
-	animation.track_set_key_value(track_id, 1, time_scale_init * 0.1)
-	animation.track_set_key_value(track_id, 2, time_scale_init)
+		animation.track_set_key_value(track_id, 0, time_scale_init)
+		animation.track_set_key_value(track_id, 1, time_scale_init * 0.1)
+		animation.track_set_key_value(track_id, 2, time_scale_init)
 	
 	
 func _get_path_current_position():
@@ -131,6 +134,10 @@ func _get_path_next_position():
 	return $Path2D.curve.sample_baked($Path2D/PathFollow2D.progress + 10)
 	
 func _process(delta: float) -> void:
+
+	if  Engine.is_editor_hint():
+		return
+
 	var player_pos = $Path2D/PathFollow2D/Circle.global_position
 	if time_serie[previous_point_id+1].x < player_pos.x:
 		previous_point_id += 1

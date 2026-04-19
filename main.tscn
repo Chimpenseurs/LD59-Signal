@@ -9,7 +9,11 @@
 [ext_resource type="Texture2D" uid="uid://ceknw0h4begpy" path="res://images/circle_white.png" id="6_272bh"]
 [ext_resource type="PackedScene" uid="uid://cudoses46ae5g" path="res://pause_menu.tscn" id="8_5vw27"]
 
-[sub_resource type="Curve2D" id="Curve2D_0xm2m"]
+[sub_resource type="Curve2D" id="Curve2D_272bh"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 200, 470.5, 0, 0, 0, 0, 240, 282.30002, 0, 0, 0, 0, 280, 470.5, 0, 0, 0, 0, 400, 470.5, 0, 0, 0, 0, 600, 470.5, 0, 0, 0, 0, 640, 282.30002, 0, 0, 0, 0, 680, 470.5, 0, 0, 0, 0, 800, 470.5, 0, 0, 0, 0, 1000, 470.5, 0, 0, 0, 0, 1040, 282.30002, 0, 0, 0, 0, 1080, 470.5, 0, 0, 0, 0, 1200, 470.5, 0, 0, 0, 0, 1400, 470.5, 0, 0, 0, 0, 1440, 282.30002, 0, 0, 0, 0, 1480, 470.5, 0, 0, 0, 0, 1600, 470.5, 0, 0, 0, 0, 1800, 470.5, 0, 0, 0, 0, 1840, 282.30002, 0, 0, 0, 0, 1880, 470.5, 0, 0, 0, 0, 2000, 470.5, 0, 0, 0, 0, 2200, 470.5, 0, 0, 0, 0, 2240, 282.30002, 0, 0, 0, 0, 2280, 470.5, 0, 0, 0, 0, 2400, 470.5, 0, 0, 0, 0, 2600, 470.5, 0, 0, 0, 0, 2640, 282.30002, 0, 0, 0, 0, 2680, 470.5, 0, 0, 0, 0, 2800, 470.5, 0, 0, 0, 0, 3000, 470.5, 0, 0, 0, 0, 3040, 282.30002, 0, 0, 0, 0, 3080, 470.5, 0, 0, 0, 0, 3200, 470.5, 0, 0, 0, 0, 3400, 470.5, 0, 0, 0, 0, 3440, 282.30002, 0, 0, 0, 0, 3480, 470.5, 0, 0, 0, 0, 3600, 470.5, 0, 0, 0, 0, 3800, 470.5, 0, 0, 0, 0, 3840, 282.30002, 0, 0, 0, 0, 3880, 470.5, 0, 0, 0, 0, 4000, 470.5, 0, 0, 0, 0, 4200, 470.5, 0, 0, 0, 0, 4240, 282.30002, 0, 0, 0, 0, 4280, 470.5, 0, 0, 0, 0, 4400, 470.5, 0, 0, 0, 0, 4600, 470.5, 0, 0, 0, 0, 4640, 282.30002, 0, 0, 0, 0, 4680, 470.5, 0, 0, 0, 0, 4800, 470.5, 0, 0, 0, 0, 5000, 470.5, 0, 0, 0, 0, 5040, 282.30002, 0, 0, 0, 0, 5080, 470.5, 0, 0, 0, 0, 5200, 470.5, 0, 0, 0, 0, 5400, 470.5, 0, 0, 0, 0, 5440, 282.30002, 0, 0, 0, 0, 5480, 470.5, 0, 0, 0, 0, 5600, 470.5, 0, 0, 0, 0, 5800, 470.5, 0, 0, 0, 0, 5840, 94.1, 0, 0, 0, 0, 5880, 846.89996, 0, 0, 0, 0, 5920, 282.30002, 0, 0, 0, 0, 6000, 470.5, 0, 0, 0, 0, 6200, 470.5, 0, 0, 0, 0, 6240, 282.30002, 0, 0, 0, 0, 6280, 470.5, 0, 0, 0, 0, 6400, 470.5, 0, 0, 0, 0, 6600, 470.5, 0, 0, 0, 0, 6640, 282.30002, 0, 0, 0, 0, 6680, 470.5, 0, 0, 0, 0, 6800, 470.5, 0, 0, 0, 0, 7000, 470.5, 0, 0, 0, 0, 7040, 282.30002, 0, 0, 0, 0, 7080, 470.5, 0, 0, 0, 0, 7200, 470.5, 0, 0, 0, 0, 7400, 470.5, 0, 0, 0, 0, 7440, 94.1, 0, 0, 0, 0, 7480, 846.89996, 0, 0, 0, 0, 7520, 282.30002, 0, 0, 0, 0, 7600, 470.5, 0, 0, 0, 0, 7800, 470.5, 0, 0, 0, 0, 7840, 282.30002, 0, 0, 0, 0, 7880, 470.5, 0, 0, 0, 0, 8000, 470.5, 0, 0, 0, 0, 8200, 470.5, 0, 0, 0, 0, 8240, 282.30002, 0, 0, 0, 0, 8280, 470.5, 0, 0, 0, 0, 8400, 470.5, 0, 0, 0, 0, 8600, 470.5, 0, 0, 0, 0, 8640, 94.1, 0, 0, 0, 0, 8680, 846.89996, 0, 0, 0, 0, 8720, 282.30002, 0, 0, 0, 0, 8800, 470.5, 0, 0, 0, 0, 9000, 470.5, 0, 0, 0, 0, 9040, 282.30002, 0, 0, 0, 0, 9080, 470.5, 0, 0, 0, 0, 9200, 470.5, 0, 0, 0, 0, 9400, 470.5, 0, 0, 0, 0, 9440, 282.30002, 0, 0, 0, 0, 9480, 470.5, 0, 0, 0, 0, 9600, 470.5, 0, 0, 0, 0, 10000, 470.5, 0, 0, 0, 0, 10040, 94.1, 0, 0, 0, 0, 10080, 846.89996, 0, 0, 0, 0, 10120, 282.30002, 0, 0, 0, 0, 10200, 470.5, 0, 0, 0, 0, 10600, 470.5, 0, 0, 0, 0, 10640, 282.30002, 0, 0, 0, 0, 10680, 470.5, 0, 0, 0, 0, 10800, 470.5, 0, 0, 0, 0, 11000, 470.5, 0, 0, 0, 0, 11040, 282.30002, 0, 0, 0, 0, 11080, 470.5, 0, 0, 0, 0, 11200, 470.5, 0, 0, 0, 0, 11200, 470.5, 0, 0, 0, 0, 11240, 94.1, 0, 0, 0, 0, 11280, 846.89996, 0, 0, 0, 0, 11320, 282.30002, 0, 0, 0, 0, 11400, 470.5, 0, 0, 0, 0, 11800, 470.5, 0, 0, 0, 0, 11840, 282.30002, 0, 0, 0, 0, 11880, 470.5, 0, 0, 0, 0, 12000, 470.5, 0, 0, 0, 0, 12600, 470.5, 0, 0, 0, 0, 12640, 94.1, 0, 0, 0, 0, 12680, 846.89996, 0, 0, 0, 0, 12720, 282.30002, 0, 0, 0, 0, 12800, 470.5, 0, 0, 0, 0, 13000, 470.5, 0, 0, 0, 0, 13040, 282.30002, 0, 0, 0, 0, 13080, 470.5, 0, 0, 0, 0, 13200, 470.5, 0, 0, 0, 0, 13400, 470.5, 0, 0, 0, 0, 13440, 282.30002, 0, 0, 0, 0, 13480, 470.5, 0, 0, 0, 0, 13600, 470.5, 0, 0, 0, 0, 14200, 470.5, 0, 0, 0, 0, 14240, 94.1, 0, 0, 0, 0, 14280, 846.89996, 0, 0, 0, 0, 14320, 282.30002, 0, 0, 0, 0, 14400, 470.5, 0, 0, 0, 0, 14600, 470.5, 0, 0, 0, 0, 14640, 282.30002, 0, 0, 0, 0, 14680, 470.5, 0, 0, 0, 0, 14800, 470.5, 0, 0, 0, 0, 15000, 470.5, 0, 0, 0, 0, 15040, 282.30002, 0, 0, 0, 0, 15080, 470.5, 0, 0, 0, 0, 15200, 470.5, 0, 0, 0, 0, 15400, 470.5, 0, 0, 0, 0, 15440, 282.30002, 0, 0, 0, 0, 15480, 470.5, 0, 0, 0, 0, 15600, 470.5, 0, 0, 0, 0, 15800, 470.5, 0, 0, 0, 0, 15840, 94.1, 0, 0, 0, 0, 15880, 846.89996, 0, 0, 0, 0, 15920, 282.30002, 0, 0, 0, 0, 16000, 470.5, 0, 0, 0, 0, 16200, 470.5, 0, 0, 0, 0, 16240, 282.30002, 0, 0, 0, 0, 16280, 470.5, 0, 0, 0, 0, 16400, 470.5, 0, 0, 0, 0, 16600, 470.5, 0, 0, 0, 0, 16640, 282.30002, 0, 0, 0, 0, 16680, 470.5, 0, 0, 0, 0, 16800, 470.5, 0, 0, 0, 0, 17000, 470.5, 0, 0, 0, 0, 17040, 282.30002, 0, 0, 0, 0, 17080, 470.5, 0, 0, 0, 0, 17200, 470.5, 0, 0, 0, 0, 17400, 470.5, 0, 0, 0, 0, 17440, 282.30002, 0, 0, 0, 0, 17480, 470.5, 0, 0, 0, 0, 17600, 470.5, 0, 0, 0, 0, 17800, 470.5, 0, 0, 0, 0, 17840, 282.30002, 0, 0, 0, 0, 17880, 470.5, 0, 0, 0, 0, 18000, 470.5, 0, 0, 0, 0, 18200, 470.5, 0, 0, 0, 0, 18240, 282.30002, 0, 0, 0, 0, 18280, 470.5, 0, 0, 0, 0, 18400, 470.5, 0, 0, 0, 0, 18600, 470.5, 0, 0, 0, 0, 18640, 282.30002, 0, 0, 0, 0, 18680, 470.5, 0, 0, 0, 0, 18800, 470.5, 0, 0, 0, 0, 19000, 470.5, 0, 0, 0, 0, 19040, 282.30002, 0, 0, 0, 0, 19080, 470.5, 0, 0, 0, 0, 19200, 470.5, 0, 0, 0, 0, 19400, 470.5, 0, 0, 0, 0, 19440, 282.30002, 0, 0, 0, 0, 19480, 470.5, 0, 0, 0, 0, 19600, 470.5, 0, 0, 0, 0, 19800, 470.5, 0, 0, 0, 0, 19840, 282.30002, 0, 0, 0, 0, 19880, 470.5, 0, 0, 0, 0, 20000, 470.5, 0, 0, 0, 0, 20200, 470.5, 0, 0, 0, 0, 20240, 282.30002, 0, 0, 0, 0, 20280, 470.5, 0, 0, 0, 0, 20400, 470.5, 0, 0, 0, 0, 20600, 470.5, 0, 0, 0, 0, 20640, 282.30002, 0, 0, 0, 0, 20680, 470.5, 0, 0, 0, 0, 20800, 470.5, 0, 0, 0, 0, 21000, 470.5, 0, 0, 0, 0, 21040, 282.30002, 0, 0, 0, 0, 21080, 470.5, 0, 0, 0, 0, 21200, 470.5, 0, 0, 0, 0, 21400, 470.5, 0, 0, 0, 0, 21440, 282.30002, 0, 0, 0, 0, 21480, 470.5, 0, 0, 0, 0, 21600, 470.5, 0, 0, 0, 0, 21800, 470.5, 0, 0, 0, 0, 21840, 282.30002, 0, 0, 0, 0, 21880, 470.5, 0, 0, 0, 0, 22000, 470.5, 0, 0, 0, 0, 22200, 470.5, 0, 0, 0, 0, 22240, 282.30002, 0, 0, 0, 0, 22280, 470.5, 0, 0, 0, 0, 22400, 470.5, 0, 0, 0, 0, 22600, 470.5, 0, 0, 0, 0, 22640, 282.30002, 0, 0, 0, 0, 22680, 470.5, 0, 0, 0, 0, 22800, 470.5, 0, 0, 0, 0, 23000, 470.5, 0, 0, 0, 0, 23040, 282.30002, 0, 0, 0, 0, 23080, 470.5, 0, 0, 0, 0, 23200, 470.5, 0, 0, 0, 0, 23400, 470.5, 0, 0, 0, 0, 23440, 282.30002, 0, 0, 0, 0, 23480, 470.5, 0, 0, 0, 0, 23600, 470.5, 0, 0, 0, 0, 23800, 470.5, 0, 0, 0, 0, 23840, 282.30002, 0, 0, 0, 0, 23880, 470.5, 0, 0, 0, 0, 24000, 470.5, 0, 0, 0, 0, 24200, 470.5, 0, 0, 0, 0, 24240, 282.30002, 0, 0, 0, 0, 24280, 470.5, 0, 0, 0, 0, 24400, 470.5, 0, 0, 0, 0, 24600, 470.5, 0, 0, 0, 0, 24640, 282.30002, 0, 0, 0, 0, 24680, 470.5, 0, 0, 0, 0, 24800, 470.5, 0, 0, 0, 0, 25000, 470.5, 0, 0, 0, 0, 25040, 282.30002, 0, 0, 0, 0, 25080, 470.5, 0, 0, 0, 0, 25200, 470.5, 0, 0, 0, 0, 25400, 470.5, 0, 0, 0, 0, 25440, 282.30002, 0, 0, 0, 0, 25480, 470.5, 0, 0, 0, 0, 25600, 470.5, 0, 0, 0, 0, 25800, 470.5, 0, 0, 0, 0, 25840, 282.30002, 0, 0, 0, 0, 25880, 470.5, 0, 0, 0, 0, 26000, 470.5, 0, 0, 0, 0, 26200, 470.5, 0, 0, 0, 0, 26240, 282.30002, 0, 0, 0, 0, 26280, 470.5, 0, 0, 0, 0, 26400, 470.5, 0, 0, 0, 0, 26600, 470.5, 0, 0, 0, 0, 26640, 282.30002, 0, 0, 0, 0, 26680, 470.5, 0, 0, 0, 0, 26800, 470.5, 0, 0, 0, 0, 27000, 470.5, 0, 0, 0, 0, 27040, 282.30002, 0, 0, 0, 0, 27080, 470.5, 0, 0, 0, 0, 27200, 470.5, 0, 0, 0, 0, 27400, 470.5, 0, 0, 0, 0, 27440, 282.30002, 0, 0, 0, 0, 27480, 470.5, 0, 0, 0, 0, 27600, 470.5, 0, 0, 0, 0, 27800, 470.5, 0, 0, 0, 0, 27840, 282.30002, 0, 0, 0, 0, 27880, 470.5, 0, 0, 0, 0, 28000, 470.5, 0, 0, 0, 0, 28200, 470.5, 0, 0, 0, 0, 28240, 282.30002, 0, 0, 0, 0, 28280, 470.5, 0, 0, 0, 0, 28400, 470.5, 0, 0, 0, 0, 28600, 470.5, 0, 0, 0, 0, 28640, 282.30002, 0, 0, 0, 0, 28680, 470.5, 0, 0, 0, 0, 28800, 470.5, 0, 0, 0, 0, 29000, 470.5, 0, 0, 0, 0, 29040, 282.30002, 0, 0, 0, 0, 29080, 470.5, 0, 0, 0, 0, 29200, 470.5, 0, 0, 0, 0, 29400, 470.5, 0, 0, 0, 0, 29440, 282.30002, 0, 0, 0, 0, 29480, 470.5, 0, 0, 0, 0, 29600, 470.5, 0, 0, 0, 0, 29800, 470.5, 0, 0, 0, 0, 29840, 282.30002, 0, 0, 0, 0, 29880, 470.5, 0, 0, 0, 0, 30000, 470.5, 0, 0, 0, 0, 30200, 470.5, 0, 0, 0, 0, 30240, 282.30002, 0, 0, 0, 0, 30280, 470.5, 0, 0, 0, 0, 30400, 470.5)
+}
+point_count = 300
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1bvp3"]
 radius = 17.448338
@@ -304,10 +308,11 @@ random_volume_offset_db = 4.2
 streams_count = 1
 stream_0/stream = ExtResource("6_7mycd")
 
-[node name="Main" type="Node" unique_id=403780105]
+[node name="Main" type="Node2D" unique_id=1759385988]
 process_mode = 1
 script = ExtResource("2_0xm2m")
-time_scale = 0.05
+xy_scale = Vector2(1, 941)
+time_scale = 0.0015987487767014268
 dist_offset_threshold = 203
 
 [node name="TextureButton" type="Button" parent="." unique_id=526635855]
@@ -317,18 +322,20 @@ anchor_left = 0.109000005
 anchor_top = 0.208
 anchor_right = 0.943
 anchor_bottom = 0.307
-offset_left = -125.56801
+offset_left = 30200.0
 offset_top = -134.784
-offset_right = -1068.336
-offset_bottom = -167.936
+offset_right = 30236.0
+offset_bottom = -103.784
 scale = Vector2(2, 2)
 size_flags_horizontal = 4
-text = "1"
+text = "151"
 
 [node name="Path2D" type="Path2D" parent="." unique_id=523228222]
-curve = SubResource("Curve2D_0xm2m")
+curve = SubResource("Curve2D_272bh")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1380822122]
+position = Vector2(190.21849, 468.42105)
+rotation = -1.3613727
 v_offset = -10.0
 loop = false
 
@@ -351,7 +358,7 @@ process_material = SubResource("ParticleProcessMaterial_272bh")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1536082122]
 material = SubResource("ShaderMaterial_lquwl")
-points = PackedVector2Array(5, 467, 166, 152, 261, 465, 376, 156, 471, 463, 616, 141, 736, 460, 856, 135, 964, 465, 1116, 126, 1236, 469, 1395, 126, 1517, 467, 1682, 117, 1859, 454, 2002, 102, 2151, 452, 2271, 106, 2416, 442, 2605, 91, 2748, 445, 2885, 88, 3174, 607, 3365, 101, 3465, 270, 4124, 35, 4451, 156, 4670, 53, 5103, 533, 5187, 407, 5262, 480, 5311, 390, 5418, 484, 5523, 244, 5594, 370, 5740, 40, 5956, 458, 6282, 342, 6413, 463, 6464, 204, 6562, 525, 6742, 93, 6874, 459, 7051, 78, 7235, 631, 7475, 235, 7612, 544, 7809, 32, 8045, 560, 8090, 415, 8243, 600, 8403, 30, 8604, 394, 8702, 211, 8780, 375, 8859, 217, 8920, 380, 9031, 116, 9173, 617, 9440, 64, 9667, 617)
+points = PackedVector2Array(200, 470.5, 240, 282.30002, 280, 470.5, 400, 470.5, 600, 470.5, 640, 282.30002, 680, 470.5, 800, 470.5, 1000, 470.5, 1040, 282.30002, 1080, 470.5, 1200, 470.5, 1400, 470.5, 1440, 282.30002, 1480, 470.5, 1600, 470.5, 1800, 470.5, 1840, 282.30002, 1880, 470.5, 2000, 470.5, 2200, 470.5, 2240, 282.30002, 2280, 470.5, 2400, 470.5, 2600, 470.5, 2640, 282.30002, 2680, 470.5, 2800, 470.5, 3000, 470.5, 3040, 282.30002, 3080, 470.5, 3200, 470.5, 3400, 470.5, 3440, 282.30002, 3480, 470.5, 3600, 470.5, 3800, 470.5, 3840, 282.30002, 3880, 470.5, 4000, 470.5, 4200, 470.5, 4240, 282.30002, 4280, 470.5, 4400, 470.5, 4600, 470.5, 4640, 282.30002, 4680, 470.5, 4800, 470.5, 5000, 470.5, 5040, 282.30002, 5080, 470.5, 5200, 470.5, 5400, 470.5, 5440, 282.30002, 5480, 470.5, 5600, 470.5, 5800, 470.5, 5840, 94.1, 5880, 846.89996, 5920, 282.30002, 6000, 470.5, 6200, 470.5, 6240, 282.30002, 6280, 470.5, 6400, 470.5, 6600, 470.5, 6640, 282.30002, 6680, 470.5, 6800, 470.5, 7000, 470.5, 7040, 282.30002, 7080, 470.5, 7200, 470.5, 7400, 470.5, 7440, 94.1, 7480, 846.89996, 7520, 282.30002, 7600, 470.5, 7800, 470.5, 7840, 282.30002, 7880, 470.5, 8000, 470.5, 8200, 470.5, 8240, 282.30002, 8280, 470.5, 8400, 470.5, 8600, 470.5, 8640, 94.1, 8680, 846.89996, 8720, 282.30002, 8800, 470.5, 9000, 470.5, 9040, 282.30002, 9080, 470.5, 9200, 470.5, 9400, 470.5, 9440, 282.30002, 9480, 470.5, 9600, 470.5, 10000, 470.5, 10040, 94.1, 10080, 846.89996, 10120, 282.30002, 10200, 470.5, 10600, 470.5, 10640, 282.30002, 10680, 470.5, 10800, 470.5, 11000, 470.5, 11040, 282.30002, 11080, 470.5, 11200, 470.5, 11200, 470.5, 11240, 94.1, 11280, 846.89996, 11320, 282.30002, 11400, 470.5, 11800, 470.5, 11840, 282.30002, 11880, 470.5, 12000, 470.5, 12600, 470.5, 12640, 94.1, 12680, 846.89996, 12720, 282.30002, 12800, 470.5, 13000, 470.5, 13040, 282.30002, 13080, 470.5, 13200, 470.5, 13400, 470.5, 13440, 282.30002, 13480, 470.5, 13600, 470.5, 14200, 470.5, 14240, 94.1, 14280, 846.89996, 14320, 282.30002, 14400, 470.5, 14600, 470.5, 14640, 282.30002, 14680, 470.5, 14800, 470.5, 15000, 470.5, 15040, 282.30002, 15080, 470.5, 15200, 470.5, 15400, 470.5, 15440, 282.30002, 15480, 470.5, 15600, 470.5, 15800, 470.5, 15840, 94.1, 15880, 846.89996, 15920, 282.30002, 16000, 470.5, 16200, 470.5, 16240, 282.30002, 16280, 470.5, 16400, 470.5, 16600, 470.5, 16640, 282.30002, 16680, 470.5, 16800, 470.5, 17000, 470.5, 17040, 282.30002, 17080, 470.5, 17200, 470.5, 17400, 470.5, 17440, 282.30002, 17480, 470.5, 17600, 470.5, 17800, 470.5, 17840, 282.30002, 17880, 470.5, 18000, 470.5, 18200, 470.5, 18240, 282.30002, 18280, 470.5, 18400, 470.5, 18600, 470.5, 18640, 282.30002, 18680, 470.5, 18800, 470.5, 19000, 470.5, 19040, 282.30002, 19080, 470.5, 19200, 470.5, 19400, 470.5, 19440, 282.30002, 19480, 470.5, 19600, 470.5, 19800, 470.5, 19840, 282.30002, 19880, 470.5, 20000, 470.5, 20200, 470.5, 20240, 282.30002, 20280, 470.5, 20400, 470.5, 20600, 470.5, 20640, 282.30002, 20680, 470.5, 20800, 470.5, 21000, 470.5, 21040, 282.30002, 21080, 470.5, 21200, 470.5, 21400, 470.5, 21440, 282.30002, 21480, 470.5, 21600, 470.5, 21800, 470.5, 21840, 282.30002, 21880, 470.5, 22000, 470.5, 22200, 470.5, 22240, 282.30002, 22280, 470.5, 22400, 470.5, 22600, 470.5, 22640, 282.30002, 22680, 470.5, 22800, 470.5, 23000, 470.5, 23040, 282.30002, 23080, 470.5, 23200, 470.5, 23400, 470.5, 23440, 282.30002, 23480, 470.5, 23600, 470.5, 23800, 470.5, 23840, 282.30002, 23880, 470.5, 24000, 470.5, 24200, 470.5, 24240, 282.30002, 24280, 470.5, 24400, 470.5, 24600, 470.5, 24640, 282.30002, 24680, 470.5, 24800, 470.5, 25000, 470.5, 25040, 282.30002, 25080, 470.5, 25200, 470.5, 25400, 470.5, 25440, 282.30002, 25480, 470.5, 25600, 470.5, 25800, 470.5, 25840, 282.30002, 25880, 470.5, 26000, 470.5, 26200, 470.5, 26240, 282.30002, 26280, 470.5, 26400, 470.5, 26600, 470.5, 26640, 282.30002, 26680, 470.5, 26800, 470.5, 27000, 470.5, 27040, 282.30002, 27080, 470.5, 27200, 470.5, 27400, 470.5, 27440, 282.30002, 27480, 470.5, 27600, 470.5, 27800, 470.5, 27840, 282.30002, 27880, 470.5, 28000, 470.5, 28200, 470.5, 28240, 282.30002, 28280, 470.5, 28400, 470.5, 28600, 470.5, 28640, 282.30002, 28680, 470.5, 28800, 470.5, 29000, 470.5, 29040, 282.30002, 29080, 470.5, 29200, 470.5, 29400, 470.5, 29440, 282.30002, 29480, 470.5, 29600, 470.5, 29800, 470.5, 29840, 282.30002, 29880, 470.5, 30000, 470.5, 30200, 470.5, 30240, 282.30002, 30280, 470.5, 30400, 470.5)
 width = 40.0
 default_color = Color(0.21818587, 0.5092811, 1, 1)
 texture_mode = 2
@@ -445,5 +452,151 @@ bus = &"SFX"
 
 [connection signal="back_to_menu" from="Camera2D/PauseMenu" to="." method="_on_pause_menu_back_to_menu"]
 [connection signal="restart" from="Camera2D/PauseMenu" to="." method="_on_pause_menu_restart"]
+[connection signal="area_entered" from="Line2D/Column/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/Column/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20608/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20608/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20609/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20609/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20610/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20610/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20611/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20611/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20612/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20612/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20613/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20613/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20614/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20614/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20615/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20615/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20616/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20616/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20617/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20617/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20618/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20618/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20619/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20619/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20620/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20620/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20621/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20621/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20622/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20622/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20623/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20623/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20624/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20624/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20625/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20625/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20626/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20626/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20627/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20627/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20628/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20628/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20629/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20629/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20630/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20630/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20631/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20631/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20632/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20632/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20633/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20633/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20634/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20634/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20635/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20635/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20636/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20636/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20637/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20637/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20638/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20638/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20639/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20639/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20640/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20640/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20641/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20641/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20642/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20642/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20643/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20643/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20644/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20644/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20645/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20645/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20646/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20646/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20647/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20647/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20648/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20648/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20649/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20649/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20650/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20650/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20651/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20651/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20652/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20652/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20653/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20653/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20654/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20654/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20655/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20655/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20656/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20656/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20657/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20657/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20658/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20658/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20659/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20659/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20660/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20660/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20661/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20661/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20662/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20662/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20663/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20663/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20664/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20664/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20665/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20665/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20666/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20666/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20667/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20667/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20668/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20668/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20669/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20669/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20670/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20670/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20671/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20671/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20672/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20672/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20673/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20673/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20674/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20674/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20675/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20675/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20676/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20676/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20677/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20677/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20678/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20678/Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Line2D/@Sprite2D@20679/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="area_exited" from="Line2D/@Sprite2D@20679/Area2D" to="." method="_on_area_2d_area_exited"]
 [connection signal="area_entered" from="Column/Area2D" to="." method="_on_trigger_area_entered"]
 [connection signal="area_exited" from="Column/Area2D" to="." method="_on_area_2d_area_exited"]
