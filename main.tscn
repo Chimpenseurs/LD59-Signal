@@ -155,6 +155,21 @@ script = ExtResource("2_0xm2m")
 time_scale = 0.05
 dist_offset_threshold = 203
 
+[node name="TextureButton" type="Button" parent="." unique_id=526635855]
+z_index = 2
+anchors_preset = -1
+anchor_left = 0.109000005
+anchor_top = 0.208
+anchor_right = 0.943
+anchor_bottom = 0.307
+offset_left = -125.56801
+offset_top = -134.784
+offset_right = -1068.336
+offset_bottom = -167.936
+scale = Vector2(2, 2)
+size_flags_horizontal = 4
+text = "1"
+
 [node name="Line2D" type="Line2D" parent="." unique_id=1536082122]
 material = SubResource("ShaderMaterial_lquwl")
 points = PackedVector2Array(5, 467, 166, 152, 261, 465, 376, 156, 471, 463, 616, 141, 736, 460, 856, 135, 964, 465, 1116, 126, 1236, 469, 1395, 126, 1517, 467, 1682, 117, 1859, 454, 2002, 102, 2151, 452, 2271, 106, 2416, 442, 2605, 91, 2748, 445, 2885, 88, 3174, 607, 3365, 101, 3465, 270, 4124, 35, 4451, 156, 4670, 53, 5103, 533, 5187, 407, 5262, 480, 5311, 390, 5418, 484, 5523, 244, 5594, 370, 5740, 40, 5956, 458, 6282, 342, 6413, 463, 6464, 204, 6562, 525, 6742, 93, 6874, 459, 7051, 78, 7235, 631, 7475, 235, 7612, 544, 7809, 32, 8045, 560, 8090, 415, 8243, 600, 8403, 30, 8604, 394, 8702, 211, 8780, 375, 8859, 217, 8920, 380, 9031, 116, 9173, 617, 9440, 64, 9667, 617)
