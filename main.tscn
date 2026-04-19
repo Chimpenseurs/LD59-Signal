@@ -140,6 +140,16 @@ shader_parameter/noise_scale = Vector2(1, 1)
 
 [sub_resource type="Curve2D" id="Curve2D_0xm2m"]
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h2yge"]
+lifetime_randomness = 0.21
+particle_flag_disable_z = true
+angle_min = -720.0
+angle_max = 720.0
+gravity = Vector3(0, 98, 0)
+scale_min = 0.0
+scale_max = 31.769999
+turbulence_enabled = true
+
 [sub_resource type="Animation" id="Animation_h2yge"]
 length = 0.001
 tracks/0/type = "value"
@@ -255,7 +265,7 @@ dist_offset_threshold = 203
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1536082122]
 material = SubResource("ShaderMaterial_lquwl")
-points = PackedVector2Array(5, 467, 166, 152, 261, 465, 376, 156, 471, 463, 616, 141, 736, 460, 856, 135, 964, 465, 1116, 126, 1236, 469, 1395, 126, 1517, 467, 1682, 117, 1873, 604, 2218, 51, 2348, 270, 2486, 75, 2531, 205, 2657, 19, 2760, 289, 2886, 169, 3159, 576, 3480, 34, 3549, 246, 4290, 30, 4451, 156, 4670, 53, 5103, 533, 5187, 407, 5262, 480, 5311, 390, 5418, 484, 5523, 244, 5594, 370, 5740, 40, 5956, 458, 6282, 342, 6413, 463, 6496, 21)
+points = PackedVector2Array(5, 467, 166, 152, 261, 465, 376, 156, 471, 463, 616, 141, 736, 460, 856, 135, 964, 465, 1116, 126, 1236, 469, 1395, 126, 1517, 467, 1682, 117, 1859, 454, 2002, 102, 2151, 452, 2271, 106, 2416, 442, 2605, 91, 2748, 445, 2885, 88, 3174, 607, 3365, 101, 3465, 270, 4124, 35, 4451, 156, 4670, 53, 5103, 533, 5187, 407, 5262, 480, 5311, 390, 5418, 484, 5523, 244, 5594, 370, 5740, 40, 5956, 458, 6282, 342, 6413, 463, 6464, 204, 6562, 525, 6742, 93, 6874, 459, 7051, 78, 7235, 631, 7475, 235, 7612, 544, 7809, 32, 8045, 560, 8090, 415, 8243, 600, 8403, 30, 8604, 394, 8702, 211, 8780, 375, 8859, 217, 8920, 380, 9031, 116, 9173, 617, 9440, 64, 9667, 617)
 width = 100.0
 default_color = Color(1, 0, 0, 1)
 texture_mode = 2
@@ -269,12 +279,20 @@ metadata/_edit_lock_ = true
 curve = SubResource("Curve2D_0xm2m")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1380822122]
-rotates = false
+v_offset = -40.0
 loop = false
 
 [node name="Circle" type="Sprite2D" parent="Path2D/PathFollow2D" unique_id=1360790884]
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_1bvp3")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Path2D/PathFollow2D/Circle" unique_id=809476249]
+visible = false
+lifetime = 1.12
+speed_scale = 2.9
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_h2yge")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1097233294]
 position = Vector2(575.99994, 319.99997)
