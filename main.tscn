@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
 [ext_resource type="Shader" uid="uid://7bfhjbcb41x0" path="res://shaders/signal.gdshader" id="2_1bvp3"]
-[ext_resource type="AudioStream" uid="uid://ds5xmikf7av13" path="res://musics/LD59-Signal-test.ogg" id="3_h2yge"]
+[ext_resource type="AudioStream" uid="uid://5vlilbo61imd" path="res://musics/LD59-Signal-test.ogg" id="3_h2yge"]
 [ext_resource type="Texture2D" uid="uid://bn63imeod2dmu" path="res://images/circle.svg" id="4_1bvp3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lquwl"]

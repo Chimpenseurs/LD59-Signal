@@ -16,28 +16,20 @@ func _init(offset_x: float, stride_x: float):
 	self.trigger_end = offset_x + 5
 	self._set_time_serie(stride_x)
 
-func get_pulse() -> Array[Vector2]:
-	return self.time_serie
-	
-func get_end_combo_trigger() -> float:
-	return self.trigger_end
-
-func send_user_input(input: Input, current_x: float) -> Combo_state:
-	if self.state == Combo_state.WAITING_NEXT:
+func _handle_combo(combo: Combo, current_x: float) -> Combo_state:
 #	Implement your combo logic here.
-		if input.is_action_just_pressed("ui_up"):
-			#print(current_x)
-			if current_x < self.trigger_start:
-				print("TOO_SOON")
-				return Combo_state.TOO_SOON
-			elif current_x > self.trigger_end:
-				print("TOO_LATE")
-				return Combo_state.TOO_LATE
-			else:
-				print("GOOD")
-				return Combo_state.GOOD
+	if combo == self.expected_combos[combo_idx]:
+		#print(current_x)
+		if current_x < self.trigger_start:
+			print("TOO_SOON")
+			return Combo_state.TOO_SOON
+		elif current_x > self.trigger_end:
+			print("TOO_LATE")
+			return Combo_state.TOO_LATE
 		else:
-			print("BAD")
-			return Combo_state.BAD
+			print("GOOD")
+			self.combo_idx += 1
+			return Combo_state.GOOD
 	else:
-		return self.state
+		print("BAD")
+		return Combo_state.BAD
