@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://cudoses46ae5g"]
+
+[ext_resource type="Script" uid="uid://beej3nmm3skwj" path="res://pause_menu.gd" id="1_05uyy"]
+[ext_resource type="FontFile" uid="uid://mnrswl4tv81w" path="res://assets/fonts/JVNE Wopper'83.ttf" id="1_hdmo1"]
+[ext_resource type="AudioStream" uid="uid://dvw2eq6g7u65x" path="res://assets/sfx/menu_select.wav" id="2_nwcfo"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_nwcfo"]
+font = ExtResource("1_hdmo1")
+font_size = 30
+font_color = Color(0, 0.7647059, 0, 1)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_05uyy"]
+random_volume_offset_db = 1.09
+streams_count = 1
+stream_0/stream = ExtResource("2_nwcfo")
+
+[node name="PauseMenu" type="Control" unique_id=727579683]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_05uyy")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=914156068]
+layout_mode = 0
+offset_left = -28.0
+offset_top = -18.0
+offset_right = 1186.0
+offset_bottom = 678.0
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="Label" type="Label" parent="." unique_id=2088571525]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 92.0
+offset_right = 100.0
+offset_bottom = 137.0
+grow_horizontal = 2
+text = "PAUSE"
+label_settings = SubResource("LabelSettings_nwcfo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=31560401]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Continue" type="Button" parent="VBoxContainer" unique_id=1791964323]
+process_mode = 3
+layout_mode = 2
+text = "Continue"
+
+[node name="Restart" type="Button" parent="VBoxContainer" unique_id=1629084009]
+layout_mode = 2
+text = "Restart"
+
+[node name="MainMenu" type="Button" parent="VBoxContainer" unique_id=854597223]
+layout_mode = 2
+text = "Main Menu"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=249948787]
+stream = SubResource("AudioStreamRandomizer_05uyy")
+
+[connection signal="mouse_entered" from="VBoxContainer/Continue" to="." method="_on_continue_mouse_entered"]
+[connection signal="mouse_entered" from="VBoxContainer/Restart" to="." method="_on_restart_mouse_entered"]
+[connection signal="mouse_entered" from="VBoxContainer/MainMenu" to="." method="_on_main_menu_mouse_entered"]
