@@ -67,7 +67,7 @@ func add_regular_pulse(offset_x, stride_x):
 	scale_pulse(pulse)
 	var velocity_scale = stride_x / length_pulse(pulse)
 	inject_pulse(pulse, velocity_scale)
-		
+
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
 	var stride_x = 200

@@ -62,13 +62,13 @@ func _handle_combo(combo: Combo, current_x: float) -> Combo_state:
 	assert(false, "Not implemented for PulseBase class.")
 	return Combo_state.GOOD
 
-func handle_input(input: Input, current_x: float) -> Combo_state:
-	if input.is_action_just_pressed("ui_up"):
+func handle_input(current_x: float) -> Combo_state:
+	if Input.is_action_just_pressed("ui_up"):
 		if self.state == Combo_state.WAITING_NEXT_TRIGGER:
 			return self._handle_combo(Combo.UP, current_x)
 		return Combo_state.UNEXPECTED_TRIGGER
 
-	if input.is_action_just_pressed("ui_down"):
+	if Input.is_action_just_pressed("ui_down"):
 		if self.state == Combo_state.WAITING_NEXT_TRIGGER:
 			return self._handle_combo(Combo.DOWN, current_x)
 		return Combo_state.UNEXPECTED_TRIGGER
