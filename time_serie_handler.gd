@@ -32,66 +32,9 @@ var previous_point_id = 0
 
 var valid_control = false
 
-#func _lerp(pt1: Vector2, pt2: Vector2, lerp: float) -> Vector2:
-	#return Vector2(
-		#(pt2.x - pt1.x) * lerp,
-		#(pt2.y - pt1.y) * lerp
-	#)
-#
-#func _get_first_point() -> Vector2:
-	#var point_before = (t - (fmod(t, INTERVAL_SIZE))) / INTERVAL_SIZE
-	#var lerp_val = (fmod(t, INTERVAL_SIZE)) / INTERVAL_SIZE
-#
-	#if point_before + 1 < len(time_serie):
-		#return _lerp(
-			#time_serie[point_before],
-			#time_serie[point_before + 1],
-			#lerp_val)
-	#
-##	Return null point at end of game.
-	#return Vector2(0, 0)
-#
-#func _get_last_point() -> Vector2:
-	#var t_right = t + display_size.x
-	#var point_after = ((t_right - fmod(t_right, INTERVAL_SIZE)) / INTERVAL_SIZE) + 1
-	#point_after = min(point_after, len(time_serie) - 1)
-	#var lerp_val = (fmod(t, INTERVAL_SIZE)) / INTERVAL_SIZE
-#
-	#return _lerp(time_serie[point_after - 1], time_serie[point_after], lerp_val)
-#
-#func incr_y_by(n: int) -> void:
-	#y += n
-#
-#func decr_y_by(n: int) -> void:
-	#y -= n
-#
-#func get_y() -> int:
-	#return y
-	#
 func get_serie() -> Array[Vector2]:
 	return time_serie
-#
-#func get_serie_interval() -> Array:
-##	Get the point of the left border of the screen.
-	#var first_point = _get_first_point()
-#
-##	Get the point of the right border of the screen.
-	#var last_point = _get_last_point()
-#
-##	Get the points in the time serie included in the screen.
-	#var points = self.time_serie.slice(
-		#((t - fmod(t, INTERVAL_SIZE)) / INTERVAL_SIZE) + 1,
-		#max(
-			#(t + 100 - fmod(t, INTERVAL_SIZE)) / INTERVAL_SIZE,
-			#len(time_serie) - 1
-		#)
-	#)
-	#
-##	Add the points of the border of the screen.
-	#points.push_front(first_point)
-	#points.push_back(last_point)
-	#return points
-	
+
 var baseline_h = 0.5
 var medium_h = 0.3
 var high_h = 0.1
@@ -150,7 +93,6 @@ func _ready() -> void:
 		self.add_child(tb)
 		index += 1
 		
-			
 	$Line2D.points = time_serie
 	
 	var curve = Curve2D.new()
@@ -214,24 +156,9 @@ func _process(delta: float) -> void:
 		if not has_pressed:
 			print("MISSED")
 			$AnimationPlayer.play("slower")
-			#$Ld59SignalProto.pitch_scale /= slow_coef
-			#time_scale = slow_time_scale
-			#derivation_vec = (player_pos - previous_position).normalized()
-			#derivation_vec_coef = initial_derivation_vec_coef
-			#derivation_timeleft = initial_derivation_timeleft
 		self.next_trigger_point_id+=1
 		
 	previous_position = player_pos
- 
-	#if derivation_vec_coef > 0:
-		#var delta_next_pos = - player_pos.normalized()
-		#$Path2D/PathFollow2D/Circle.position += lerp(derivation_vec * delta, delta_next_pos * delta, 1-derivation_vec_coef)
-		##derivation_vec_coef = max(0, derivation_vec_coef -  0.1)
-		#derivation_timeleft = max(0, derivation_timeleft - delta)
-		#print(1.0-Tween.interpolate_value(0, 1.0, 0.5 - derivation_timeleft, 0.5, Tween.TRANS_EXPO, Tween.EASE_IN))
-		#var t = 1.0-Tween.interpolate_value(0, 1.0, 0.5 - derivation_timeleft, 0.5, Tween.TRANS_EXPO, Tween.EASE_IN)
-		#print(t)
-		#derivation_vec_coef = t
 
 func _on_trigger_area_entered(area: Area2D) -> void:
 	valid_control = true
