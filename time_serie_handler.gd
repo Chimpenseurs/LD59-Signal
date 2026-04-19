@@ -24,8 +24,8 @@ var time_serie = []
 var triggers = []
 var velocities_scales = []
 
-var next_point_id = 1
-
+var next_trigger_point_id = 1
+var previous_point_id = 0
 #func _lerp(pt1: Vector2, pt2: Vector2, lerp: float) -> Vector2:
 	#return Vector2(
 		#(pt2.x - pt1.x) * lerp,
@@ -92,12 +92,11 @@ var high_h = 0.1
 
 func inject_pulse(pulse, velocity_scale):
 	triggers.append(time_serie.size())
-	scale_pulse(pulse)
 	time_serie.append_array(pulse)
 	for i in pulse.size()-1:
 		velocities_scales.append(velocity_scale)
-	velocities_scales.append(1)
-
+	velocities_scales.append(1.0)
+	
 func scale_pulse(pulse):
 	for i in pulse.size():
 		pulse[i] *= xy_scale
@@ -109,12 +108,14 @@ func length_pulse(pulse) -> float :
 	return length
 
 func add_simple_pulse(offset_x, stride_x):
-	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x * 0.5, medium_h), Vector2(offset_x + stride_x * 0.9, baseline_h)]
+	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x * 0.5, medium_h), Vector2(offset_x + stride_x * 0.9, baseline_h), Vector2(offset_x + stride_x * 1.0, baseline_h)]
+	scale_pulse(pulse)
 	var velocity_scale = stride_x / length_pulse(pulse)
 	inject_pulse(pulse, velocity_scale)
 
 func add_regular_pulse(offset_x, stride_x):
-	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x * 0.2, high_h), Vector2(offset_x + stride_x * 0.4, 1.0 - high_h), Vector2(offset_x + stride_x * 0.6, medium_h), Vector2(offset_x + stride_x * 0.9, 0.5)]
+	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x * 0.2, high_h), Vector2(offset_x + stride_x * 0.4, 1.0 - high_h), Vector2(offset_x + stride_x * 0.6, medium_h), Vector2(offset_x + stride_x * 1.0, 0.5)]
+	scale_pulse(pulse)
 	var velocity_scale = stride_x / length_pulse(pulse)
 	inject_pulse(pulse, velocity_scale)
 	
@@ -126,7 +127,7 @@ func _ready() -> void:
 		var bound_y = 0.3 if is_even else 0.7
 		if i == 24:
 			add_regular_pulse(i * stride_x, stride_x)
-		elif is_even:
+		elif not is_even and i != 23 and i != 25:
 			add_simple_pulse(i * stride_x, stride_x)
 		
 	$Line2D.points = time_serie
@@ -163,13 +164,15 @@ func _get_path_next_position():
 	return $Path2D.curve.sample_baked($Path2D/PathFollow2D.progress + 10)
 	
 func _process(delta: float) -> void:
-	
-	var velocity_scale = velocities_scales[triggers[next_point_id]]
 	var player_pos = $Path2D/PathFollow2D/Circle.global_position
-	var next_point = time_serie[triggers[next_point_id]]
-	var distance_to_next_point = player_pos.distance_to(next_point)
+	if time_serie[previous_point_id+1].x < player_pos.x:
+		previous_point_id += 1
+		
+	var velocity_scale = velocities_scales[previous_point_id]
+	var next_trigger_point = time_serie[triggers[next_trigger_point_id]]
+	var distance_to_next_point = player_pos.distance_to(next_trigger_point)
 	
-	current_time += delta * (time_scale * velocity_scale)
+	current_time += delta * (time_scale / velocity_scale)
 	
 	$Camera2D.position.x = _get_path_current_position().x
 	$Path2D/PathFollow2D.set_progress_ratio(current_time)
@@ -187,12 +190,12 @@ func _process(delta: float) -> void:
 		print(distance_to_next_point)
 		if distance_to_next_point < dist_offset_threshold:
 			print("GOOD")
-			self.next_point_id+=1
+			self.next_trigger_point_id+=1
 		else :
 			print("BAD")
 			$AnimationPlayer.play("slower")
 			
-	if player_pos.x > next_point.x:
+	if player_pos.x > next_trigger_point.x:
 		if not has_pressed:
 			print("MISSED")
 			$AnimationPlayer.play("slower")
@@ -201,7 +204,7 @@ func _process(delta: float) -> void:
 			#derivation_vec = (player_pos - previous_position).normalized()
 			#derivation_vec_coef = initial_derivation_vec_coef
 			#derivation_timeleft = initial_derivation_timeleft
-		self.next_point_id+=1
+		self.next_trigger_point_id+=1
 		
 	previous_position = player_pos
 
