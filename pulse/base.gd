@@ -26,6 +26,9 @@ enum Combo_state {
 
 	# State when the player push input when the Pulse doesn't expect signal.
 	UNEXPECTED_TRIGGER,
+	
+	# State when nothing happends
+	NONE
 }
 
 const BASELINE_H = 0.5
@@ -43,6 +46,7 @@ var expected_combos: Array[Combo]
 
 func _init(offset_x: float):
 	self.offset_x = offset_x
+	self.combo_idx = 0
 	self.state = Combo_state.WAITING_NEXT_TRIGGER
 
 func get_pulse() -> Array[Vector2]:
@@ -50,6 +54,9 @@ func get_pulse() -> Array[Vector2]:
 
 func get_trigger_end() -> float:
 	return self.trigger_end
+
+func get_state() -> Combo_state:
+	return self.state
 
 func _handle_combo(combo: Combo, current_x: float) -> Combo_state:
 	assert(false, "Not implemented for PulseBase class.")
@@ -66,4 +73,4 @@ func handle_input(input: Input, current_x: float) -> Combo_state:
 			return self._handle_combo(Combo.DOWN, current_x)
 		return Combo_state.UNEXPECTED_TRIGGER
 
-	return self.Combo_state
+	return Combo_state.NONE
