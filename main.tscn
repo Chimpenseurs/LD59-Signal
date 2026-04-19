@@ -1,10 +1,28 @@
 [gd_scene format=3 uid="uid://cx6w8noqg5f3v"]
 
 [ext_resource type="Script" uid="uid://de0liubomjc6w" path="res://time_serie_handler.gd" id="2_0xm2m"]
-[ext_resource type="AudioStream" uid="uid://5vlilbo61imd" path="res://musics/LD59-Signal-test.ogg" id="3_h2yge"]
+[ext_resource type="Shader" uid="uid://7bfhjbcb41x0" path="res://shaders/signal.gdshader" id="2_1bvp3"]
+[ext_resource type="AudioStream" uid="uid://ds5xmikf7av13" path="res://musics/LD59-Signal-test.ogg" id="3_h2yge"]
 [ext_resource type="Texture2D" uid="uid://bn63imeod2dmu" path="res://images/circle.svg" id="4_1bvp3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lquwl"]
+shader = ExtResource("2_1bvp3")
+shader_parameter/beams = 2
+shader_parameter/energy = 3.0
+shader_parameter/roughness = 3
+shader_parameter/frequency = 10
+shader_parameter/speed = 1.0
+shader_parameter/thickness = 0.10000000149012
+shader_parameter/outline_thickness = 0.10000000149012
+shader_parameter/beam_difference = 0.0
+shader_parameter/glow = 0.0
+shader_parameter/outline_glow = 0.0
+shader_parameter/color = Color(0.91, 1, 1, 1)
+shader_parameter/outline_color = Color(0.5, 1, 0.96, 1)
+shader_parameter/progress = 1.0
+shader_parameter/y_offset = 0.0
+shader_parameter/fixed_edge_size = 0.05
+shader_parameter/noise_scale = Vector2(1, 1)
 
 [sub_resource type="Curve2D" id="Curve2D_0xm2m"]
 
@@ -133,6 +151,7 @@ dist_offset_threshold = 203
 [node name="Line2D" type="Line2D" parent="." unique_id=1536082122]
 material = SubResource("ShaderMaterial_lquwl")
 points = PackedVector2Array(5, 467, 166, 152, 261, 465, 376, 156, 471, 463, 616, 141, 736, 460, 856, 135, 964, 465, 1116, 126, 1236, 469, 1395, 126, 1517, 467, 1682, 117, 1859, 454, 2002, 102, 2151, 452, 2271, 106, 2416, 442, 2605, 91, 2748, 445, 2885, 88, 3174, 607, 3365, 101, 3465, 270, 4124, 35, 4451, 156, 4670, 53, 5103, 533, 5187, 407, 5262, 480, 5311, 390, 5418, 484, 5523, 244, 5594, 370, 5740, 40, 5956, 458, 6282, 342, 6413, 463, 6464, 204, 6562, 525, 6742, 93, 6874, 459, 7051, 78, 7235, 631, 7475, 235, 7612, 544, 7809, 32, 8045, 560, 8090, 415, 8243, 600, 8403, 30, 8604, 394, 8702, 211, 8780, 375, 8859, 217, 8920, 380, 9031, 116, 9173, 617, 9440, 64, 9667, 617)
+width = 40.0
 default_color = Color(0.21818587, 0.5092811, 1, 1)
 texture_mode = 2
 joint_mode = 2
