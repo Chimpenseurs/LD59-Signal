@@ -20,6 +20,7 @@ const PULSE_SLICE_UP = 3
 const SUCCEED = 0
 const FAILED = 1
 const PENDING = 2
+const WAITING = 3
 
 @export var xy_scale = Vector2(1.0,1)
 
@@ -41,29 +42,63 @@ var current_trigger
 class PushTrigger:
 	var position_index : Array[int]
 	var expected_actions = ["ui_button0"]
-	func _init(index):
-		position_index = [index]
-	func has_succeed() :
-		var input_valid_nb = 0
-		for required_action in self.expected_actions:
-			if Input.is_action_just_pressed(required_action) :
-				input_valid_nb += 1
-				continue
-		if input_valid_nb == self.expected_actions.size():
-			return SUCCEED
-
+	func _init(index, index2):
+		position_index = [index, index2]
+	func has_succeed(current_position_x, time_serie) :
+		var begin = time_serie[position_index[0]].x
+		if current_position_x <= begin:
+			var input_valid_nb = 0
+			for required_action in self.expected_actions:
+				if Input.is_action_pressed(required_action) :
+					input_valid_nb += 1
+					continue
+			if input_valid_nb == self.expected_actions.size():
+				return SUCCEED
+		elif current_position_x > begin:
+			return FAILED
+			
 class SlideTrigger:
 	var position_index : Array[int]
 	var expected_actions = ["ui_button0"]
+	var status = WAITING
+	
 	func _init(index, index2):
 		position_index = [index, index2]
-	func has_succeed() :
-		var input_valid_nb = 0
-		for required_action in self.expected_actions:
-			if Input.is_action_just_released(required_action) :
-				input_valid_nb += 1
-				continue
-		return input_valid_nb == self.expected_actions.size()
+	func has_succeed(current_position_x, time_serie) :
+		var begin = time_serie[position_index[0]].x
+		var end = time_serie[position_index[1]].x
+		var range_slide = (end - begin)
+		var stride = range_slide * 0.1
+		if current_position_x <= begin:
+			var input_valid_nb = 0
+			for required_action in self.expected_actions:
+				if Input.is_action_pressed(required_action) :
+					input_valid_nb += 1
+					continue
+			if input_valid_nb == self.expected_actions.size():
+				status = PENDING
+				return PENDING
+				
+		elif current_position_x < end - stride:
+			if status == WAITING:
+				return FAILED
+			var input_valid_nb = 0
+			for required_action in self.expected_actions:
+				if Input.is_action_pressed(required_action) :
+					input_valid_nb += 1
+					continue
+			if input_valid_nb == self.expected_actions.size():
+				return PENDING
+			else : 
+				return FAILED
+		elif current_position_x >= end - stride:
+			var input_valid_nb = 0
+			for required_action in self.expected_actions:
+				if Input.is_action_just_released(required_action) :
+					input_valid_nb += 1
+					continue
+			if input_valid_nb == self.expected_actions.size():
+				return SUCCEED
 	
 func get_serie() -> Array[Vector2]:
 	return time_serie
@@ -81,15 +116,15 @@ func add_flat_pulse(offset_x, stride_x):
 	
 func add_simple_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, MEDIUM_H), Vector2(offset_x + stride_x * 0.4, DOWN_MEDIUM_H), Vector2(offset_x + stride_x * 0.6, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
-	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1)])
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, time_serie.size()+2)])
 
 func add_regular_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, HIGH_H), Vector2(offset_x + stride_x * 0.4, 1.0 - HIGH_H), Vector2(offset_x + stride_x * 0.6, MEDIUM_H), Vector2(offset_x + stride_x * 1.0, 0.5)]
-	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1)])
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, time_serie.size()+3)])
 	
 func add_slice_up_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.6, HIGH_H), Vector2(offset_x + stride_x * 0.7, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
-	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size()+1)])
+	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size())])
 		
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
@@ -121,8 +156,12 @@ func _ready() -> void:
 
 	for i in triggers.size():
 		var column = $Column.duplicate()
-		var texture_width = column.texture.width
-		column.position.x = time_serie[triggers[i].position_index[0]].x - texture_width * 0.5
+		var begin = time_serie[triggers[i].position_index[0]].x
+		if triggers[i].position_index.size() == 2:
+			column.scale.x = 3.5
+			column.position.x = begin + (column.texture.width) * 0.2
+		else:
+			column.position.x = begin - column.texture.width * 0.5
 		column.trigger = triggers[i]
 		$Line2D.add_child(column)
 	
@@ -170,13 +209,14 @@ func _process(delta: float) -> void:
 	#   $AnimationPlayer.play("slower")
 
 	if current_trigger :
-		var status = current_trigger.has_succeed()
+		var status = current_trigger.has_succeed(current_position.x, time_serie)
 		if status == SUCCEED:
 			print("GOOD")
 			current_trigger = null
 			$AnimationPlayer.play("success")
 		elif status == FAILED:
 			print("BAD")
+			current_trigger = null
 			$AnimationPlayer.play("slower")
 		elif status == PENDING:
 			print("PENDING")
