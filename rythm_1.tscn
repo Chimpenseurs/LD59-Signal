@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dhn6bxml8pw2p"]
+
+[ext_resource type="Script" uid="uid://dbpr1ughcmlli" path="res://rythm_1.gd" id="1_kvync"]
+
+[node name="Rythm1" type="Line2D" unique_id=2013756196]
+width = 2.0
+default_color = Color(0, 0.7647059, 0, 1)
+script = ExtResource("1_kvync")
