@@ -30,7 +30,8 @@ const UNEXPECTED = 7
 
 var bpm = 129
 
-var partition = """0,0,0,0,0,0,0,0, 
+var partition = """
+0,0,0,0,0,0,0,0, 
 0,1,0,1,0,1,0,1, 
 0,1,0,1,0,1,0,1,
 0,1,0,1,0,1,0,1, 
@@ -171,7 +172,7 @@ func add_slice_up_pulse(offset_x, stride_x):
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
 	
-	var content = partition# FileAccess.open("res://partition.txt", FileAccess.READ).get_as_text().strip_edges().split(",")
+	var content = partition.strip_edges().split(",") # FileAccess.open("res://partition.txt", FileAccess.READ).get_as_text().strip_edges().split(",")
 	var pulses_types = []
 	for pulse_type in content:
 		pulses_types.append(int(pulse_type))
