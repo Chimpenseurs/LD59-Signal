@@ -16,6 +16,8 @@ const PULSE_FLAT = 0
 const PULSE_BEAT = 1
 const PULSE_CHORD = 2
 const PULSE_SLICE_UP = 3
+const BOUING_BOUING = 4
+const RESSORT = 5
 
 const NONE = 0
 const SUCCEED = 1
@@ -62,8 +64,8 @@ class PushTrigger:
 		
 	func create_column(column: Node) -> Array[Node]:
 		var column_1 = column.duplicate()
-		column_1.scale.x = end_trigger - start_trigger
-		column_1.position.x = start_trigger
+		column_1.scale /= 1.8
+		column_1.position.x = start_trigger + (end_trigger - start_trigger) * 0.5
 		return [column_1]
 
 	# The idea is: if the current x position of the player is higher than
@@ -103,12 +105,13 @@ class SlideTrigger:
 		var column_start = column.duplicate()
 		var column_end = column.duplicate()
 		var column_between = column.duplicate()
-		column_start.scale.x = stride
-		column_end.scale.x = stride
-		column_between.scale.x = range_slide - (2 * stride)
-		column_start.position.x = start_trigger
-		column_end.position.x = end_trigger - stride
-		column_between = start_trigger + stride
+		column_start.scale /= 2
+		column_end.scale /= 2
+		column_between.scale /= 2
+		column_start.position.x = start_trigger + stride * 0.5
+		column_end.position.x = end_trigger - stride  + stride * 0.5
+		column_between.position.x = start_trigger + stride
+		column_between.modulate = Color(1.0, 0.843, 0.0, 1.0)
 		return [column_start, column_between, column_end]
 		
 	func get_next_trigger_x() -> float:
@@ -147,7 +150,7 @@ class SlideTrigger:
 		return NONE
 					
 			#var input_valid_nb = 0
-			#for required_action in self.expected_actions:
+			#for required_action in self.expected_actions:    
 				#if Input.is_action_pressed(required_action):
 					#input_valid_nb += 1
 					#continue
@@ -201,6 +204,14 @@ func add_regular_pulse(offset_x, stride_x):
 func add_slice_up_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.6, HIGH_H), Vector2(offset_x + stride_x * 0.7, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
 	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size(), offset_x, stride_x)])
+	
+func add_bouingbouing_pulse(offset_x, stride_x):
+	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.05, 0.9), Vector2(offset_x + stride_x * 0.35, 0.15), Vector2(offset_x + stride_x * 0.5, 0.7), Vector2(offset_x + stride_x * 0.7, 0.4), Vector2(offset_x + stride_x * 0.95, 0.55),Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, offset_x, stride_x)])
+	
+func add_ressort_pulse(offset_x, stride_x):
+	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, 0.8), Vector2(offset_x + stride_x * 0.4, 0.2), Vector2(offset_x + stride_x * 0.6, 0.8), Vector2(offset_x + stride_x * 0.8, 0.2), Vector2(offset_x + stride_x, 0.8), Vector2(offset_x + stride_x * 1.2, 0.2), Vector2(offset_x + stride_x * 1.4, 0.8), Vector2(offset_x + stride_x * 1.6, 0.2), Vector2(offset_x + stride_x * 1.8, 0.8), Vector2(offset_x + stride_x * 2.0, BASELINE_H)]
+	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size(), offset_x, stride_x * 2)])
 
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
@@ -221,6 +232,11 @@ func _ready() -> void:
 			add_regular_pulse(index * stride_x, stride_x)
 		elif pulse_type == PULSE_SLICE_UP:
 			add_slice_up_pulse(index * stride_x, stride_x)
+		elif pulse_type == BOUING_BOUING:
+			add_bouingbouing_pulse(index * stride_x, stride_x)
+		elif pulse_type == RESSORT:
+			add_ressort_pulse(index * stride_x, stride_x)
+			index += 1
 		var str = str(index)
 		$TextureButton.text = str
 		$TextureButton.position.x = index * stride_x
@@ -231,7 +247,7 @@ func _ready() -> void:
 	$Line2D.points = time_serie
 
 	for trigger in triggers:
-		var columns = trigger.create_column($Column)
+		var columns = trigger.create_column($TriggerPush)
 		for column in columns:
 			$Line2D.add_child(column)
 	
@@ -266,7 +282,7 @@ func _process(delta: float) -> void:
 		decimal = 0.5
  
 	var a = 1       if decimal == 0.5 else 0
-	$Camera2D/Label.text = str("time: ", str(minutes), "m ", str(seconds), "s ", str(decimal), " b ", str(seconds * 2 + a))
+	$Camera2D/Label.text = str("time: ", str(minutes), "m ", str(seconds), "s ", str(decimal), " b ", str((minutes * 60 + seconds) * 2 + a))
 	
 	var current_position = _get_path_current_position(current_time)
 	
