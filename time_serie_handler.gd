@@ -23,7 +23,13 @@ const PENDING = 2
 const WAITING = 3
 
 @export var xy_scale = Vector2(1.0,1)
-@export var velocity_x : float = 10.0 # m/s
+
+var bpm = 129
+
+var bps = bpm / 60 # bpm but per seconds
+var stride_x = 200
+
+var velocity_x : float = stride_x * bps
 
 var path_pixels_ref = 7839.0
 var current_time = 0.0
@@ -122,7 +128,6 @@ func add_slice_up_pulse(offset_x, stride_x):
 		
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
-	var stride_x = 200
 	
 	var content = FileAccess.open("res://partition.txt", FileAccess.READ).get_as_text().strip_edges().split(",")
 	var pulses_types = []
