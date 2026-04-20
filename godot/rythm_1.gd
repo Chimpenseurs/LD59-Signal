@@ -4,6 +4,8 @@ extends Line2D
 
 signal kick_succeed
 
+@export var partition = "res://partition_rythm1.txt"
+@export var input_required = "ui_left"
 var kick_scene = preload("res://kick.tscn")
 
 var time_serie = []
@@ -20,17 +22,6 @@ var stride_x = 200
 var velocity_x : float = stride_x * bps
 
 const BASELINE_H = 0.5
-
-
-func create_kit(pos: Vector2) -> Line2D:
-	var kit = Line2D.new()
-	kit.default_color = Color("00c300")
-	kit.add_point(Vector2(pos.x, pos.y-5.0))
-	kit.add_point(Vector2(pos.x, pos.y+5.0))
-	
-	var area = Area2D.new()
-	
-	return kit
 
 func inject_pulse(pulse, i_triggers):
 	for i in pulse.size():
@@ -49,6 +40,7 @@ func add_kit_pulse(offset_x, stride_x):
 	var kick = kick_scene.instantiate()
 	kick.set_position(Vector2(offset_x-offset_x/2.0, 0.0))
 	kick.kick_succeed.connect(_on_kick_succeed)
+	kick.input_required = input_required
 	
 	self.add_child(kick)
 	
@@ -57,7 +49,7 @@ func add_kit_pulse(offset_x, stride_x):
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var stride_x = 200
-	var content = FileAccess.open("res://partition_rythm1.txt", FileAccess.READ).get_as_text().strip_edges().split(",")
+	var content = FileAccess.open(partition, FileAccess.READ).get_as_text().strip_edges().split(",")
 	time_serie.append(Vector2(0,0.5)) # BASELINE
 	var pulses_types = []
 	for i in range(0, len(content)):

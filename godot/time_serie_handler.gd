@@ -43,6 +43,8 @@ var triggers = []
 var trigger_miss = false
 var current_trigger_idx = 0
 
+var score = 0
+
 class PushTrigger:
 	var position_index : Array[int]
 	var expected_actions = ["ui_button0"]
@@ -58,6 +60,12 @@ class PushTrigger:
 		self.end_trigger = start_x + (0.1 * stride_x)
 		self.state = PENDING
 		
+	func create_column(column: Node) -> Array[Node]:
+		var column_1 = column.duplicate()
+		column_1.scale.x = end_trigger - start_trigger
+		column_1.position.x = start_trigger
+		return [column_1]
+
 	# The idea is: if the current x position of the player is higher than
 	# get_next_trigger_x, we go to the next Trigger object.
 	func get_next_trigger_x() -> float:
@@ -83,12 +91,26 @@ class SlideTrigger:
 	var state = PENDING
 	var start_trigger: float
 	var end_trigger: float
-	
+
 	func _init(index, index2, start_x, stride_x):
 		position_index = [index, index2]
 		start_trigger = start_x
 		end_trigger = start_x + stride_x
 
+	func create_column(column: Node) -> Array[Node]:
+		var range_slide = end_trigger - start_trigger
+		var stride = range_slide * 0.4
+		var column_start = column.duplicate()
+		var column_end = column.duplicate()
+		var column_between = column.duplicate()
+		column_start.scale.x = stride
+		column_end.scale.x = stride
+		column_between.scale.x = range_slide - (2 * stride)
+		column_start.position.x = start_trigger
+		column_end.position.x = end_trigger - stride
+		column_between = start_trigger + stride
+		return [column_start, column_between, column_end]
+		
 	func get_next_trigger_x() -> float:
 		return self.end_trigger
 
@@ -208,16 +230,10 @@ func _ready() -> void:
 		
 	$Line2D.points = time_serie
 
-	for i in triggers.size():
-		var column = $Column.duplicate()
-		var begin = time_serie[triggers[i].position_index[0]].x
-		if triggers[i].position_index.size() == 2:
-			column.scale.x = 3.5
-			column.position.x = begin + (column.texture.width) * 0.2
-		else:
-			column.position.x = begin - column.texture.width * 0.5
-		column.trigger = triggers[i]
-		$Line2D.add_child(column)
+	for trigger in triggers:
+		var columns = trigger.create_column($Column)
+		for column in columns:
+			$Line2D.add_child(column)
 	
 func _get_path_current_position(time):
 	var pos_x = time * velocity_x
@@ -239,6 +255,8 @@ func _process(delta: float) -> void:
 		
 	current_time += delta
 	
+	$Camera2D/LabelScore.text = "score: " + str(score)
+	
 	var minutes = int(current_time) / 60
 	var seconds = int(current_time) % 60
 	var decimal : float = current_time - int(current_time)
@@ -255,6 +273,7 @@ func _process(delta: float) -> void:
 	$Camera2D.position.x = current_position.x
 	$Circle.position = current_position
 	$CircleRythm1.position.x = current_position.x
+	$CircleRythm2.position.x = current_position.x
 	
 	if Input.is_action_just_pressed("pause"):
 		$Camera2D/PauseMenu.visible = true
@@ -262,13 +281,14 @@ func _process(delta: float) -> void:
 	
 	if trigger_miss :
 		trigger_miss = false
-		print("MISS")
-		$AnimationPlayer.play("slower")
+		# print("MISS")
+		# $AnimationPlayer.play("slower")
 	
 	if (current_position.x > triggers[current_trigger_idx].get_next_trigger_x()) && (current_trigger_idx < (triggers.size() - 1)):
 		if triggers[current_trigger_idx].state in [PENDING, WAITING]:
-			print("MISS")
-			$AnimationPlayer.play("slower")
+			pass
+			# print("MISS")
+			# $AnimationPlayer.play("slower")
 		current_trigger_idx += 1
 	
 	if current_trigger_idx < triggers.size():
@@ -280,6 +300,7 @@ func _process(delta: float) -> void:
 				print("GOOD")
 				current_trigger = null
 				$AnimationPlayer.play("success")
+				score += 1
 			FAILED:
 				print("BAD")
 				current_trigger = null
@@ -290,13 +311,13 @@ func _process(delta: float) -> void:
 				print("WAITING")
 			UNEXPECTED:
 				print("UNEXPECTED")
-				$AnimationPlayer.play("slower")
+				# $AnimationPlayer.play("slower")
 			TOO_LATE:
 				print("TOO_LATE")
-				$AnimationPlayer.play("slower")
+				# $AnimationPlayer.play("slower")
 			TOO_SOON:
 				print("TOO_SOON")
-				$AnimationPlayer.play("slower")
+				# $AnimationPlayer.play("slower")
 			_:
 				pass
 
@@ -306,3 +327,7 @@ func active_wave():
 
 func _on_rythm_1_kick_succeed() -> void:
 	$AnimationPlayer.play("kick_success")
+
+
+func _on_rythm_2_kick_succeed() -> void:
+	$AnimationPlayer.play("clap_success")
