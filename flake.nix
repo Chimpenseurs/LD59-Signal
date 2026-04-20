@@ -54,7 +54,7 @@
         nativeBuildInputs = [
           pkgs.autoPatchelfHook
           pkgs.godot_4
-          pkgs.godot_4-export-templates
+          pkgs.godot_4-export-templates-bin
         ];
 
         runtimeDependencies = map pkgs.lib.getLib [
@@ -75,9 +75,9 @@
           cd godot
 
           export HOME=$(mktemp -d)
-          mkdir -p $HOME/.local/share/godot/export_templates
+          mkdir -p $HOME/.local/
 
-          ln -s "${pkgs.godot_4-export-templates}" "$HOME/.local/share/godot/export_templates/${godot_version_folder}"
+          ln -s "${pkgs.godot_4-export-templates-bin}/share" "$HOME/.local/"
 
           mkdir -p _build/
           godot4 --headless --export-release Web ./_build/index.html
