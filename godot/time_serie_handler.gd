@@ -54,15 +54,25 @@ var start_scale_size = 0.8
 var combo_scale_factor = 0.1
 var max_scale_size = 1.8
 var max_particules_amount = 2000
+var line_thickness_max = 0.1
 
 func player_visual(intensity: int):
 	var scale_size = start_scale_size + max(intensity, max_scale_size) * combo_scale_factor
 	$Circle.scale.x = min(max_scale_size, scale_size)
 	$Circle.scale.y = min(max_scale_size, scale_size)
 
-	$Circle/GPUParticles2D.amount = min(intensity * 10, 1, max_particules_amount)
+	$Circle/GPUParticles2D.amount = min(intensity * 10, max_particules_amount)
+	$Circle/GPUParticles2D.emitting = intensity > 0
 	
-	$Line2D.material.set_shader_parameter("beams", min(max(1, intensity), 15))
+	
+	
+	var thickness_scale_size = min(intensity / 50.0, 0.1)
+	if intensity == 0:
+		$Line2D.material.set_shader_parameter("thickness", 0.015)
+		$Line2D.material.set_shader_parameter("outline_thickness", 0.015)
+	else:
+		$Line2D.material.set_shader_parameter("thickness", thickness_scale_size)
+		$Line2D.material.set_shader_parameter("outline_thickness", thickness_scale_size)
 
 
 class PushTrigger:
@@ -234,13 +244,14 @@ func add_ressort_pulse(offset_x, stride_x):
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
 	
+	
 	var content = Partition.new().partition.strip_edges().split(",") # FileAccess.open("res://partition.txt", FileAccess.READ).get_as_text().strip_edges().split(",")
 	var pulses_types = []
 	for pulse_type in content:
 		pulses_types.append(int(pulse_type))
 	
 	# Init the number of particules
-	$Circle/GPUParticles2D.amount = 0
+	player_visual(0)
 
 	var index = 0
 	time_serie.append(Vector2(0,BASELINE_H))
@@ -291,7 +302,7 @@ func _process(delta: float) -> void:
 		return
 	
 	# Easy mode for score 
-	player_visual(score)
+	player_visual(combo)
 	
 	current_time += delta
 	
