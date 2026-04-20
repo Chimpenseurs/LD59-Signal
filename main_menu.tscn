@@ -75,9 +75,9 @@ text = "Quit"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1095557074]
 layout_mode = 0
-offset_left = 468.0
+offset_left = 453.0
 offset_top = 507.0
-offset_right = 682.0
+offset_right = 667.0
 offset_bottom = 547.0
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=828512108]

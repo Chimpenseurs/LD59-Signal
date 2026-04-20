@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://beej3nmm3skwj" path="res://pause_menu.gd" id="1_05uyy"]
 [ext_resource type="FontFile" uid="uid://mnrswl4tv81w" path="res://assets/fonts/JVNE Wopper'83.ttf" id="1_hdmo1"]
 [ext_resource type="AudioStream" uid="uid://dvw2eq6g7u65x" path="res://assets/sfx/menu_select.wav" id="2_nwcfo"]
+[ext_resource type="Texture2D" uid="uid://cvplpfb2rycxv" path="res://assets/img/pngimg.com - sound_PNG33.png" id="4_p81d2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_nwcfo"]
 font = ExtResource("1_hdmo1")
@@ -61,6 +62,27 @@ text = "Restart"
 layout_mode = 2
 text = "Main Menu"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1165504144]
+layout_mode = 0
+offset_left = 468.0
+offset_top = 432.0
+offset_right = 682.0
+offset_bottom = 472.0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=1297514119]
+layout_mode = 2
+texture = ExtResource("4_p81d2")
+expand_mode = 3
+
+[node name="HSlider" type="HSlider" parent="HBoxContainer" unique_id=885282111]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = -10.0
+max_value = 10.0
+rounded = true
+ticks_position = 3
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=249948787]
 stream = SubResource("AudioStreamRandomizer_05uyy")
 
@@ -70,3 +92,5 @@ stream = SubResource("AudioStreamRandomizer_05uyy")
 [connection signal="pressed" from="VBoxContainer/Restart" to="." method="_on_restart_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/MainMenu" to="." method="_on_main_menu_mouse_entered"]
 [connection signal="pressed" from="VBoxContainer/MainMenu" to="." method="_on_main_menu_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/HSlider" to="." method="_on_h_slider_mouse_entered"]
+[connection signal="value_changed" from="HBoxContainer/HSlider" to="." method="_on_h_slider_value_changed"]
