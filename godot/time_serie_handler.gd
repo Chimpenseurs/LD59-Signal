@@ -66,6 +66,8 @@ var triggers = []
 var trigger_miss = false
 var current_trigger_idx = 0
 
+var score = 0
+
 class PushTrigger:
 	var position_index : Array[int]
 	var expected_actions = ["ui_button0"]
@@ -260,6 +262,8 @@ func _process(delta: float) -> void:
 	if  Engine.is_editor_hint():
 		return
 	
+	$Camera2D/LabelScore.text = "score: " + str(score)
+	
 	var minutes = int(current_time) / 60
 	var seconds = int(current_time) % 60
  
@@ -279,13 +283,14 @@ func _process(delta: float) -> void:
 	
 	if trigger_miss :
 		trigger_miss = false
-		print("MISS")
-		$AnimationPlayer.play("slower")
+		# print("MISS")
+		# $AnimationPlayer.play("slower")
 	
 	if (current_position.x > triggers[current_trigger_idx].get_next_trigger_x()) && (current_trigger_idx < (triggers.size() - 1)):
 		if triggers[current_trigger_idx].state in [PENDING, WAITING]:
-			print("MISS")
-			$AnimationPlayer.play("slower")
+			pass
+			# print("MISS")
+			# $AnimationPlayer.play("slower")
 		current_trigger_idx += 1
 	
 	if current_trigger_idx < triggers.size():
@@ -297,6 +302,7 @@ func _process(delta: float) -> void:
 				print("GOOD")
 				current_trigger = null
 				$AnimationPlayer.play("success")
+				score += 1
 			FAILED:
 				print("BAD")
 				current_trigger = null
@@ -307,13 +313,13 @@ func _process(delta: float) -> void:
 				print("WAITING")
 			UNEXPECTED:
 				print("UNEXPECTED")
-				$AnimationPlayer.play("slower")
+				# $AnimationPlayer.play("slower")
 			TOO_LATE:
 				print("TOO_LATE")
-				$AnimationPlayer.play("slower")
+				# $AnimationPlayer.play("slower")
 			TOO_SOON:
 				print("TOO_SOON")
-				$AnimationPlayer.play("slower")
+				# $AnimationPlayer.play("slower")
 			_:
 				pass
 
