@@ -4,6 +4,7 @@ class_name Game
 extends Node
 
 signal set_pause
+signal end_game(score)
 
 # constants
 const LOW_H = 0.9
@@ -263,7 +264,7 @@ func _get_path_current_position(time):
 		assert(pt != null)
 		return pt
 			
-	assert(false)
+	return null
 	
 func _process(delta: float) -> void:
 	if  Engine.is_editor_hint():
@@ -286,56 +287,59 @@ func _process(delta: float) -> void:
 	
 	var current_position = _get_path_current_position(current_time)
 	
-	$Camera2D.position.x = current_position.x
-	$Circle.position = current_position
-	$CircleRythm1.position.x = current_position.x
-	$CircleRythm2.position.x = current_position.x
-	
-	if Input.is_action_just_pressed("pause"):
-		$Camera2D/PauseMenu.visible = true
-		emit_signal("set_pause")
-	
-	if trigger_miss :
-		trigger_miss = false
-		# print("MISS")
-		# $AnimationPlayer.play("slower")
-	
-	if (current_position.x > triggers[current_trigger_idx].get_next_trigger_x()) && (current_trigger_idx < (triggers.size() - 1)):
-		if triggers[current_trigger_idx].state in [PENDING, WAITING]:
-			pass
+	if current_position == null:
+		end_game.emit(score)
+	else:
+		$Camera2D.position.x = current_position.x
+		$Circle.position = current_position
+		$CircleRythm1.position.x = current_position.x
+		$CircleRythm2.position.x = current_position.x
+		
+		if Input.is_action_just_pressed("pause"):
+			$Camera2D/PauseMenu.visible = true
+			emit_signal("set_pause")
+		
+		if trigger_miss :
+			trigger_miss = false
 			# print("MISS")
 			# $AnimationPlayer.play("slower")
-		current_trigger_idx += 1
-	
-	if current_trigger_idx < triggers.size():
-		var current_trigger = triggers[current_trigger_idx]
-	
-		var status = current_trigger.has_succeed(current_position.x)
-		match status:	
-			SUCCEED:
-				print("GOOD")
-				current_trigger = null
-				$AnimationPlayer.play("success")
-				score += 1
-			FAILED:
-				print("BAD")
-				current_trigger = null
-				$AnimationPlayer.play("slower")
-			PENDING:
-				print("PENDING")
-			WAITING:
-				print("WAITING")
-			UNEXPECTED:
-				print("UNEXPECTED")
-				# $AnimationPlayer.play("slower")
-			TOO_LATE:
-				print("TOO_LATE")
-				# $AnimationPlayer.play("slower")
-			TOO_SOON:
-				print("TOO_SOON")
-				# $AnimationPlayer.play("slower")
-			_:
+		
+		if (current_position.x > triggers[current_trigger_idx].get_next_trigger_x()) && (current_trigger_idx < (triggers.size() - 1)):
+			if triggers[current_trigger_idx].state in [PENDING, WAITING]:
 				pass
+				# print("MISS")
+				# $AnimationPlayer.play("slower")
+			current_trigger_idx += 1
+		
+		if current_trigger_idx < triggers.size():
+			var current_trigger = triggers[current_trigger_idx]
+		
+			var status = current_trigger.has_succeed(current_position.x)
+			match status:	
+				SUCCEED:
+					print("GOOD")
+					current_trigger = null
+					$AnimationPlayer.play("success")
+					score += 1
+				FAILED:
+					print("BAD")
+					current_trigger = null
+					$AnimationPlayer.play("slower")
+				PENDING:
+					print("PENDING")
+				WAITING:
+					print("WAITING")
+				UNEXPECTED:
+					print("UNEXPECTED")
+					# $AnimationPlayer.play("slower")
+				TOO_LATE:
+					print("TOO_LATE")
+					# $AnimationPlayer.play("slower")
+				TOO_SOON:
+					print("TOO_SOON")
+					# $AnimationPlayer.play("slower")
+				_:
+					pass
 
 func active_wave():
 	$Wave.position = $Circle.global_position

@@ -20,7 +20,7 @@ func _on_play() -> void:
 		game.queue_free()
 	
 	if endgame_menu != null:
-		game.queue_free()
+		endgame_menu.queue_free()
 	
 	if main_menu != null:
 		main_menu.queue_free()
@@ -29,6 +29,7 @@ func _on_play() -> void:
 	game.get_node("Camera2D/PauseMenu").restart.connect(_on_play)
 	game.get_node("Camera2D/PauseMenu").back_to_menu.connect(_on_back_to_main_menu)
 	game.set_pause.connect(_on_game_pause)
+	game.end_game.connect(_on_endgame)
 	
 	add_child(game)
 	get_tree().paused = false
@@ -56,7 +57,7 @@ func _on_back_to_main_menu() -> void:
 		control_menu.queue_free()
 	
 	if endgame_menu != null:
-		game.queue_free()
+		endgame_menu.queue_free()
 	
 	if game != null:
 		game.queue_free()
