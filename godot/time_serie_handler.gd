@@ -64,16 +64,21 @@ func player_visual(intensity: int):
 	$Circle.scale.x = min(max_scale_size, scale_size)
 	$Circle.scale.y = min(max_scale_size, scale_size)
 
-	$Circle/GPUParticles2D.amount = min(intensity * 10, max_particules_amount)
+	$Circle/GPUParticles2D.amount_ratio = max(intensity / 10.0, 0.1)
 	$Circle/GPUParticles2D.emitting = intensity > 0
 	
-	$Camera2D/GPUParticles2D.amount_ratio = max(intensity / 10.0, 0.1)
-	$Camera2D/GPUParticles2D.amount = 600 if intensity > 0 else 1
-	if $Camera2D/GPUParticles2D.amount == 1:
+	if intensity >= 10:
+		var p = intensity - 10
+		$Camera2D/GPUParticles2D.amount_ratio = max(p / 10.0, 0.1)
+		$Camera2D/GPUParticles2D.amount = 600 if p > 0 else 1
+	
+	if intensity == 0:
 		$Camera2D/GPUParticles2D.visible = false
+		$Circle/GPUParticles2D.visible = false
 	else :
 		$Camera2D/GPUParticles2D.visible = true
-		
+		$Circle/GPUParticles2D.visible = true
+
 	
 	var thickness_scale_size = min(intensity / 50.0, 0.1)
 	if intensity == 0:
