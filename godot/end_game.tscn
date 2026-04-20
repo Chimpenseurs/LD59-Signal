@@ -116,6 +116,24 @@ Music:
 A game by the team Chimpenseurs (github.com/Chimpenseurs)"
 label_settings = SubResource("LabelSettings_8aegd")
 
+[node name="Label4" type="Label" parent="." unique_id=966449453]
+layout_mode = 0
+offset_left = 302.0
+offset_top = 525.0
+offset_right = 645.0
+offset_bottom = 562.0
+text = "Max Combo ;"
+label_settings = SubResource("LabelSettings_sjse8")
+
+[node name="Score2" type="Label" parent="." unique_id=782256437]
+layout_mode = 0
+offset_left = 620.0
+offset_top = 531.0
+offset_right = 770.0
+offset_bottom = 568.0
+text = ">9000"
+label_settings = SubResource("LabelSettings_5q2h6")
+
 [connection signal="mouse_entered" from="VBoxContainer/restart" to="." method="_on_restart_mouse_entered"]
 [connection signal="pressed" from="VBoxContainer/restart" to="." method="_on_restart_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/main menu" to="." method="_on_main_menu_mouse_entered"]

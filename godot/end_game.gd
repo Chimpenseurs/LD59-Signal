@@ -3,8 +3,9 @@ extends Control
 signal restart
 signal back_to_menu
 
-func set_score(score: int) -> void:
+func set_score(score: int, combo_max: int) -> void:
 	$Score.text = str(score)
+	$Score2.text = str(combo_max)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -12,6 +13,9 @@ func _ready() -> void:
 		# Assuming score is at zero when sent from the start menu
 		$Score.visible = false
 		$Label2.visible = false
+		
+		$Score2.visible = false
+		$Label4.visible = false
 		
 		$VBoxContainer/restart.text = "Start"
 		
