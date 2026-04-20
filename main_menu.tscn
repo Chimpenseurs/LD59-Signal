@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bd133ig7cfo71" path="res://main_menu.gd" id="1_7vrkn"]
 [ext_resource type="FontFile" uid="uid://mnrswl4tv81w" path="res://assets/fonts/JVNE Wopper'83.ttf" id="2_fu7sn"]
 [ext_resource type="AudioStream" uid="uid://dvw2eq6g7u65x" path="res://assets/sfx/menu_select.wav" id="3_fu7sn"]
+[ext_resource type="Texture2D" uid="uid://cvplpfb2rycxv" path="res://assets/img/pngimg.com - sound_PNG33.png" id="3_jix8l"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jix8l"]
 font = ExtResource("2_fu7sn")
@@ -28,7 +29,7 @@ layout_mode = 0
 offset_left = -10.0
 offset_top = -4.0
 offset_right = 1161.0
-offset_bottom = 666.0
+offset_bottom = 9996.0
 color = Color(0, 0, 0, 1)
 
 [node name="Label" type="Label" parent="." unique_id=291444793]
@@ -72,6 +73,27 @@ text = "Controls"
 layout_mode = 2
 text = "Quit"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1095557074]
+layout_mode = 0
+offset_left = 468.0
+offset_top = 507.0
+offset_right = 682.0
+offset_bottom = 547.0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=828512108]
+layout_mode = 2
+texture = ExtResource("3_jix8l")
+expand_mode = 3
+
+[node name="HSlider" type="HSlider" parent="HBoxContainer" unique_id=720742782]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = -10.0
+max_value = 10.0
+rounded = true
+ticks_position = 3
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1631304962]
 stream = SubResource("AudioStreamRandomizer_jix8l")
 bus = &"SFX"
@@ -82,3 +104,5 @@ bus = &"SFX"
 [connection signal="pressed" from="VBoxContainer/controls" to="." method="_on_controls_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/quit" to="." method="_on_quit_mouse_entered"]
 [connection signal="pressed" from="VBoxContainer/quit" to="." method="_on_quit_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/HSlider" to="." method="_on_h_slider_mouse_entered"]
+[connection signal="value_changed" from="HBoxContainer/HSlider" to="." method="_on_h_slider_value_changed"]
