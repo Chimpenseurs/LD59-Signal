@@ -9,33 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://cikt0x7c3rrj4" path="res://images/circle_white.png" id="6_272bh"]
 [ext_resource type="PackedScene" uid="uid://cudoses46ae5g" path="res://pause_menu.tscn" id="8_5vw27"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_1bvp3"]
-radius = 17.448338
-
-[sub_resource type="Gradient" id="Gradient_lquwl"]
-colors = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 0.3372549)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_7mycd"]
-gradient = SubResource("Gradient_lquwl")
-
-[sub_resource type="Curve" id="Curve_lquwl"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_7mycd"]
-curve = SubResource("Curve_lquwl")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_272bh"]
-particle_flag_disable_z = true
-angle_min = -334.69998
-angle_max = 115.40001
-initial_velocity_min = 39.62
-initial_velocity_max = 69.56
-gravity = Vector3(0, 98, 0)
-scale_max = 10.0
-scale_curve = SubResource("CurveTexture_7mycd")
-color_ramp = SubResource("GradientTexture1D_7mycd")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lquwl"]
 shader = ExtResource("2_1bvp3")
 shader_parameter/beams = 2
@@ -86,8 +59,20 @@ colors = PackedColorArray(0, 0, 0, 0, 0, 0.3499999, 1, 0.4745098, 0, 0.3499999, 
 gradient = SubResource("Gradient_h2yge")
 height = 128
 
+[sub_resource type="GDScript" id="GDScript_5vw27"]
+script/source = "extends Sprite2D
+class_name ColumnTrigger
+
+signal column_entered
+
+var trigger
+
+func _on_area_2d_area_entered(area: Area2D) -> void:
+	column_entered.emit(self)
+"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lquwl"]
-size = Vector2(106.666626, 126.79575)
+size = Vector2(60.00003, 1.3266535)
 
 [sub_resource type="Animation" id="Animation_h2yge"]
 length = 0.001
@@ -295,6 +280,33 @@ _data = {
 &"success": SubResource("Animation_5vw27")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_1bvp3"]
+radius = 17.448338
+
+[sub_resource type="Gradient" id="Gradient_lquwl"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 0.3372549)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7mycd"]
+gradient = SubResource("Gradient_lquwl")
+
+[sub_resource type="Curve" id="Curve_lquwl"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_7mycd"]
+curve = SubResource("Curve_lquwl")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_272bh"]
+particle_flag_disable_z = true
+angle_min = -334.69998
+angle_max = 115.40001
+initial_velocity_min = 39.62
+initial_velocity_max = 69.56
+gravity = Vector3(0, 98, 0)
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_7mycd")
+color_ramp = SubResource("GradientTexture1D_7mycd")
+
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_272bh"]
 random_pitch = 1.0696088
 random_volume_offset_db = 4.2
@@ -321,25 +333,6 @@ offset_bottom = -103.784
 scale = Vector2(2, 2)
 size_flags_horizontal = 4
 text = "151"
-
-[node name="Circle" type="Sprite2D" parent="." unique_id=1360790884]
-modulate = Color(1, 0, 0, 1)
-material = ExtResource("3_lquwl")
-position = Vector2(199.90001, -8.9995)
-rotation = -0.009999665
-scale = Vector2(1.5000001, 1.5000001)
-texture = ExtResource("3_272bh")
-
-[node name="Area2D" type="Area2D" parent="Circle" unique_id=48873254]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Circle/Area2D" unique_id=563145820]
-shape = SubResource("CircleShape2D_1bvp3")
-
-[node name="GPUParticles2D" type="GPUParticles2D" parent="Circle" unique_id=1600524317]
-amount = 256
-lifetime = 2.6799999999999997
-randomness = 0.21
-process_material = SubResource("ParticleProcessMaterial_272bh")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1536082122]
 material = SubResource("ShaderMaterial_lquwl")
@@ -417,11 +410,12 @@ bus = &"Music"
 position = Vector2(-692.9999, 338.80402)
 scale = Vector2(1, 6.784)
 texture = SubResource("GradientTexture2D_1bvp3")
+script = SubResource("GDScript_5vw27")
 
 [node name="Area2D" type="Area2D" parent="Column" unique_id=601109245]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Column/Area2D" unique_id=1258925870]
-position = Vector2(3.3327637, -0.10409927)
+position = Vector2(-0.00012207031, 0.2500038)
 shape = SubResource("RectangleShape2D_lquwl")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1148269338]
@@ -430,6 +424,25 @@ libraries/ = SubResource("AnimationLibrary_lquwl")
 [node name="Wave" type="Sprite2D" parent="." unique_id=848662902]
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("6_272bh")
+
+[node name="Circle" type="Sprite2D" parent="." unique_id=1360790884]
+modulate = Color(1, 0, 0, 1)
+material = ExtResource("3_lquwl")
+position = Vector2(199.90001, -8.9995)
+rotation = -0.009999665
+scale = Vector2(1.5000001, 1.5000001)
+texture = ExtResource("3_272bh")
+
+[node name="Area2D" type="Area2D" parent="Circle" unique_id=48873254]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Circle/Area2D" unique_id=563145820]
+shape = SubResource("CircleShape2D_1bvp3")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Circle" unique_id=1600524317]
+amount = 256
+lifetime = 2.6799999999999997
+randomness = 0.21
+process_material = SubResource("ParticleProcessMaterial_272bh")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1089278649]
 stream = SubResource("AudioStreamRandomizer_272bh")
@@ -583,5 +596,6 @@ bus = &"SFX"
 [connection signal="area_exited" from="Line2D/@Sprite2D@18887/Area2D" to="." method="_on_area_2d_area_exited"]
 [connection signal="back_to_menu" from="Camera2D/PauseMenu" to="." method="_on_pause_menu_back_to_menu"]
 [connection signal="restart" from="Camera2D/PauseMenu" to="." method="_on_pause_menu_restart"]
-[connection signal="area_entered" from="Column/Area2D" to="." method="_on_trigger_area_entered"]
+[connection signal="column_entered" from="Column" to="." method="_on_trigger_area_entered"]
+[connection signal="area_entered" from="Column/Area2D" to="Column" method="_on_area_2d_area_entered"]
 [connection signal="area_exited" from="Column/Area2D" to="." method="_on_area_2d_area_exited"]

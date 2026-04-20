@@ -6,54 +6,81 @@ extends Node
 signal set_pause
 
 # constants
-var baseline_h = 0.5
-var medium_h = 0.3
-var high_h = 0.1
+const LOW_H = 0.9
+const DOWN_MEDIUM_H = 0.7
+const BASELINE_H = 0.5
+const MEDIUM_H = 0.3
+const HIGH_H = 0.1
 
-var current_time = 0.0
+const PULSE_FLAT = 0
+const PULSE_BEAT = 1
+const PULSE_CHORD = 2
+const PULSE_SLICE_UP = 3
+
 @export var xy_scale = Vector2(1.0,1)
 @export var velocity_x : float = 10.0 # m/s
 
 var path_pixels_ref = 7839.0
+var current_time = 0.0
 
 var time_serie = []
 var triggers = []
+var trigger_miss = false
+var current_trigger
 
-var next_trigger_point_id = 1
-var previous_point_id = 0
+class PushTrigger:
+	var position_index : int
+	var expected_actions = ["ui_button0"]
+	func _init(index):
+		position_index = index
+	func has_succeed() :
+		var input_valid_nb = 0
+		for required_action in self.expected_actions:
+			if Input.is_action_just_pressed(required_action) :
+				input_valid_nb += 1
+				continue
+		return input_valid_nb == self.expected_actions.size()
 
-var valid_control = false
-
+class ReleaseTrigger:
+	var position_index : int
+	var expected_actions = ["ui_button0"]
+	func _init(index):
+		position_index = index
+	func has_succeed() :
+		var input_valid_nb = 0
+		for required_action in self.expected_actions:
+			if Input.is_action_just_released(required_action) :
+				input_valid_nb += 1
+				continue
+		print(Input.is_action_just_released("required_actionui_button0"))
+		
+		return input_valid_nb == self.expected_actions.size()
+	
 func get_serie() -> Array[Vector2]:
 	return time_serie
 
 func inject_pulse(pulse, i_triggers):
-	scale_pulse(pulse)
+	for i in pulse.size():
+		pulse[i] *= xy_scale
 	var path = pulse.slice(1,pulse.size())
 	triggers.append_array(i_triggers)
 	time_serie.append_array(path)
-	
-func scale_pulse(pulse):
-	for i in pulse.size():
-		pulse[i] *= xy_scale
-
-func length_pulse(pulse) -> float :
-	var length = 0
-	for i in pulse.size()-1:
-		length += pulse[i].distance_to(pulse[i+1])
-	return length
 
 func add_flat_pulse(offset_x, stride_x):
-	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x, baseline_h)]
+	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x, BASELINE_H)]
 	inject_pulse(pulse, [])
 	
 func add_simple_pulse(offset_x, stride_x):
-	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x * 0.2, medium_h), Vector2(offset_x + stride_x * 0.4, baseline_h), Vector2(offset_x + stride_x * 1.0, baseline_h)]
-	inject_pulse(pulse, [time_serie.size()-1])
+	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, MEDIUM_H), Vector2(offset_x + stride_x * 0.4, DOWN_MEDIUM_H), Vector2(offset_x + stride_x * 0.6, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1)])
 
 func add_regular_pulse(offset_x, stride_x):
-	var pulse = [Vector2(offset_x, baseline_h), Vector2(offset_x + stride_x * 0.2, high_h), Vector2(offset_x + stride_x * 0.4, 1.0 - high_h), Vector2(offset_x + stride_x * 0.6, medium_h), Vector2(offset_x + stride_x * 1.0, 0.5)]
-	inject_pulse(pulse, [time_serie.size()-1])
+	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, HIGH_H), Vector2(offset_x + stride_x * 0.4, 1.0 - HIGH_H), Vector2(offset_x + stride_x * 0.6, MEDIUM_H), Vector2(offset_x + stride_x * 1.0, 0.5)]
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1)])
+	
+func add_slice_up_pulse(offset_x, stride_x):
+	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.6, HIGH_H), Vector2(offset_x + stride_x * 0.7, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1), ReleaseTrigger.new(time_serie.size() + 1)])
 		
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
@@ -65,14 +92,16 @@ func _ready() -> void:
 		pulses_types.append(int(pulse_type))
 	
 	var index = 0
-	time_serie.append(Vector2(0,baseline_h))
+	time_serie.append(Vector2(0,BASELINE_H))
 	for pulse_type in pulses_types:
-		if pulse_type == 0:
+		if pulse_type == PULSE_FLAT:
 			add_flat_pulse(index * stride_x, stride_x)
-		if pulse_type == 1:
+		if pulse_type == PULSE_BEAT:
 			add_simple_pulse(index * stride_x, stride_x)
-		elif pulse_type == 2:
+		elif pulse_type == PULSE_CHORD:
 			add_regular_pulse(index * stride_x, stride_x)
+		elif pulse_type == PULSE_SLICE_UP:
+			add_slice_up_pulse(index * stride_x, stride_x)
 		var str = str(index)
 		$TextureButton.text = str
 		$TextureButton.position.x = index * stride_x
@@ -84,9 +113,9 @@ func _ready() -> void:
 
 	for i in triggers.size():
 		var column = $Column.duplicate()
-		var texture : GradientTexture2D = column.texture
-		var texture_width = texture.width
-		column.position.x = time_serie[triggers[i]].x - texture_width * 0.5
+		var texture_width = column.texture.width
+		column.position.x = time_serie[triggers[i].position_index].x - texture_width * 0.5
+		column.trigger = triggers[i]
 		$Line2D.add_child(column)
 	
 func _get_path_current_position(time):
@@ -104,51 +133,40 @@ func _get_path_current_position(time):
 	assert(false)
 	
 func _process(delta: float) -> void:
-
 	if  Engine.is_editor_hint():
 		return
-
-	var player_pos = $Circle.global_position
-	if time_serie[previous_point_id+1].x < player_pos.x:
-		previous_point_id += 1
-		
-	var next_trigger_point = time_serie[triggers[next_trigger_point_id]]
-	var distance_to_next_point = player_pos.distance_to(next_trigger_point)
 	
 	current_time += delta
 	var current_position = _get_path_current_position(current_time)
 	
 	$Camera2D.position.x = current_position.x
 	$Circle.position = current_position
-	#$Path2D/PathFollow2D.set_progress_ratio(current_time)
 		
-	var has_pressed = false
 	if Input.is_action_just_pressed("pause"):
 		$Camera2D/PauseMenu.visible = true
 		emit_signal("set_pause")
 		
-	if Input.is_action_just_pressed("ui_up") :
-		has_pressed = true
-		print(distance_to_next_point)
-		if valid_control:
-			print("GOOD")
-			$AnimationPlayer.play("success")
-			self.next_trigger_point_id+=1
-		else :
-			print("BAD")
-			$AnimationPlayer.play("slower")
-			
-	if player_pos.x > next_trigger_point.x:
-		if not has_pressed:
-			print("MISSED")
-			$AnimationPlayer.play("slower")
-		self.next_trigger_point_id+=1
+	if trigger_miss :
+		trigger_miss = false
+		print("MISS")
+		$AnimationPlayer.play("slower")
+		
+	if current_trigger == null and Input.is_action_just_pressed("ui_button0"):
+		print("BAD")
+		$AnimationPlayer.play("slower")
 
-func _on_trigger_area_entered(area: Area2D) -> void:
-	valid_control = true
+	if current_trigger and current_trigger.has_succeed():
+		print("GOOD")
+		$AnimationPlayer.play("success")
+		current_trigger = null
+
+func _on_trigger_area_entered(column) -> void:
+	current_trigger = column.trigger
 
 func _on_area_2d_area_exited(area: Area2D) -> void:
-	valid_control = false
+	if current_trigger:
+		trigger_miss = true
+	current_trigger = null
 	
 func active_wave():
 	$Wave.position = $Circle.global_position
