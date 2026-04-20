@@ -67,8 +67,8 @@ func player_visual(intensity: int):
 	$Circle/GPUParticles2D.amount_ratio = max(intensity / 10.0, 0.1)
 	$Circle/GPUParticles2D.emitting = intensity > 0
 	
-	if intensity >= 6:
-		var p = intensity - 6
+	if intensity >= 10:
+		var p = intensity - 10
 		$Camera2D/GPUParticles2D.amount_ratio = max(p / 10.0, 0.1)
 		$Camera2D/GPUParticles2D.amount = 600 if p > 0 else 1
 	
@@ -100,8 +100,8 @@ class PushTrigger:
 	func _init(index, start_x, stride_x_):
 		position_index = [index]
 		self.stride_x = stride_x_
-		self.start_trigger = start_x - (0.1 * stride_x)
-		self.end_trigger = start_x + (0.1 * stride_x)
+		self.start_trigger = start_x - (0.5 * stride_x)
+		self.end_trigger = start_x + (0.5 * stride_x)
 		self.state = PENDING
 		
 	func create_column(column: Node) -> Array[Node]:
