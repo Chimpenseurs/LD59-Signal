@@ -47,6 +47,23 @@ var trigger_miss = false
 var current_trigger_idx = 0
 
 var score = 0
+var combo = 0
+
+# Game feel variables
+var start_scale_size = 0.8
+var combo_scale_factor = 0.1
+var max_scale_size = 1.8
+var max_particules_amount = 2000
+
+func player_visual(intensity: int):
+	var scale_size = start_scale_size + max(intensity, max_scale_size) * combo_scale_factor
+	$Circle.scale.x = min(max_scale_size, scale_size)
+	$Circle.scale.y = min(max_scale_size, scale_size)
+
+	$Circle/GPUParticles2D.amount = min(intensity * 10, 1, max_particules_amount)
+	
+	$Line2D.material.set_shader_parameter("beams", min(max(1, intensity), 15))
+
 
 class PushTrigger:
 	var position_index : Array[int]
@@ -222,6 +239,9 @@ func _ready() -> void:
 	for pulse_type in content:
 		pulses_types.append(int(pulse_type))
 	
+	# Init the number of particules
+	$Circle/GPUParticles2D.amount = 0
+
 	var index = 0
 	time_serie.append(Vector2(0,BASELINE_H))
 	for pulse_type in pulses_types:
@@ -269,10 +289,13 @@ func _get_path_current_position(time):
 func _process(delta: float) -> void:
 	if  Engine.is_editor_hint():
 		return
-		
+	
+	# Easy mode for score 
+	player_visual(score)
+	
 	current_time += delta
 	
-	$Camera2D/LabelScore.text = "score: " + str(score)
+	$Camera2D/LabelScore.text = "score: " + str(score) + " combo: " + str(combo)
 	
 	var minutes = int(current_time) / 60
 	var seconds = int(current_time) % 60
@@ -321,29 +344,35 @@ func _process(delta: float) -> void:
 					current_trigger = null
 					$AnimationPlayer.play("success")
 					score += 1
+					combo += 1
 				FAILED:
 					print("BAD")
 					current_trigger = null
-					$AnimationPlayer.play("slower")
+					# $AnimationPlayer.play("slower")
+					combo = 0
 				PENDING:
 					print("PENDING")
+					combo = 0
 				WAITING:
 					print("WAITING")
+					combo = 0
 				UNEXPECTED:
 					print("UNEXPECTED")
+					combo = 0
 					# $AnimationPlayer.play("slower")
 				TOO_LATE:
 					print("TOO_LATE")
+					combo = 0
 					# $AnimationPlayer.play("slower")
 				TOO_SOON:
 					print("TOO_SOON")
+					combo = 0
 					# $AnimationPlayer.play("slower")
 				_:
 					pass
 
 func active_wave():
 	$Wave.position = $Circle.global_position
-
 
 func _on_rythm_1_kick_succeed() -> void:
 	score += 2

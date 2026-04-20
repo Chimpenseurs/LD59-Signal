@@ -9,6 +9,7 @@ func set_score(score: int) -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if $Score.text == "0":
+		# Assuming score is at zero when sent from the start menu
 		$Score.visible = false
 		$Label2.visible = false
 		
