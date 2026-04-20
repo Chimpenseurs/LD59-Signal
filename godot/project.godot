@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 
+[autoload]
+
+Partition="*uid://bdwydd6ekig82"
+
 [display]
 
 window/size/initial_position_type=3

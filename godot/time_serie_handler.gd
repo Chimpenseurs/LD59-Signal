@@ -25,38 +25,15 @@ const WAITING = 4
 const TOO_SOON = 5
 const TOO_LATE = 6
 const UNEXPECTED = 7
-
 @export var xy_scale = Vector2(1.0,1)
 
-var bpm = 129
+var Partition = preload("res://partition.gd")
 
-var partition = """
-0,0,0,0,0,0,0,0, 
-0,1,0,1,0,1,0,1, 
-0,1,0,1,0,1,0,1,
-0,1,0,1,0,1,0,1, 
-0,1,0,1,0,2,0,1,
-0,1,0,1,0,2,0,1,
-0,1,0,2,0,1,0,1, 
-0,0,2,0,0,1,0,1, 
-2,0,0,1,0,0,0,2, 
-0,1,0,1,0,0,0,2, 
-0,1,0,1,0,1,0,2, 
-0,1,0,1,0,1,0,1, 
-0,1,0,1,0,1,0,1,
-0,1,0,1,0,1,0,1, 
-0,1,0,1,0,1,0,1, 
-0,1,0,1,0,1,0,1, 
-0,1,0,1,0,1,0,1, 
-0,1,0,1,0,1,0,1, 
-0,1,0,1,0,1,0,1, 
-0,1,0,1,0,1,0,1
-"""
+var bpm = 120
 
 var bps = bpm / 60 # bpm but per seconds
 var stride_x = 200
-
-var velocity_x : float = stride_x * bps
+var velocity_x : float = 400
 
 var path_pixels_ref = 7839.0
 var current_time = 0.0
@@ -206,7 +183,7 @@ func add_slice_up_pulse(offset_x, stride_x):
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
 	
-	var content = partition.strip_edges().split(",") # FileAccess.open("res://partition.txt", FileAccess.READ).get_as_text().strip_edges().split(",")
+	var content = Partition.new().partition.strip_edges().split(",") # FileAccess.open("res://partition.txt", FileAccess.READ).get_as_text().strip_edges().split(",")
 	var pulses_types = []
 	for pulse_type in content:
 		pulses_types.append(int(pulse_type))
@@ -259,13 +236,20 @@ func _get_path_current_position(time):
 func _process(delta: float) -> void:
 	if  Engine.is_editor_hint():
 		return
+		
+	current_time += delta
 	
 	var minutes = int(current_time) / 60
 	var seconds = int(current_time) % 60
+	var decimal : float = current_time - int(current_time)
+	if decimal < 0.5:
+		decimal = 0
+	else:
+		decimal = 0.5
  
-	$Camera2D/Label.text = str("time: ", str(minutes), "m ", str(seconds), "s")
+	var a = 1       if decimal == 0.5 else 0
+	$Camera2D/Label.text = str("time: ", str(minutes), "m ", str(seconds), "s ", str(decimal), " b ", str(seconds * 2 + a))
 	
-	current_time += delta
 	var current_position = _get_path_current_position(current_time)
 	
 	$Camera2D.position.x = current_position.x
