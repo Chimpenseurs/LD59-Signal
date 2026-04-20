@@ -64,8 +64,6 @@ func player_visual(intensity: int):
 	$Circle/GPUParticles2D.amount = min(intensity * 10, max_particules_amount)
 	$Circle/GPUParticles2D.emitting = intensity > 0
 	
-	
-	
 	var thickness_scale_size = min(intensity / 50.0, 0.1)
 	if intensity == 0:
 		$Line2D.material.set_shader_parameter("thickness", 0.015)
@@ -231,7 +229,7 @@ func add_regular_pulse(offset_x, stride_x):
 
 func add_slice_up_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.6, HIGH_H), Vector2(offset_x + stride_x * 0.7, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
-	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size(), offset_x, stride_x)])
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, offset_x, stride_x)])
 	
 func add_bouingbouing_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.05, 0.9), Vector2(offset_x + stride_x * 0.35, 0.15), Vector2(offset_x + stride_x * 0.5, 0.7), Vector2(offset_x + stride_x * 0.7, 0.4), Vector2(offset_x + stride_x * 0.95, 0.55),Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
