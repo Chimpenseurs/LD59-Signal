@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cksnivb1l0k6k"]
 
 [ext_resource type="FontFile" uid="uid://mnrswl4tv81w" path="res://assets/fonts/JVNE Wopper'83.ttf" id="1_sjse8"]
-[ext_resource type="Script" path="res://end_game.gd" id="1_weimh"]
+[ext_resource type="Script" uid="uid://dj8gial40xgc3" path="res://end_game.gd" id="1_weimh"]
 [ext_resource type="AudioStream" uid="uid://dvw2eq6g7u65x" path="res://assets/sfx/menu_select.wav" id="3_5q2h6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_weimh"]
@@ -99,7 +99,7 @@ offset_bottom = 606.0
 text = "Programming: 
     @chtimy, @avzgui, @jajalecapouet, @olddadou
 
-Musique:
+Music:
     @avzgui
 
 

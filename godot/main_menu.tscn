@@ -69,6 +69,10 @@ text = "Play"
 layout_mode = 2
 text = "Controls"
 
+[node name="credits" type="Button" parent="VBoxContainer" unique_id=338946781]
+layout_mode = 2
+text = "Credits"
+
 [node name="quit" type="Button" parent="VBoxContainer" unique_id=34225060]
 layout_mode = 2
 text = "Quit"
@@ -102,6 +106,8 @@ bus = &"SFX"
 [connection signal="pressed" from="VBoxContainer/play" to="." method="_on_play_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/controls" to="." method="_on_controls_mouse_entered"]
 [connection signal="pressed" from="VBoxContainer/controls" to="." method="_on_controls_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/credits" to="." method="_on_credits_mouse_entered"]
+[connection signal="pressed" from="VBoxContainer/credits" to="." method="_on_credits_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/quit" to="." method="_on_quit_mouse_entered"]
 [connection signal="pressed" from="VBoxContainer/quit" to="." method="_on_quit_pressed"]
 [connection signal="mouse_entered" from="HBoxContainer/HSlider" to="." method="_on_h_slider_mouse_entered"]

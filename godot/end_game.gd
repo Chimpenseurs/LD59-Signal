@@ -8,6 +8,12 @@ func set_score(score: int) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if $Score.text == "0":
+		$Score.visible = false
+		$Label2.visible = false
+		
+		$VBoxContainer/restart.text = "Start"
+		
 	pass # Replace with function body.
 
 

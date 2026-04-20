@@ -66,8 +66,9 @@ func _on_back_to_main_menu() -> void:
 	add_child(main_menu)
 	main_menu.launch_game.connect(_on_play)
 	main_menu.show_control_menu.connect(_on_control_menu)
+	main_menu.end_game.connect(_on_endgame)
 
-func _on_endgame(score: int) -> void:
+func _on_endgame(score: int = 0) -> void:
 	if endgame_menu != null:
 		game.queue_free()
 	
