@@ -48,6 +48,7 @@ var current_trigger_idx = 0
 
 var score = 0
 var combo = 0
+var combo_max = 0
 
 # Game feel variables
 var start_scale_size = 0.8
@@ -57,6 +58,8 @@ var max_particules_amount = 2000
 var line_thickness_max = 0.1
 
 func player_visual(intensity: int):
+	if intensity > combo_max:
+		combo_max = intensity
 	var scale_size = start_scale_size + max(intensity, max_scale_size) * combo_scale_factor
 	$Circle.scale.x = min(max_scale_size, scale_size)
 	$Circle.scale.y = min(max_scale_size, scale_size)
@@ -328,7 +331,7 @@ func _process(delta: float) -> void:
 	var current_position = _get_path_current_position(current_time)
 	
 	if current_position == null:
-		end_game.emit(score)
+		end_game.emit(score, combo_max)
 	else:
 		$Camera2D.position.x = current_position.x
 		$Circle.position = current_position

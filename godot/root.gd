@@ -68,7 +68,7 @@ func _on_back_to_main_menu() -> void:
 	main_menu.show_control_menu.connect(_on_control_menu)
 	main_menu.end_game.connect(_on_endgame)
 
-func _on_endgame(score: int = 0) -> void:
+func _on_endgame(score: int = 0, combo_max: int = 0) -> void:
 	if endgame_menu != null:
 		game.queue_free()
 	
@@ -76,7 +76,7 @@ func _on_endgame(score: int = 0) -> void:
 		game.queue_free()
 	
 	endgame_menu = endgame_menu_scene.instantiate()
-	endgame_menu.set_score(score)
+	endgame_menu.set_score(score, combo_max)
 	add_child(endgame_menu)
 	endgame_menu.restart.connect(_on_play)
 	endgame_menu.back_to_menu.connect(_on_back_to_main_menu)
