@@ -87,6 +87,16 @@ func player_visual(intensity: int):
 	else:
 		$Line2D.material.set_shader_parameter("thickness", thickness_scale_size)
 		$Line2D.material.set_shader_parameter("outline_thickness", thickness_scale_size)
+	
+	var start_vibration = 15
+	if intensity > start_vibration:
+		var intens = intensity - start_vibration
+		var val = max(intens / 15.0, 3)
+		$Circle.offset.x = randf_range(-val, val)
+		$Circle.offset.y = randf_range(-val, val)
+	else:
+		$Circle.offset.x = 0.0
+		$Circle.offset.y = 0.0
 
 
 class PushTrigger:
