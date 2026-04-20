@@ -67,8 +67,8 @@ func player_visual(intensity: int):
 	$Circle/GPUParticles2D.amount_ratio = max(intensity / 10.0, 0.1)
 	$Circle/GPUParticles2D.emitting = intensity > 0
 	
-	if intensity >= 10:
-		var p = intensity - 10
+	if intensity >= 6:
+		var p = intensity - 6
 		$Camera2D/GPUParticles2D.amount_ratio = max(p / 10.0, 0.1)
 		$Camera2D/GPUParticles2D.amount = 600 if p > 0 else 1
 	
