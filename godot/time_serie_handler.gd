@@ -64,6 +64,14 @@ func player_visual(intensity: int):
 	$Circle/GPUParticles2D.amount = min(intensity * 10, max_particules_amount)
 	$Circle/GPUParticles2D.emitting = intensity > 0
 	
+	$Camera2D/GPUParticles2D.amount_ratio = max(intensity / 10.0, 1.0)
+	$Camera2D/GPUParticles2D.amount = 600 if intensity > 0 else 1
+	if $Camera2D/GPUParticles2D.amount == 1:
+		$Camera2D/GPUParticles2D.visible = false
+	else :
+		$Camera2D/GPUParticles2D.visible = true
+		
+	
 	var thickness_scale_size = min(intensity / 50.0, 0.1)
 	if intensity == 0:
 		$Line2D.material.set_shader_parameter("thickness", 0.015)
