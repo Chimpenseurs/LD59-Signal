@@ -64,7 +64,7 @@ class PushTrigger:
 		
 	func create_column(column: Node) -> Array[Node]:
 		var column_1 = column.duplicate()
-		column_1.scale.x = end_trigger - start_trigger
+		column_1.scale /= 1.8
 		column_1.position.x = start_trigger + (end_trigger - start_trigger) * 0.5
 		return [column_1]
 
@@ -105,12 +105,12 @@ class SlideTrigger:
 		var column_start = column.duplicate()
 		var column_end = column.duplicate()
 		var column_between = column.duplicate()
-		column_start.scale.x = stride
-		column_end.scale.x = stride
-		column_between.scale.x = range_slide - (2 * stride)
+		column_start.scale /= 2
+		column_end.scale /= 2
+		column_between.scale /= 2
 		column_start.position.x = start_trigger + stride * 0.5
 		column_end.position.x = end_trigger - stride  + stride * 0.5
-		column_between.position.x = start_trigger + stride + stride * 0.5
+		column_between.position.x = start_trigger + stride
 		column_between.modulate = Color(1.0, 0.843, 0.0, 1.0)
 		return [column_start, column_between, column_end]
 		
@@ -247,7 +247,7 @@ func _ready() -> void:
 	$Line2D.points = time_serie
 
 	for trigger in triggers:
-		var columns = trigger.create_column($Column)
+		var columns = trigger.create_column($TriggerPush)
 		for column in columns:
 			$Line2D.add_child(column)
 	

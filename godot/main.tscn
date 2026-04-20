@@ -56,23 +56,6 @@ func random_position_activate(enabled):
 [sub_resource type="LabelSettings" id="LabelSettings_efxa6"]
 font = ExtResource("5_4c57u")
 
-[sub_resource type="Gradient" id="Gradient_h2yge"]
-offsets = PackedFloat32Array(0, 0.15060242, 0.5180723, 0.8795181, 1)
-colors = PackedColorArray(0, 0, 0, 0, 0, 0.3499999, 1, 0.4745098, 0, 0.3499999, 1, 0.67058825, 0.23000002, 0.49949992, 1, 0.5372549, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_1bvp3"]
-gradient = SubResource("Gradient_h2yge")
-width = 3
-height = 128
-
-[sub_resource type="GDScript" id="GDScript_5vw27"]
-script/source = "extends Sprite2D
-class_name ColumnTrigger
-"
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lquwl"]
-size = Vector2(1, 89.475)
-
 [sub_resource type="Animation" id="Animation_h2yge"]
 length = 0.001
 tracks/0/type = "value"
@@ -534,17 +517,20 @@ stream = ExtResource("4_lquwl")
 autoplay = true
 bus = &"Music"
 
-[node name="Column" type="Sprite2D" parent="." unique_id=202545968]
+[node name="TriggerRelease" type="Sprite2D" parent="." unique_id=1406843216]
+position = Vector2(-830, 65)
+texture = ExtResource("6_272bh")
+centered = false
+
+[node name="TriggerHold" type="Sprite2D" parent="." unique_id=1114414453]
+position = Vector2(-773, -236)
+texture = ExtResource("6_272bh")
+centered = false
+
+[node name="TriggerPush" type="Sprite2D" parent="." unique_id=202545968]
 position = Vector2(-692.9999, 338.80402)
-scale = Vector2(1, 6.784)
-texture = SubResource("GradientTexture2D_1bvp3")
-script = SubResource("GDScript_5vw27")
-
-[node name="Area2D" type="Area2D" parent="Column" unique_id=601109245]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Column/Area2D" unique_id=1258925870]
-position = Vector2(-0.00012207031, -0.19221878)
-shape = SubResource("RectangleShape2D_lquwl")
+texture = ExtResource("6_272bh")
+offset = Vector2(4, -16)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1148269338]
 libraries/ = SubResource("AnimationLibrary_lquwl")
@@ -1006,5 +992,3 @@ bus = &"SFX"
 [connection signal="kick_succeed" from="Rythm2" to="." method="_on_rythm_2_kick_succeed"]
 [connection signal="back_to_menu" from="Camera2D/PauseMenu" to="." method="_on_pause_menu_back_to_menu"]
 [connection signal="restart" from="Camera2D/PauseMenu" to="." method="_on_pause_menu_restart"]
-[connection signal="area_entered" from="Column/Area2D" to="Column" method="_on_area_2d_area_entered"]
-[connection signal="area_exited" from="Column/Area2D" to="." method="_on_area_2d_area_exited"]
