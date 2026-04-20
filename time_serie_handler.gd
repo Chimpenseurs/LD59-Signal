@@ -17,6 +17,10 @@ const PULSE_BEAT = 1
 const PULSE_CHORD = 2
 const PULSE_SLICE_UP = 3
 
+const SUCCEED = 0
+const FAILED = 1
+const PENDING = 2
+
 @export var xy_scale = Vector2(1.0,1)
 @export var velocity_x : float = 10.0 # m/s
 
@@ -29,31 +33,30 @@ var trigger_miss = false
 var current_trigger
 
 class PushTrigger:
-	var position_index : int
+	var position_index : Array[int]
 	var expected_actions = ["ui_button0"]
 	func _init(index):
-		position_index = index
+		position_index = [index]
 	func has_succeed() :
 		var input_valid_nb = 0
 		for required_action in self.expected_actions:
 			if Input.is_action_just_pressed(required_action) :
 				input_valid_nb += 1
 				continue
-		return input_valid_nb == self.expected_actions.size()
+		if input_valid_nb == self.expected_actions.size():
+			return SUCCEED
 
-class ReleaseTrigger:
-	var position_index : int
+class SlideTrigger:
+	var position_index : Array[int]
 	var expected_actions = ["ui_button0"]
-	func _init(index):
-		position_index = index
+	func _init(index, index2):
+		position_index = [index, index2]
 	func has_succeed() :
 		var input_valid_nb = 0
 		for required_action in self.expected_actions:
 			if Input.is_action_just_released(required_action) :
 				input_valid_nb += 1
 				continue
-		print(Input.is_action_just_released("required_actionui_button0"))
-		
 		return input_valid_nb == self.expected_actions.size()
 	
 func get_serie() -> Array[Vector2]:
@@ -80,7 +83,7 @@ func add_regular_pulse(offset_x, stride_x):
 	
 func add_slice_up_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.6, HIGH_H), Vector2(offset_x + stride_x * 0.7, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
-	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1), ReleaseTrigger.new(time_serie.size() + 1)])
+	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size()+1)])
 		
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
@@ -114,7 +117,7 @@ func _ready() -> void:
 	for i in triggers.size():
 		var column = $Column.duplicate()
 		var texture_width = column.texture.width
-		column.position.x = time_serie[triggers[i].position_index].x - texture_width * 0.5
+		column.position.x = time_serie[triggers[i].position_index[0]].x - texture_width * 0.5
 		column.trigger = triggers[i]
 		$Line2D.add_child(column)
 	
@@ -155,10 +158,17 @@ func _process(delta: float) -> void:
 		print("BAD")
 		$AnimationPlayer.play("slower")
 
-	if current_trigger and current_trigger.has_succeed():
-		print("GOOD")
-		$AnimationPlayer.play("success")
-		current_trigger = null
+	if current_trigger :
+		var status = current_trigger.has_succeed()
+		if status == SUCCEED:
+			print("GOOD")
+			current_trigger = null
+			$AnimationPlayer.play("success")
+		elif status == FAILED:
+			print("BAD")
+			$AnimationPlayer.play("slower")
+		elif status == PENDING:
+			print("PENDING")
 
 func _on_trigger_area_entered(column) -> void:
 	current_trigger = column.trigger
