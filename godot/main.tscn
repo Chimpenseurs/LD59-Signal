@@ -578,10 +578,10 @@ offset_right = 40.0
 offset_bottom = -56.0
 
 [node name="LabelScore" type="Label" parent="Camera2D" unique_id=547381878]
-offset_left = -168.99994
-offset_top = -309.0
-offset_right = -93.99994
-offset_bottom = -263.00003
+offset_left = -164.99994
+offset_top = -310.0
+offset_right = -89.99994
+offset_bottom = -264.00003
 label_settings = SubResource("LabelSettings_efxa6")
 
 [node name="Ld59SignalProto" type="AudioStreamPlayer" parent="." unique_id=1224994769]
