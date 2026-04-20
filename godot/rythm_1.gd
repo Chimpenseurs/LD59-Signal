@@ -8,7 +8,13 @@ var trigger_miss = false
 var current_trigger
 
 var xy_scale = Vector2(1.0,1)
-var velocity_x : float = 10.0 # m/s
+
+var bpm = 129
+
+var bps = bpm / 60 # bpm but per seconds
+var stride_x = 200
+
+var velocity_x : float = stride_x * bps
 
 const BASELINE_H = 0.5
 
