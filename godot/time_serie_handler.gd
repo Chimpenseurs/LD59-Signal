@@ -17,10 +17,14 @@ const PULSE_BEAT = 1
 const PULSE_CHORD = 2
 const PULSE_SLICE_UP = 3
 
-const SUCCEED = 0
-const FAILED = 1
-const PENDING = 2
-const WAITING = 3
+const NONE = 0
+const SUCCEED = 1
+const FAILED = 2
+const PENDING = 3
+const WAITING = 4
+const TOO_SOON = 5
+const TOO_LATE = 6
+const UNEXPECTED = 7
 
 @export var xy_scale = Vector2(1.0,1)
 
@@ -37,26 +41,42 @@ var current_time = 0.0
 var time_serie = []
 var triggers = []
 var trigger_miss = false
-var current_trigger
+var current_trigger_idx = 0
 
 class PushTrigger:
 	var position_index : Array[int]
 	var expected_actions = ["ui_button0"]
-	func _init(index, index2):
-		position_index = [index, index2]
-	func has_succeed(current_position_x, time_serie) :
-		var begin = time_serie[position_index[0]].x
-		if current_position_x <= begin:
-			var input_valid_nb = 0
-			for required_action in self.expected_actions:
-				if Input.is_action_pressed(required_action) :
-					input_valid_nb += 1
-					continue
-			if input_valid_nb == self.expected_actions.size():
-				return SUCCEED
-		elif current_position_x > begin:
-			return FAILED
-			
+	var start_trigger: float
+	var end_trigger: float
+	var stride_x: float
+	var state: int
+
+	func _init(index, start_x, stride_x_):
+		position_index = [index]
+		self.stride_x = stride_x_
+		self.start_trigger = start_x - (0.1 * stride_x)
+		self.end_trigger = start_x + (0.1 * stride_x)
+		self.state = PENDING
+		
+	# The idea is: if the current x position of the player is higher than
+	# get_next_trigger_x, we go to the next Trigger object.
+	func get_next_trigger_x() -> float:
+		return self.end_trigger + (self.stride_x * 0.5)
+
+	func has_succeed(current_x: float):
+		for required_action in self.expected_actions:
+			if Input.is_action_just_pressed(required_action):
+				if self.state != PENDING:
+					return UNEXPECTED
+				if current_x > self.end_trigger:
+					self.state = TOO_LATE
+				elif current_x < self.start_trigger:
+					self.state = TOO_SOON
+				else:
+					self.state = SUCCEED
+				return self.state
+		return NONE
+
 class SlideTrigger:
 	var position_index : Array[int]
 	var expected_actions = ["ui_button0"]
@@ -116,16 +136,16 @@ func add_flat_pulse(offset_x, stride_x):
 	
 func add_simple_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, MEDIUM_H), Vector2(offset_x + stride_x * 0.4, DOWN_MEDIUM_H), Vector2(offset_x + stride_x * 0.6, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
-	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, time_serie.size()+2)])
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, offset_x, stride_x)])
 
 func add_regular_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, HIGH_H), Vector2(offset_x + stride_x * 0.4, 1.0 - HIGH_H), Vector2(offset_x + stride_x * 0.6, MEDIUM_H), Vector2(offset_x + stride_x * 1.0, 0.5)]
-	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, time_serie.size()+3)])
-	
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, offset_x, stride_x)])
+
 func add_slice_up_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.6, HIGH_H), Vector2(offset_x + stride_x * 0.7, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
 	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size())])
-		
+
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
 	
@@ -204,12 +224,16 @@ func _process(delta: float) -> void:
 		print("MISS")
 		$AnimationPlayer.play("slower")
 	
-	# if current_trigger == null and Input.is_action_just_pressed("ui_button0"):
-	#   print("BAD")
-	#   $AnimationPlayer.play("slower")
-
-	if current_trigger :
-		var status = current_trigger.has_succeed(current_position.x, time_serie)
+	if (current_position.x > triggers[current_trigger_idx].get_next_trigger_x()) && (current_trigger_idx < (triggers.size() - 1)):
+		if triggers[current_trigger_idx].state == PENDING:
+			print("MISS")
+			$AnimationPlayer.play("slower")
+		current_trigger_idx += 1
+	
+	if current_trigger_idx < triggers.size():
+		var current_trigger = triggers[current_trigger_idx]
+	
+		var status = current_trigger.has_succeed(current_position.x)
 		if status == SUCCEED:
 			print("GOOD")
 			current_trigger = null
@@ -220,15 +244,13 @@ func _process(delta: float) -> void:
 			$AnimationPlayer.play("slower")
 		elif status == PENDING:
 			print("PENDING")
+		elif status == UNEXPECTED:
+			print("UNEXPECTED")
+		elif status == TOO_LATE:
+			print("TOO_LATE")
+		elif status == TOO_SOON:
+			print("TOO_SOON")
 
-func _on_trigger_area_entered(column) -> void:
-	current_trigger = column.trigger
-
-func _on_area_2d_area_exited(area: Area2D) -> void:
-	if current_trigger:
-		trigger_miss = true
-	current_trigger = null
-	
 func active_wave():
 	$Wave.position = $Circle.global_position
 
