@@ -4,7 +4,7 @@
 // Incrementing CACHE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
 /** @type {string} */
-const CACHE_VERSION = '1776691653|464031727';
+const CACHE_VERSION = '1776720123|1405418218';
 /** @type {string} */
 const CACHE_PREFIX = 'LD59-Signal-sw-cache-';
 const CACHE_NAME = CACHE_PREFIX + CACHE_VERSION;
