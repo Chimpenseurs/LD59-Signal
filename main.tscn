@@ -72,7 +72,7 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lquwl"]
-size = Vector2(60.00003, 1.3266535)
+size = Vector2(60.00003, 89.47525)
 
 [sub_resource type="Animation" id="Animation_h2yge"]
 length = 0.001
@@ -415,7 +415,7 @@ script = SubResource("GDScript_5vw27")
 [node name="Area2D" type="Area2D" parent="Column" unique_id=601109245]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Column/Area2D" unique_id=1258925870]
-position = Vector2(-0.00012207031, 0.2500038)
+position = Vector2(-0.00012207031, -0.19221878)
 shape = SubResource("RectangleShape2D_lquwl")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1148269338]
