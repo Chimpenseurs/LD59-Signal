@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://br88l51cas5cx"]
+
+[node name="SimplePulseArea" type="Node2D" unique_id=588509120]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1305109059]
