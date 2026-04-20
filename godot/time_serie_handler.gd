@@ -346,8 +346,10 @@ func active_wave():
 
 
 func _on_rythm_1_kick_succeed() -> void:
+	score += 2
 	$AnimationPlayer.play("kick_success")
 
 
 func _on_rythm_2_kick_succeed() -> void:
+	score += 5
 	$AnimationPlayer.play("clap_success")
