@@ -22,7 +22,13 @@ const FAILED = 1
 const PENDING = 2
 
 @export var xy_scale = Vector2(1.0,1)
-@export var velocity_x : float = 10.0 # m/s
+
+var bpm = 129
+
+var bps = bpm / 60 # bpm but per seconds
+var stride_x = 200
+
+var velocity_x : float = stride_x * bps
 
 var path_pixels_ref = 7839.0
 var current_time = 0.0
@@ -87,7 +93,6 @@ func add_slice_up_pulse(offset_x, stride_x):
 		
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
-	var stride_x = 200
 	
 	var content = FileAccess.open("res://partition.txt", FileAccess.READ).get_as_text().strip_edges().split(",")
 	var pulses_types = []
@@ -139,24 +144,29 @@ func _process(delta: float) -> void:
 	if  Engine.is_editor_hint():
 		return
 	
+	var minutes = int(current_time) / 60
+	var seconds = int(current_time) % 60
+ 
+	$Camera2D/Label.text = str("time: ", str(minutes), "m ", str(seconds), "s")
+	
 	current_time += delta
 	var current_position = _get_path_current_position(current_time)
 	
 	$Camera2D.position.x = current_position.x
 	$Circle.position = current_position
-		
+	
 	if Input.is_action_just_pressed("pause"):
 		$Camera2D/PauseMenu.visible = true
 		emit_signal("set_pause")
-		
+	
 	if trigger_miss :
 		trigger_miss = false
 		print("MISS")
 		$AnimationPlayer.play("slower")
-		
-	if current_trigger == null and Input.is_action_just_pressed("ui_button0"):
-		print("BAD")
-		$AnimationPlayer.play("slower")
+	
+	# if current_trigger == null and Input.is_action_just_pressed("ui_button0"):
+	#   print("BAD")
+	#   $AnimationPlayer.play("slower")
 
 	if current_trigger :
 		var status = current_trigger.has_succeed()
