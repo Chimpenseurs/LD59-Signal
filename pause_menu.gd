@@ -5,7 +5,7 @@ signal back_to_menu
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	$HBoxContainer/HSlider.value = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master"))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -33,3 +33,11 @@ func _on_restart_pressed() -> void:
 
 func _on_main_menu_pressed() -> void:
 	emit_signal("back_to_menu")
+
+func _on_h_slider_mouse_entered() -> void:
+	$AudioStreamPlayer.play()
+
+
+func _on_h_slider_value_changed(value: float) -> void:
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), value)
+	$AudioStreamPlayer.play()
