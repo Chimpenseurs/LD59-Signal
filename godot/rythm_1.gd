@@ -2,10 +2,13 @@
 
 extends Line2D
 
+signal kick_succeed
+
+var kick_scene = preload("res://kick.tscn")
+
 var time_serie = []
 var triggers = []
 var trigger_miss = false
-var current_trigger
 
 var xy_scale = Vector2(1.0,1)
 
@@ -18,11 +21,14 @@ var velocity_x : float = stride_x * bps
 
 const BASELINE_H = 0.5
 
+
 func create_kit(pos: Vector2) -> Line2D:
 	var kit = Line2D.new()
 	kit.default_color = Color("00c300")
 	kit.add_point(Vector2(pos.x, pos.y-5.0))
 	kit.add_point(Vector2(pos.x, pos.y+5.0))
+	
+	var area = Area2D.new()
 	
 	return kit
 
@@ -40,18 +46,11 @@ func add_flat_pulse(offset_x, stride_x):
 func add_kit_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x, BASELINE_H)]
 	
-	var kit = Line2D.new()
-	kit.width = 2.0
-	kit.points = [Vector2(offset_x-offset_x/2.0, BASELINE_H-15.0), Vector2(offset_x-offset_x/2.0, BASELINE_H+15.0)]
-	kit.default_color = Color("00c300")
+	var kick = kick_scene.instantiate()
+	kick.set_position(Vector2(offset_x-offset_x/2.0, 0.0))
+	kick.kick_succeed.connect(_on_kick_succeed)
 	
-	self.add_child(kit)
-	
-	#var kit2 = Line2D.new()
-	#kit2.width = 2.0
-	#kit2.points = [Vector2(offset_x+offset_x/2.0, BASELINE_H-15.0), Vector2(offset_x+offset_x/2.0, BASELINE_H+15.0)]
-	#kit2.default_color = Color("00c300")
-	#self.add_child(kit2)
+	self.add_child(kick)
 	
 	inject_pulse(pulse, [])
 
@@ -73,3 +72,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func _on_kick_succeed() -> void:
+	emit_signal("kick_succeed")

@@ -154,7 +154,7 @@ func _process(delta: float) -> void:
 	
 	$Camera2D.position.x = current_position.x
 	$Circle.position = current_position
-	$Circle2.position.x = current_position.x
+	$CircleRythm1.position.x = current_position.x
 	
 	if Input.is_action_just_pressed("pause"):
 		$Camera2D/PauseMenu.visible = true
@@ -191,3 +191,7 @@ func _on_area_2d_area_exited(area: Area2D) -> void:
 	
 func active_wave():
 	$Wave.position = $Circle.global_position
+
+
+func _on_rythm_1_kick_succeed() -> void:
+	$AnimationPlayer.play("kick_success")
