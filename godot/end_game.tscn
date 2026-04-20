@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://cksnivb1l0k6k"]
+
+[ext_resource type="FontFile" uid="uid://mnrswl4tv81w" path="res://assets/fonts/JVNE Wopper'83.ttf" id="1_sjse8"]
+[ext_resource type="Script" uid="uid://dj8gial40xgc3" path="res://end_game.gd" id="1_weimh"]
+[ext_resource type="AudioStream" uid="uid://dvw2eq6g7u65x" path="res://assets/sfx/menu_select.wav" id="3_5q2h6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_weimh"]
+font = ExtResource("1_sjse8")
+font_size = 30
+font_color = Color(0, 0.7647059, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_sjse8"]
+font = ExtResource("1_sjse8")
+font_size = 25
+
+[sub_resource type="LabelSettings" id="LabelSettings_5q2h6"]
+font = ExtResource("1_sjse8")
+font_size = 25
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_8aegd"]
+streams_count = 1
+stream_0/stream = ExtResource("3_5q2h6")
+
+[sub_resource type="LabelSettings" id="LabelSettings_8aegd"]
+font = ExtResource("1_sjse8")
+
+[node name="EndGame" type="Control" unique_id=265020428]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_weimh")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1466871794]
+layout_mode = 0
+offset_left = -33.0
+offset_top = -43.0
+offset_right = 1213.0
+offset_bottom = 728.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="." unique_id=547039595]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 55.0
+offset_right = 958.0
+offset_bottom = 100.0
+text = "Thanks You For Playing !"
+label_settings = SubResource("LabelSettings_weimh")
+
+[node name="Label2" type="Label" parent="." unique_id=1922199302]
+layout_mode = 0
+offset_left = 284.0
+offset_top = 233.0
+offset_right = 627.0
+offset_bottom = 270.0
+text = "Your Score : "
+label_settings = SubResource("LabelSettings_sjse8")
+
+[node name="Score" type="Label" parent="." unique_id=762515683]
+layout_mode = 0
+offset_left = 637.0
+offset_top = 234.0
+offset_right = 787.0
+offset_bottom = 271.0
+text = ">9000"
+label_settings = SubResource("LabelSettings_5q2h6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1581103110]
+layout_mode = 0
+offset_left = 474.0
+offset_top = 323.0
+offset_right = 605.0
+offset_bottom = 424.0
+
+[node name="restart" type="Button" parent="VBoxContainer" unique_id=1923478973]
+layout_mode = 2
+text = "Restart game"
+
+[node name="main menu" type="Button" parent="VBoxContainer" unique_id=660370825]
+layout_mode = 2
+text = "Return to menu"
+
+[node name="quit" type="Button" parent="VBoxContainer" unique_id=1798742791]
+layout_mode = 2
+text = "Quit game"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1933360170]
+stream = SubResource("AudioStreamRandomizer_8aegd")
+
+[node name="Label3" type="Label" parent="." unique_id=1375997017]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 116.0
+offset_right = 1097.0
+offset_bottom = 141.0
+text = "A game by: @chtimy, @olddadou, @jajalecapouet, and @avzgui"
+label_settings = SubResource("LabelSettings_8aegd")
+
+[connection signal="mouse_entered" from="VBoxContainer/restart" to="." method="_on_restart_mouse_entered"]
+[connection signal="pressed" from="VBoxContainer/restart" to="." method="_on_restart_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/main menu" to="." method="_on_main_menu_mouse_entered"]
+[connection signal="pressed" from="VBoxContainer/main menu" to="." method="_on_main_menu_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/quit" to="." method="_on_quit_mouse_entered"]
+[connection signal="pressed" from="VBoxContainer/quit" to="." method="_on_quit_pressed"]

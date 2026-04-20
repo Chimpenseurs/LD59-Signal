@@ -3,10 +3,13 @@ extends Node
 var game_scene = preload("res://main.tscn")
 var main_menu_scene = preload("res://main_menu.tscn")
 var control_menu_scene = preload("res://control_menu.tscn")
+var endgame_menu_scene = preload("res://end_game.tscn")
 
 var main_menu
 var control_menu
+var endgame_menu
 var game
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -15,7 +18,10 @@ func _ready() -> void:
 func _on_play() -> void:
 	if game != null:
 		game.queue_free()
-		
+	
+	if endgame_menu != null:
+		game.queue_free()
+	
 	if main_menu != null:
 		main_menu.queue_free()
 	
@@ -49,6 +55,9 @@ func _on_back_to_main_menu() -> void:
 	if control_menu != null:
 		control_menu.queue_free()
 	
+	if endgame_menu != null:
+		game.queue_free()
+	
 	if game != null:
 		game.queue_free()
 	
@@ -56,6 +65,19 @@ func _on_back_to_main_menu() -> void:
 	add_child(main_menu)
 	main_menu.launch_game.connect(_on_play)
 	main_menu.show_control_menu.connect(_on_control_menu)
+
+func _on_endgame(score: int) -> void:
+	if endgame_menu != null:
+		game.queue_free()
+	
+	if game != null:
+		game.queue_free()
+	
+	endgame_menu = endgame_menu_scene.instantiate()
+	endgame_menu.set_score(score)
+	add_child(endgame_menu)
+	endgame_menu.restart.connect(_on_play)
+	endgame_menu.back_to_menu.connect(_on_back_to_main_menu)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
