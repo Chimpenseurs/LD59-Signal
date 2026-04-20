@@ -71,6 +71,8 @@ func player_visual(intensity: int):
 		var p = intensity - 10
 		$Camera2D/GPUParticles2D.amount_ratio = max(p / 10.0, 0.1)
 		$Camera2D/GPUParticles2D.amount = 600 if p > 0 else 1
+	else:
+		$Camera2D/GPUParticles2D.amount = 1
 	
 	if intensity == 0:
 		$Camera2D/GPUParticles2D.visible = false
