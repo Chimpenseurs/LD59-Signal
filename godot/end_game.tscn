@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cksnivb1l0k6k"]
 
 [ext_resource type="FontFile" uid="uid://mnrswl4tv81w" path="res://assets/fonts/JVNE Wopper'83.ttf" id="1_sjse8"]
-[ext_resource type="Script" uid="uid://dj8gial40xgc3" path="res://end_game.gd" id="1_weimh"]
+[ext_resource type="Script" path="res://end_game.gd" id="1_weimh"]
 [ext_resource type="AudioStream" uid="uid://dvw2eq6g7u65x" path="res://assets/sfx/menu_select.wav" id="3_5q2h6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_weimh"]
@@ -52,19 +52,19 @@ label_settings = SubResource("LabelSettings_weimh")
 
 [node name="Label2" type="Label" parent="." unique_id=1922199302]
 layout_mode = 0
-offset_left = 284.0
-offset_top = 233.0
-offset_right = 627.0
-offset_bottom = 270.0
+offset_left = 265.0
+offset_top = 485.0
+offset_right = 608.0
+offset_bottom = 522.0
 text = "Your Score : "
 label_settings = SubResource("LabelSettings_sjse8")
 
 [node name="Score" type="Label" parent="." unique_id=762515683]
 layout_mode = 0
-offset_left = 637.0
-offset_top = 234.0
-offset_right = 787.0
-offset_bottom = 271.0
+offset_left = 618.0
+offset_top = 486.0
+offset_right = 768.0
+offset_bottom = 523.0
 text = ">9000"
 label_settings = SubResource("LabelSettings_5q2h6")
 
@@ -92,11 +92,29 @@ stream = SubResource("AudioStreamRandomizer_8aegd")
 
 [node name="Label3" type="Label" parent="." unique_id=1375997017]
 layout_mode = 0
-offset_left = 46.0
-offset_top = 116.0
-offset_right = 1097.0
-offset_bottom = 141.0
-text = "A game by: @chtimy, @olddadou, @jajalecapouet, and @avzgui"
+offset_left = 41.0
+offset_top = 110.0
+offset_right = 1092.0
+offset_bottom = 606.0
+text = "Programming: 
+    @chtimy, @avzgui, @jajalecapouet, @olddadou
+
+Musique:
+    @avzgui
+
+
+
+
+
+
+
+
+
+
+
+
+
+A game by the team Chimpenseurs (github.com/Chimpenseurs)"
 label_settings = SubResource("LabelSettings_8aegd")
 
 [connection signal="mouse_entered" from="VBoxContainer/restart" to="." method="_on_restart_mouse_entered"]
