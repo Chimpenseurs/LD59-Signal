@@ -44,6 +44,7 @@ func add_kit_pulse(offset_x, stride_x):
 	kit.width = 2.0
 	kit.points = [Vector2(offset_x-offset_x/2.0, BASELINE_H-15.0), Vector2(offset_x-offset_x/2.0, BASELINE_H+15.0)]
 	kit.default_color = Color("00c300")
+	
 	self.add_child(kit)
 	
 	var kit2 = Line2D.new()

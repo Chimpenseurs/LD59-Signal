@@ -154,6 +154,7 @@ func _process(delta: float) -> void:
 	
 	$Camera2D.position.x = current_position.x
 	$Circle.position = current_position
+	$Circle2.position.x = current_position.x
 	
 	if Input.is_action_just_pressed("pause"):
 		$Camera2D/PauseMenu.visible = true
