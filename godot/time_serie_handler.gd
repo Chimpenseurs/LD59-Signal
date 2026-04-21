@@ -105,10 +105,16 @@ func player_visual(intensity: int):
 		$Circle.offset.x = 0.0
 		$Circle.offset.y = 0.0
 		
-	#if intensity == 50 and old_intensity != 50:
-		#animation_stacker.append(["UpDown", true])
-	#elif intensity < 50 and old_intensity >= 50:
-		#animation_stacker.append(["StopUpDown", false])
+	if intensity == 50 and old_intensity != 50:
+		var triggers = $Line2D.get_children()
+		for i in triggers:
+			if i.name.contains("Push"):
+				i.visible = false
+	elif intensity < 50 and old_intensity >= 50:
+		var triggers = $Line2D.get_children()
+		for i in triggers:
+			if i.name.contains("Push"):
+				i.visible = true
 	
 	if intensity == 40 and old_intensity != 40:
 		animation_stacker.append(["SupportMotherPlaying", true])
@@ -182,12 +188,13 @@ class PushTrigger:
 		offset = stride_x * 0.5
 		self.state = PENDING
 		
-	func create_column(triggers, root) -> Array[Node]:
+	func create_column(triggers, root):
 		var trigger_x = root.time_serie[position_index[0]].x
 		var trigger = triggers[0].duplicate()
+		root.find_child("Line2D").add_child(trigger)
+		trigger.set_name("Push")
 		trigger.scale /= 1.8
 		trigger.position = root._get_path_position(trigger_x)
-		return [trigger]
 
 	# The idea is: if the current x position of the player is higher than
 	# get_next_trigger_x, we go to the next Trigger object.
@@ -226,6 +233,7 @@ class SlideTrigger:
 		# first trigger
 		var trigger_x = root.time_serie[position_index[0]].x
 		var trigger = triggers[1].duplicate()
+		root.find_child("Line2D").add_child(trigger)
 		trigger.scale = Vector2(0.4,0.4)
 		trigger.modulate = Color(1.0, 0.843, 0.0, 1.0)
 		trigger.position = root._get_path_position(trigger_x)
@@ -233,6 +241,7 @@ class SlideTrigger:
 		# second trigger
 		trigger_x = root.time_serie[position_index[1]].x
 		var trigger2 = trigger.duplicate()
+		root.find_child("Line2D").add_child(trigger2)
 		trigger2.position = root._get_path_position(trigger_x)
 		return [trigger, trigger2]
 		
@@ -372,9 +381,8 @@ func _ready() -> void:
 	$Line2D.points = time_serie
 
 	for trigger in triggers:
-		var columns = trigger.create_column([$TriggerPush, $TriggerHold], self)
-		for column in columns:
-			$Line2D.add_child(column)
+		trigger.create_column([$TriggerPush, $TriggerHold], self)
+
 	
 func _get_path_position(pos_x):
 	for i in time_serie.size():

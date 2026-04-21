@@ -1099,7 +1099,7 @@ centered = false
 position = Vector2(-736, 859)
 texture = ExtResource("9_dg77c")
 
-[node name="TriggerPush" type="Sprite2D" parent="." unique_id=202545968]
+[node name="TriggerPush" type="Sprite2D" parent="." unique_id=202545968 groups=["TriggersPush"]]
 position = Vector2(-692.9999, 338.80402)
 scale = Vector2(0.9, 0.9)
 texture = ExtResource("6_272bh")
