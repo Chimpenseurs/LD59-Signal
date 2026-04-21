@@ -57,6 +57,11 @@ var max_scale_size = 1.8
 var max_particules_amount = 2000
 var line_thickness_max = 0.1
 
+var old_intensity = 0
+
+var animation_stacker = []
+var animation_looping = false
+
 func player_visual(intensity: int):
 	if intensity > combo_max:
 		combo_max = intensity
@@ -99,42 +104,106 @@ func player_visual(intensity: int):
 	else:
 		$Circle.offset.x = 0.0
 		$Circle.offset.y = 0.0
+		
+	#if intensity == 50 and old_intensity != 50:
+		#animation_stacker.append(["UpDown", true])
+	#elif intensity < 50 and old_intensity >= 50:
+		#animation_stacker.append(["StopUpDown", false])
+	
+	if intensity == 40 and old_intensity != 40:
+		animation_stacker.append(["SupportMotherPlaying", true])
+	elif intensity < 40 and old_intensity >= 40:
+		animation_stacker.append(["SupportMotherStop", true])
+		
+	if intensity == 35  and old_intensity != 35:
+		animation_stacker.append(["SupportMother", true])
+	elif intensity < 35 and old_intensity >= 35:
+		animation_stacker.append(["SupportMother", false])
+		
+	if intensity == 30 and old_intensity != 30:
+		animation_stacker.append(["Support2", true])
+	elif intensity < 30 and old_intensity >= 30:
+		animation_stacker.append(["Support2", false])
 
+	if intensity == 25 and old_intensity != 25:
+		animation_stacker.append(["Support1", true])
+	elif intensity < 25 and old_intensity >= 25:
+		animation_stacker.append(["Support1", false])
+		
+	if intensity == 20 and old_intensity != 20:
+		animation_stacker.append(["Support0", true])
+	elif intensity < 20 and old_intensity >= 20:
+		animation_stacker.append(["Support0", false])
+	
+		
+	var a = not $Camera2D/Supports.is_playing()
+	var b = ($Camera2D/Supports.is_playing() and animation_looping)
+	var c = not animation_stacker.is_empty()
+	if (not $Camera2D/Supports.is_playing() or ($Camera2D/Supports.is_playing() and animation_looping)) and not animation_stacker.is_empty():
+		if animation_looping:
+			$Camera2D/Supports.stop()
+		if animation_stacker[0][1]:
+			$Camera2D/Supports.play(animation_stacker[0][0])
+		else:
+			$Camera2D/Supports.play(animation_stacker[0][0], -1, -3.0, true)
+			
+		if animation_stacker[0][0] == "SupportMotherPlaying":
+			animation_looping = true
+		else:
+			animation_looping = false
+				
+		animation_stacker.pop_front()
+
+	old_intensity = intensity
+		
+
+
+func play_hot_line(trigger, active):
+	if active:
+		var subline = time_serie.slice(trigger.position_index[0], trigger.position_index[1])
+		subline[-1] = _get_path_position(subline[-1].x - 10)
+		#$HotLine.material.set_shader_parameter("thickness", $Line2D.material.get_shader_parameter("thickness") * 8)
+		#$HotLine.material.set_shader_parameter("outline_thickness", $Line2D.material.get_shader_parameter("outline_thickness") * 8)
+		$HotLine.points = subline
+		$HotLine.visible = true
+	else:
+		$HotLine.visible = false
 
 class PushTrigger:
 	var position_index : Array[int]
 	var expected_actions = ["ui_button0"]
-	var start_trigger: float
-	var end_trigger: float
 	var stride_x: float
+	var offset
 	var state: int
 
-	func _init(index, start_x, stride_x_):
+	func _init(index, stride_x_):
 		position_index = [index]
 		self.stride_x = stride_x_
-		self.start_trigger = start_x - (0.5 * stride_x)
-		self.end_trigger = start_x + (0.5 * stride_x)
+		offset = stride_x * 0.5
 		self.state = PENDING
 		
-	func create_column(column: Node) -> Array[Node]:
-		var column_1 = column.duplicate()
-		column_1.scale /= 1.8
-		column_1.position.x = start_trigger + (end_trigger - start_trigger) * 0.5
-		return [column_1]
+	func create_column(triggers, root) -> Array[Node]:
+		var trigger_x = root.time_serie[position_index[0]].x
+		var trigger = triggers[0].duplicate()
+		trigger.scale /= 1.8
+		trigger.position = root._get_path_position(trigger_x)
+		return [trigger]
 
 	# The idea is: if the current x position of the player is higher than
 	# get_next_trigger_x, we go to the next Trigger object.
-	func get_next_trigger_x() -> float:
-		return self.end_trigger + (self.stride_x * 0.5)
+	func get_next_trigger_x(root) -> float:
+		return root.time_serie[position_index[0]].x + offset
 
-	func has_succeed(current_x: float):
+	func has_succeed(current_x: float, root):
+		var trigger_x = root.time_serie[position_index[0]].x
+		var trigger_range = [trigger_x - offset, trigger_x + offset]
 		for required_action in self.expected_actions:
 			if Input.is_action_just_pressed(required_action):
 				if self.state != PENDING:
 					return UNEXPECTED
-				if current_x > self.end_trigger:
+				if current_x > trigger_range[1]:
 					self.state = TOO_LATE
-				elif current_x < self.start_trigger:
+				elif current_x < trigger_range[0]:
 					self.state = TOO_SOON
 				else:
 					self.state = SUCCEED
@@ -145,40 +214,39 @@ class SlideTrigger:
 	var position_index : Array[int]
 	var expected_actions = ["ui_button0"]
 	var state = PENDING
-	var start_trigger: float
-	var end_trigger: float
+	var offset
+	var stride_x = 0
 
-	func _init(index, index2, start_x, stride_x):
+	func _init(index, index2, i_stride_x):
 		position_index = [index, index2]
-		start_trigger = start_x
-		end_trigger = start_x + stride_x
+		stride_x = i_stride_x
+		offset = stride_x * 0.5
 
-	func create_column(column: Node) -> Array[Node]:
-		var range_slide = end_trigger - start_trigger
-		var stride = range_slide * 0.4
-		var column_start = column.duplicate()
-		var column_end = column.duplicate()
-		var column_between = column.duplicate()
-		column_start.scale /= 2
-		column_end.scale /= 2
-		column_between.scale /= 2
-		column_start.position.x = start_trigger + stride * 0.5
-		column_end.position.x = end_trigger - stride  + stride * 0.5
-		column_between.position.x = start_trigger + stride
-		column_between.modulate = Color(1.0, 0.843, 0.0, 1.0)
-		return [column_start, column_between, column_end]
+	func create_column(triggers, root) -> Array[Node]:
+		# first trigger
+		var trigger_x = root.time_serie[position_index[0]].x
+		var trigger = triggers[1].duplicate()
+		trigger.scale = Vector2(0.4,0.4)
+		trigger.modulate = Color(1.0, 0.843, 0.0, 1.0)
+		trigger.position = root._get_path_position(trigger_x)
 		
-	func get_next_trigger_x() -> float:
-		return self.end_trigger
+		# second trigger
+		trigger_x = root.time_serie[position_index[1]].x
+		var trigger2 = trigger.duplicate()
+		trigger2.position = root._get_path_position(trigger_x)
+		return [trigger, trigger2]
+		
+	func get_next_trigger_x(root) -> float:
+		return root.time_serie[position_index[1]].x + offset
 
-	func has_succeed(current_x):
-		var begin = start_trigger
-		var end = end_trigger
-		var range_slide = (end - begin)
-		var stride = range_slide * 0.4
-
+	func has_succeed(current_x, root):
+		var first_trigger_x = root.time_serie[position_index[0]].x
+		var second_trigger_x = root.time_serie[position_index[1]].x
+		var first_trigger_range = [first_trigger_x - offset, first_trigger_x + offset]
+		var second_trigger_range = [second_trigger_x - offset, second_trigger_x + offset]
+		
 #		When the Trigger is over, or if the start in not reached.
-		if state in [SUCCEED, FAILED] || current_x < begin:
+		if state in [SUCCEED, FAILED] || current_x < first_trigger_range[0]:
 			for action in self.expected_actions:
 				if Input.is_action_just_pressed(action):
 					return UNEXPECTED
@@ -187,7 +255,7 @@ class SlideTrigger:
 		elif state == WAITING:
 			for action in self.expected_actions:
 				if Input.is_action_just_released(action):
-					if current_x >= end_trigger - stride:
+					if current_x >= first_trigger_range[0]:
 						state = SUCCEED
 						return SUCCEED
 					else:
@@ -195,7 +263,7 @@ class SlideTrigger:
 						return FAILED
 
 #		When the Trigger wait the just press action.
-		elif current_x >= begin && current_x <= begin + stride:
+		elif current_x >= first_trigger_range[0] && current_x <= first_trigger_range[1]:
 			for action in self.expected_actions:
 				if state == PENDING && Input.is_action_just_pressed(action):
 					state = WAITING
@@ -249,27 +317,26 @@ func add_flat_pulse(offset_x, stride_x):
 	
 func add_simple_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, MEDIUM_H), Vector2(offset_x + stride_x * 0.4, DOWN_MEDIUM_H), Vector2(offset_x + stride_x * 0.6, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
-	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, offset_x, stride_x)])
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, stride_x)])
 
 func add_regular_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, HIGH_H), Vector2(offset_x + stride_x * 0.4, 1.0 - HIGH_H), Vector2(offset_x + stride_x * 0.6, MEDIUM_H), Vector2(offset_x + stride_x * 1.0, 0.5)]
-	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, offset_x, stride_x)])
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, stride_x)])
 
 func add_slice_up_pulse(offset_x, stride_x):
-	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.6, HIGH_H), Vector2(offset_x + stride_x * 0.7, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
-	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, offset_x, stride_x)])
+	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.6, HIGH_H), Vector2(offset_x + stride_x * 0.8, BASELINE_H), Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
+	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size() - 2 + pulse.size() - 2, stride_x)])
 	
 func add_bouingbouing_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.05, 0.9), Vector2(offset_x + stride_x * 0.35, 0.15), Vector2(offset_x + stride_x * 0.5, 0.7), Vector2(offset_x + stride_x * 0.7, 0.4), Vector2(offset_x + stride_x * 0.95, 0.55),Vector2(offset_x + stride_x * 1.0, BASELINE_H)]
-	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, offset_x, stride_x)])
+	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size() - 2 + pulse.size(), stride_x * 2)])
 	
 func add_ressort_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, 0.8), Vector2(offset_x + stride_x * 0.4, 0.2), Vector2(offset_x + stride_x * 0.6, 0.8), Vector2(offset_x + stride_x * 0.8, 0.2), Vector2(offset_x + stride_x, 0.8), Vector2(offset_x + stride_x * 1.2, 0.2), Vector2(offset_x + stride_x * 1.4, 0.8), Vector2(offset_x + stride_x * 1.6, 0.2), Vector2(offset_x + stride_x * 1.8, 0.8), Vector2(offset_x + stride_x * 2.0, BASELINE_H)]
-	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, offset_x, stride_x)])
+	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size() - 2 + pulse.size(), stride_x * 2)])
 
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
-	
 	
 	var content = Partition.new().partition.strip_edges().split(",") # FileAccess.open("res://partition.txt", FileAccess.READ).get_as_text().strip_edges().split(",")
 	var pulses_types = []
@@ -280,7 +347,7 @@ func _ready() -> void:
 	player_visual(0)
 
 	var index = 0
-	time_serie.append(Vector2(0,BASELINE_H))
+	time_serie.append(Vector2(0,BASELINE_H) * xy_scale)
 	for pulse_type in pulses_types:
 		if pulse_type == PULSE_FLAT:
 			add_flat_pulse(index * stride_x, stride_x)
@@ -305,12 +372,11 @@ func _ready() -> void:
 	$Line2D.points = time_serie
 
 	for trigger in triggers:
-		var columns = trigger.create_column($TriggerPush)
+		var columns = trigger.create_column([$TriggerPush, $TriggerHold], self)
 		for column in columns:
 			$Line2D.add_child(column)
 	
-func _get_path_current_position(time):
-	var pos_x = time * velocity_x
+func _get_path_position(pos_x):
 	for i in time_serie.size():
 		if time_serie[i].x < pos_x:
 			continue
@@ -322,6 +388,10 @@ func _get_path_current_position(time):
 		return pt
 			
 	return null
+	
+func _get_path_current_position(time : float):
+	var pos_x = time * velocity_x
+	return _get_path_position(pos_x)
 	
 func _process(delta: float) -> void:
 	if  Engine.is_editor_hint():
@@ -361,27 +431,30 @@ func _process(delta: float) -> void:
 		
 		if trigger_miss :
 			trigger_miss = false
-			# print("MISS")
-			# $AnimationPlayer.play("slower")
 		
-		if (current_position.x > triggers[current_trigger_idx].get_next_trigger_x()) && (current_trigger_idx < (triggers.size() - 1)):
+		if (current_position.x > triggers[current_trigger_idx].get_next_trigger_x(self)) && (current_trigger_idx < (triggers.size() - 1)):
 			if triggers[current_trigger_idx].state in [PENDING, WAITING]:
 				pass
-				# print("MISS")
-				# $AnimationPlayer.play("slower")
+			if triggers[current_trigger_idx].state != SUCCEED:
+				combo = 0
 			current_trigger_idx += 1
 		
 		if current_trigger_idx < triggers.size():
 			var current_trigger = triggers[current_trigger_idx]
 		
-			var status = current_trigger.has_succeed(current_position.x)
+			var status = current_trigger.has_succeed(current_position.x, self)
 			match status:	
 				SUCCEED:
 					print("GOOD")
-					current_trigger = null
 					$AnimationPlayer.play("success")
-					score += 1
-					combo += 1
+					if current_trigger is SlideTrigger :
+						score += 2
+						combo += 2
+					else:
+						score += 1
+						combo += 1
+					play_hot_line(current_trigger, false)
+					current_trigger = null
 				FAILED:
 					print("BAD")
 					current_trigger = null
@@ -392,7 +465,7 @@ func _process(delta: float) -> void:
 					combo = 0
 				WAITING:
 					print("WAITING")
-					combo = 0
+					play_hot_line(current_trigger, true)
 				UNEXPECTED:
 					print("UNEXPECTED")
 					combo = 0
@@ -407,7 +480,7 @@ func _process(delta: float) -> void:
 					# $AnimationPlayer.play("slower")
 				_:
 					pass
-
+					
 func active_wave():
 	$Wave.position = $Circle.global_position
 
