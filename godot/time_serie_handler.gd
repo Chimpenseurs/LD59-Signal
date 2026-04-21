@@ -342,7 +342,7 @@ func add_bouingbouing_pulse(offset_x, stride_x):
 	
 func add_ressort_pulse(offset_x, stride_x):
 	var pulse = [Vector2(offset_x, BASELINE_H), Vector2(offset_x + stride_x * 0.2, 0.8), Vector2(offset_x + stride_x * 0.4, 0.2), Vector2(offset_x + stride_x * 0.6, 0.8), Vector2(offset_x + stride_x * 0.8, 0.2), Vector2(offset_x + stride_x, 0.8), Vector2(offset_x + stride_x * 1.2, 0.2), Vector2(offset_x + stride_x * 1.4, 0.8), Vector2(offset_x + stride_x * 1.6, 0.2), Vector2(offset_x + stride_x * 1.8, 0.8), Vector2(offset_x + stride_x * 2.0, BASELINE_H)]
-	inject_pulse(pulse, [SlideTrigger.new(time_serie.size()-1, time_serie.size() - 2 + pulse.size(), stride_x * 2)])
+	inject_pulse(pulse, [PushTrigger.new(time_serie.size()-1, stride_x * 2)])
 
 func _ready() -> void:
 	xy_scale.y = get_viewport().get_visible_rect().size.y
